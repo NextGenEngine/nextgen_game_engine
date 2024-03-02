@@ -5,4 +5,4 @@ Generate a high quality design document that can be used by our project team to 
 I need to develop document about overall structure of game engine, that will be used to run any game on it.
 I need document that will split the whole engine on separate sections: independent modules of final game engine.
 This engine must use best practices of building game engines.
-Document will be used later of to split my project on subprojects, and teams will work separatelly on them
+Document will be used later of to split my project on subprojects, and teams will work separately on them
