@@ -1,0 +1,4 @@
+[wrap-git]
+directory=rendering
+url=git@github.com:NextGenEngine/nextgen_rendering_engine.git
+revision=head
