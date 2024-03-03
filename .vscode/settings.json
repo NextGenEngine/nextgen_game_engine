@@ -1,10 +1,14 @@
 {
     "cSpell.words": [
+        "embeddable",
         "gamepad",
         "gameplay",
         "modders",
+        "runtimes",
+        "smol",
         "spatialization",
         "subprojects",
+        "tokio",
         "Vulkan"
     ]
 }
