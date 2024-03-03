@@ -97,3 +97,45 @@ To build a coroutines-based job system in Rust using these tools, you would:
 ### Conclusion
 
 A coroutines-based job system in Rust, built on top of asynchronous runtimes like Tokio or async-std, offers a scalable and efficient way to handle high concurrency and IO-bound tasks. This model is particularly effective in scenarios where tasks involve waiting or in highly interactive environments like game engines where responsiveness is crucial. By leveraging Rust's async ecosystem, you can achieve a high degree of parallelism with lower overhead compared to traditional thread-based models, aligning well with the needs of modern, high-performance applications.
+
+## Fibers
+
+In the context of game development and high-performance applications, another powerful model for managing concurrency and parallelism is the use of fibers, also known as lightweight threads or user-level threads. Fibers offer a more granular level of control over task scheduling and execution compared to OS threads, and they can be an effective way to implement a job system that requires high throughput and low-latency task switching.
+
+### Understanding Fibers
+
+Fibers are lightweight, cooperative threads of execution that allow for manual scheduling, meaning that they yield control explicitly rather than being preemptively swapped out like traditional threads. This model provides several benefits:
+
+- **Efficient Context Switching**: Since fibers are managed in user space, switching between fibers is typically faster and less resource-intensive than switching between OS threads.
+- **Control Over Scheduling**: Developers have fine-grained control over when and how fibers yield execution, allowing for highly efficient use of CPU resources based on the application's specific needs.
+- **Suitable for High-Concurrency Tasks**: Fibers can be used to handle thousands to millions of concurrent tasks without the overhead associated with spawning and managing a comparable number of OS threads.
+
+### Fibers in Rust
+
+As of my last update, Rust's standard library does not include direct support for fibers, largely because fibers are traditionally managed in user space, and their implementation can be highly dependent on specific application requirements. However, the concept of fibers aligns closely with Rust's asynchronous programming model, where `async` tasks can be seen as a form of cooperative multitasking similar to fibers.
+
+For true fiber-like functionality in Rust, you might need to look into third-party crates or consider building a custom solution. Libraries such as `async-std`, `tokio`, and others effectively provide a fiber-like model through asynchronous tasks, even though they are not fibers in the traditional sense.
+
+I found crates available here
+
+- `https://docs.rs/fibers/latest/fibers/`
+
+- `https://github.com/edef1c/libfringe`
+
+### Implementing a Fiber-like Job System in Rust
+
+To implement a job system using a fiber-like model in Rust, consider the following approach using asynchronous programming:
+
+1. **Use Async Runtime for Task Scheduling**: Leverage an asynchronous runtime like Tokio or async-std, which schedules and executes `async` tasks efficiently. These tasks can be thought of as "fibers" for the purposes of your job system.
+2. **Explicit Yielding**: In places where you want to yield control to other tasks (similar to yielding in a fiber system), you can use `.await` on a future that represents the point at which you want to yield.
+3. **Manual Task Prioritization**: Implement your own prioritization logic on top of the async runtime if needed. This can involve creating different queues for tasks of varying priorities and using mechanisms like semaphores or channels to control their execution.
+
+### Key Considerations
+
+- **Task Granularity**: Like with fibers, the granularity of tasks is important. Smaller tasks allow for more responsive and efficient scheduling but may increase overhead from task management.
+- **Concurrency vs. Parallelism**: While fibers (and async tasks) can achieve high concurrency, true parallel execution still requires leveraging multiple threads. Combining async tasks with a multi-threaded executor (such as Tokio's multi-threaded runtime) can achieve both high concurrency and parallelism.
+- **Interoperability**: Consider how your fiber-like job system will interact with other parts of your application, especially if those parts use blocking IO or other synchronous operations. Proper integration can require careful design to avoid bottlenecks.
+
+### Conclusion
+
+While Rust does not directly support fibers in the traditional sense, its powerful asynchronous programming capabilities offer a comparable model for building efficient, high-concurrency job systems. By carefully designing your system around async tasks and leveraging the capabilities of async runtimes, you can achieve the benefits of a fibers-based system, including efficient task switching, fine-grained control over execution, and the ability to handle a large number of tasks concurrently.
