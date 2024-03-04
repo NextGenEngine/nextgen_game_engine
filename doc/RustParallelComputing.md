@@ -122,6 +122,8 @@ I found crates available here
 
 - `https://github.com/edef1c/libfringe`
 
+another interesting library to check - `https://github.com/BVE-Reborn/switchyard`
+
 ### Implementing a Fiber-like Job System in Rust
 
 To implement a job system using a fiber-like model in Rust, consider the following approach using asynchronous programming:
