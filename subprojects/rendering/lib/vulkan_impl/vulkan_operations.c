@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GLFW/glfw3.h>
-#include <stdbool.h> // Include this header for bool type support
+#include <stdbool.h>
+#include <string.h>
 
 VkInstance instance;
 VkDevice device;
@@ -13,7 +14,8 @@ VkSurfaceKHR surface;
 VkSwapchainKHR swapchain;
 GLFWwindow *window;
 
-VkResult vulkan_init() {
+VkResult vulkan_init()
+{
     // Initialize the Vulkan library
     // Initialize GLFW
     if (!glfwInit())
@@ -41,7 +43,7 @@ VkResult vulkan_init() {
     }
 
     // Initialize the Vulkan library
-    VkApplicationInfo appInfo = {};
+    VkApplicationInfo appInfo = {0};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     appInfo.pApplicationName = "Hello Vulkan";
     appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -53,7 +55,7 @@ VkResult vulkan_init() {
     const char **glfwExtensions;
     glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-    VkInstanceCreateInfo createInfo = {};
+    VkInstanceCreateInfo createInfo = {0};
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     createInfo.pApplicationInfo = &appInfo;
     createInfo.enabledExtensionCount = glfwExtensionCount;
@@ -76,7 +78,8 @@ VkResult vulkan_init() {
     return VK_SUCCESS;
 }
 
-VkResult vulkan_create_device() {
+VkResult vulkan_create_device()
+{
     // Create a logical device from the selected physical device
     uint32_t deviceCount = 0;
     vkEnumeratePhysicalDevices(instance, &deviceCount, NULL);
@@ -136,14 +139,14 @@ VkResult vulkan_create_device() {
     }
 
     float queuePriority = 1.0f;
-    VkDeviceQueueCreateInfo queueCreateInfo = {};
+    VkDeviceQueueCreateInfo queueCreateInfo = {0};
     queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     queueCreateInfo.queueFamilyIndex = 0; // This is simplified; you should search for the proper queue family
     queueCreateInfo.queueCount = 1;
     queueCreateInfo.pQueuePriorities = &queuePriority;
 
     const char *deviceExtensions[] = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
-    VkDeviceCreateInfo createInfo = {};
+    VkDeviceCreateInfo createInfo = {0};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     createInfo.queueCreateInfoCount = 1;
     createInfo.pQueueCreateInfos = &queueCreateInfo;
@@ -162,10 +165,11 @@ VkResult vulkan_create_device() {
     return VK_SUCCESS;
 }
 
-VkResult vulkan_create_swapchain() {
+VkResult vulkan_create_swapchain()
+{
     // Create a swap chain for image presentation
     // This pseudo-code assumes surface has already been created
-    VkSwapchainCreateInfoKHR createInfo = {};
+    VkSwapchainCreateInfoKHR createInfo = {0};
     createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     createInfo.surface = surface;
     createInfo.minImageCount = 2;                      // Double buffering
@@ -189,25 +193,26 @@ VkResult vulkan_create_swapchain() {
     return VK_SUCCESS;
 }
 
-typedef struct {
+typedef struct
+{
     float position[3]; // x, y, z coordinates
     float color[3];    // r, g, b colors
 } VkVertex;
 
 // Define vertices for a triangle and a square
 const VkVertex triangleVertices[] = {
-    {0.0f, -0.5f}, // Vertex 1
-    {-0.5f, 0.5f}, // Vertex 2
-    {0.5f, 0.5f}   // Vertex 3
+    {{0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}}, // Vertex 1
+    {{-0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}}, // Vertex 2
+    {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}},  // Vertex 2
 };
 
 const VkVertex squareVertices[] = {
-    {-0.5f, -0.5f}, // Bottom left
-    {0.5f, -0.5f},  // Bottom right
-    {0.5f, 0.5f},   // Top right
-    {-0.5f, -0.5f}, // Bottom left (repeated for triangle strip)
-    {0.5f, 0.5f},   // Top right (repeated for triangle strip)
-    {-0.5f, 0.5f}   // Top left
+    {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}}, // Bottom left
+    {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},  // Bottom right
+    {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}},   // Top right
+    {{-0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 0.0f}}, // Bottom left (repeated for triangle strip)
+    {{0.5f, 0.5f, 0.0f}, {0.0f, 1.0f, 1.0f}},   // Top right (repeated for triangle strip)
+    {{-0.5f, 0.5f, 0.0f}, {1.0f, 0.0f, 1.0f}}   // Top left
 };
 
 VkShaderModule createShaderModule(VkDevice device, const char *filePath)
@@ -223,7 +228,7 @@ VkShaderModule createShaderModule(VkDevice device, const char *filePath)
     fclose(file);
 
     // Create the shader module
-    VkShaderModuleCreateInfo createInfo = {};
+    VkShaderModuleCreateInfo createInfo = {0};
     createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     createInfo.codeSize = length;
     createInfo.pCode = buffer;
@@ -239,13 +244,15 @@ VkShaderModule createShaderModule(VkDevice device, const char *filePath)
     return shaderModule;
 }
 
-VkResult vulkan_render() {
+VkResult vulkan_render()
+{
     // Handle the rendering operations, drawing a frame
     // This is a simplified version and does not include actual rendering code
     printf("Frame rendered.\n");
 
     // Main loop
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window))
+    {
         // Efficiently wait for events
         glfwWaitEvents();
 
@@ -256,11 +263,11 @@ VkResult vulkan_render() {
         // }
     }
 
-
     return VK_SUCCESS;
 }
 
-void vulkan_cleanup() {
+void vulkan_cleanup()
+{
     // Clean up and release all Vulkan resources and the GLFW window
     vkDestroySwapchainKHR(device, swapchain, NULL);
     vkDestroyDevice(device, NULL);

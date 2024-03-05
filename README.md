@@ -1,66 +1,72 @@
-# Game Engine Design Document
+# NextGen Game Engine
 
-## 1. Introduction
+First draft of game engine
 
-### 1.1 Purpose
+## Install Rust and Cargo (assumes rustup is already installed)
 
-The purpose of this document is to provide a comprehensive design blueprint for the development of a game engine. This engine will serve as a foundation for running various games, emphasizing modularity, performance, scalability, and ease of use.
+```bash
+rustup update
+rustup default stable
+```
 
-### 1.2 Scope
+## Install Meson and Ninja (assumes Python and pip are already installed)
 
-This document covers the architectural design, module breakdown, and development practices for creating a versatile game engine. It aims to guide project teams through the development process, ensuring consistency and quality in the engine's implementation.
+```bash
+pip install --user meson ninja
+```
 
-## 2. Game Engine Architecture
+## Install Vulkan development packages (assumes a package manager like apt, dnf, or pacman is available)
 
-### 2.1 Overview
+This step is platform-dependent and may vary. The example below is for Ubuntu-like systems.
 
-The game engine architecture is designed to be modular, with each component responsible for a distinct aspect of game functionality. This modularity allows for parallel development, easy maintenance, and the flexibility to enhance or replace modules without affecting the entire system.
+```bash
+sudo apt install libvulkan-dev libglfw3-dev
+```
 
-### 2.2 Core Modules
+## Build project with Meson
 
-1. **Rendering Engine**: Manages all visual aspects, including 2D/3D graphics rendering, shader management, and scene graph representation. It should be designed to support multiple rendering backends (e.g., DirectX, Vulkan, OpenGL).
+GCC/MSVC:
 
-2. **Physics Engine**: Handles simulations of physical systems, including collision detection, rigid body dynamics, and particle systems. It must be optimized for performance and accuracy.
+```bash
+meson builddir
+meson compile -C builddir
+```
 
-3. **Audio Engine**: Manages sound playback, 3D audio spatialization, and audio resource management. It should support a variety of audio formats and middleware integration.
+LLVM/CLANG:
 
-4. **Input Management**: Processes input from various devices (keyboard, mouse, gamepad, etc.), allowing for customizable control schemes and input mapping.
+```bash
+meson setup --cross-file clang_cross_file.txt builddir
+meson compile -C builddir
+```
 
-5. **Networking**: Facilitates multiplayer functionality, including client-server communication, peer-to-peer connections, and networked game state synchronization.
+Strip executable to remove debug symbols and make executable smaller:
 
-6. **Resource Management**: Manages the loading, unloading, and organization of game assets (textures, models, sounds, etc.) to optimize memory usage and performance.
+GCC:
 
-7. **Scripting Engine**: Enables game logic customization through scripting languages (e.g., Lua, Python), allowing developers and modders to script game behavior without recompiling the engine.
+```bash
+strip builddir/nextgen_game_engine
+```
 
-8. **UI/UX System**: Provides tools and libraries for developing user interfaces (menus, HUDs, dialog boxes), supporting both in-game and out-of-game UI.
+LLVM/CLANG:
 
-9. **Game World Management**: Handles the logic and structure of the game world, including scene management, entity-component systems, and level streaming.
+```bash
+llvm-strip-14 builddir/nextgen_game_engine
+```
 
-10. **Analytics and Telemetry**: Gathers data on gameplay, performance metrics, and user behavior to inform development decisions and improve user experience.
+**_NOTE_**: Building with LLVM/CLang may require additional configuration
+in `clang_cross_file.txt` file. For example, this line:
 
-## 3. Development Best Practices
+```bash
+strip = 'llvm-strip-14' # or 'strip' if llvm-strip-14 is not available
+```
 
-- **Code Modularity**: Ensure that each module can be developed, tested, and deployed independently.
-- **Performance Optimization**: Prioritize efficient algorithms and data structures to minimize CPU and memory usage.
-- **Scalability**: Design modules to be scalable, supporting a range of hardware capabilities and game complexities.
-- **Cross-Platform Development**: Aim for compatibility across various platforms (PC, consoles, mobile) by abstracting platform-specific code.
-- **Testing and QA**: Implement unit tests and integration tests for each module, and conduct regular code reviews and performance audits.
-- **Documentation**: Maintain comprehensive documentation for each module, including APIs, usage examples, and development guidelines.
+is specific for LLVM version 14. If you have another version of LLVM/CLang,
+then you must specify there another command for stripping
 
-## 4. Project Management
+## Installing in current system
 
-### 4.1 Module Development Teams
+```bash
+meson install
+```
 
-Assign teams to specific modules based on expertise and project requirements. Encourage collaboration and knowledge sharing between teams to maintain consistency and quality across the engine.
-
-### 4.2 Milestones and Deliverables
-
-Define clear milestones and deliverables for each module, including development timelines, feature completion, testing, and integration phases.
-
-### 4.3 Version Control and CI/CD
-
-Use version control (e.g., Git) to manage code changes and contributions. Implement Continuous Integration/Continuous Deployment (CI/CD) pipelines to automate testing and build processes, ensuring that the engine remains stable and functional throughout development.
-
-## 5. Conclusion
-
-This document provides a foundational design for developing a modular game engine. By adhering to the outlined architecture, modules, best practices, and project management strategies, the development team can efficiently work towards creating a robust and flexible engine capable of powering a wide variety of games. The modular approach not only facilitates parallel development but also ensures that the engine remains adaptable to future technologies and gaming trends.
+This command will strip executable automatically.

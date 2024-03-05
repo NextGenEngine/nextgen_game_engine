@@ -1,15 +1,29 @@
 {
     "cSpell.words": [
+        "builddir",
         "embeddable",
         "gamepad",
         "gameplay",
+        "glfw",
+        "GLFW",
+        "libglfw",
+        "libvulkan",
         "modders",
+        "MSVC",
+        "nextgen",
+        "pacman",
         "runtimes",
+        "rustup",
         "smol",
         "spatialization",
+        "SPIR",
         "subprojects",
+        "swapchain",
+        "Swapchain",
         "tokio",
-        "Vulkan"
+        "vulkan",
+        "Vulkan",
+        "Wwindow"
     ],
     "C_Cpp.default.compileCommands": "/home/artem/projects/3dengine/builddir/compile_commands.json",
     "rust-analyzer.linkedProjects": [
