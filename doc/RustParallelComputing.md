@@ -24,6 +24,12 @@ Rust is an excellent choice for concurrent and parallel computing due to its saf
 
 - **Mio**: A low-level, non-blocking I/O platform for Rust focusing on event-driven IO. Mio can be used as a foundation for building your own asynchronous runtime or for scenarios where direct control over non-blocking IO is needed.
 
+## 6. Parallelo Parallel Library (PPL): Unlock the Power of Parallel Computing in Rust
+
+- `https://github.com/valebes/ppl`
+
+  Parallelo Parallel Library (PPL) is an under-development parallel framework written in Rust. The main goal of PPL is to provide a structured approach to parallel programming in Rust, allowing developers to unleash the power of parallelism without having to deal with low-level concurrency management mechanisms. PPL empowers your Rust programs by unlocking the immense potential of parallelism, making your computations faster and more efficient. Whether you're working on large-scale data processing, simulations, or any computationally intensive task, PPL has got you covered.
+
 ## 6. Avoiding OS Threads Overhead
 
 To specifically address your need to avoid the overhead of frequently spawning OS threads:
@@ -123,6 +129,10 @@ I found crates available here
 - `https://github.com/edef1c/libfringe`
 
 another interesting library to check - `https://github.com/BVE-Reborn/switchyard`
+
+Recently I found very interesting parallel framework for Rust - PPL
+
+- `https://github.com/valebes/ppl`
 
 ### Implementing a Fiber-like Job System in Rust
 
