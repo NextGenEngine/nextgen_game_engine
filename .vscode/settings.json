@@ -12,6 +12,7 @@
         "MSVC",
         "nextgen",
         "pacman",
+        "Parallelo",
         "runtimes",
         "rustup",
         "smol",
