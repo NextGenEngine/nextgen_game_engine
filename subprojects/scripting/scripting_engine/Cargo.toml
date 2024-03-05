@@ -1,0 +1,15 @@
+[package]
+name = "scripting_engine"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lua = "0.5"
+pyo3 = { version = "0.15", features = ["extension-module"] }
+
+[lib]
+name = "scripting_engine"
+path = "src/lib.rs"
+
+[features]
+default = []

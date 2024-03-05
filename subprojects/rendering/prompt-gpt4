@@ -1,0 +1,77 @@
+Generate a high quality design document that can be used by our project team to design the software described below. It should be complete and usable as the sole design documentation to get our team to complete our project.
+
+--
+
+I have this game design document:
+
+# Game Engine Design Document
+
+## 1. Introduction
+
+### 1.1 Purpose
+
+The purpose of this document is to provide a comprehensive design blueprint for the development of a game engine. This engine will serve as a foundation for running various games, emphasizing modularity, performance, scalability, and ease of use.
+
+### 1.2 Scope
+
+This document covers the architectural design, module breakdown, and development practices for creating a versatile game engine. It aims to guide project teams through the development process, ensuring consistency and quality in the engine's implementation.
+
+## 2. Game Engine Architecture
+
+### 2.1 Overview
+
+The game engine architecture is designed to be modular, with each component responsible for a distinct aspect of game functionality. This modularity allows for parallel development, easy maintenance, and the flexibility to enhance or replace modules without affecting the entire system.
+
+### 2.2 Core Modules
+
+1. **Rendering Engine**: Manages all visual aspects, including 2D/3D graphics rendering, shader management, and scene graph representation. It should be designed to support multiple rendering backends (e.g., DirectX, Vulkan, OpenGL).
+
+2. **Physics Engine**: Handles simulations of physical systems, including collision detection, rigid body dynamics, and particle systems. It must be optimized for performance and accuracy.
+
+3. **Audio Engine**: Manages sound playback, 3D audio spatialization, and audio resource management. It should support a variety of audio formats and middleware integration.
+
+4. **Input Management**: Processes input from various devices (keyboard, mouse, gamepad, etc.), allowing for customizable control schemes and input mapping.
+
+5. **Networking**: Facilitates multiplayer functionality, including client-server communication, peer-to-peer connections, and networked game state synchronization.
+
+6. **Resource Management**: Manages the loading, unloading, and organization of game assets (textures, models, sounds, etc.) to optimize memory usage and performance.
+
+7. **Scripting Engine**: Enables game logic customization through scripting languages (e.g., Lua, Python), allowing developers and modders to script game behavior without recompiling the engine.
+
+8. **UI/UX System**: Provides tools and libraries for developing user interfaces (menus, HUDs, dialog boxes), supporting both in-game and out-of-game UI.
+
+9. **Game World Management**: Handles the logic and structure of the game world, including scene management, entity-component systems, and level streaming.
+
+10. **Analytics and Telemetry**: Gathers data on gameplay, performance metrics, and user behavior to inform development decisions and improve user experience.
+
+## 3. Development Best Practices
+
+- **Code Modularity**: Ensure that each module can be developed, tested, and deployed independently.
+- **Performance Optimization**: Prioritize efficient algorithms and data structures to minimize CPU and memory usage.
+- **Scalability**: Design modules to be scalable, supporting a range of hardware capabilities and game complexities.
+- **Cross-Platform Development**: Aim for compatibility across various platforms (PC, consoles, mobile) by abstracting platform-specific code.
+- **Testing and QA**: Implement unit tests and integration tests for each module, and conduct regular code reviews and performance audits.
+- **Documentation**: Maintain comprehensive documentation for each module, including APIs, usage examples, and development guidelines.
+
+## 4. Project Management
+
+### 4.1 Module Development Teams
+
+Assign teams to specific modules based on expertise and project requirements. Encourage collaboration and knowledge sharing between teams to maintain consistency and quality across the engine.
+
+### 4.2 Milestones and Deliverables
+
+Define clear milestones and deliverables for each module, including development timelines, feature completion, testing, and integration phases.
+
+### 4.3 Version Control and CI/CD
+
+Use version control (e.g., Git) to manage code changes and contributions. Implement Continuous Integration/Continuous Deployment (CI/CD) pipelines to automate testing and build processes, ensuring that the engine remains stable and functional throughout development.
+
+## 5. Conclusion
+
+This document provides a foundational design for developing a modular game engine. By adhering to the outlined architecture, modules, best practices, and project management strategies, the development team can efficiently work towards creating a robust and flexible engine capable of powering a wide variety of games. The modular approach not only facilitates parallel development but also ensures that the engine remains adaptable to future technologies and gaming trends.
+
+
+
+Now I need design document for one core module: Rendering Engine
+It must be well designed and reusable, it must be integrated in my game engine and work well together with other core modules. using best practices in mind. It must expose interface in rust language

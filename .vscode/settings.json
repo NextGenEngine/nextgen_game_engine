@@ -11,9 +11,11 @@
         "tokio",
         "Vulkan"
     ],
-    "C_Cpp.default.compileCommands": "${workspaceFolder}/builddir/compile_commands.json",
+    "C_Cpp.default.compileCommands": "/home/artem/projects/3dengine/builddir/compile_commands.json",
     "rust-analyzer.linkedProjects": [
-        "subprojects/rendering/rust-project.json"
+        "subprojects/rendering/rust-project.json",
+        "subprojects/test/rust-project.json",
+        "subprojects/configuration/rust-project.json"
     ],
     "rust-analyzer.cargo.target": null,
     "rust-analyzer.procMacro.enable": true,

@@ -1,0 +1,4 @@
+[binaries]
+c = 'clang'
+cpp = 'clang++'
+strip = 'llvm-strip-14' # or 'strip' if llvm-strip-14 is not available

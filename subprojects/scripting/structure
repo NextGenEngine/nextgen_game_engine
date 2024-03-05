@@ -1,0 +1,29 @@
+scripting_engine/
+├── meson.build
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── language_bindings/
+│   │   ├── mod.rs
+│   │   ├── lua_binding.rs
+│   │   └── python_binding.rs
+│   ├── script_execution_environment/
+│   │   ├── mod.rs
+│   │   ├── script_loader.rs
+│   │   ├── sandboxing.rs
+│   │   └── coroutine_management.rs
+│   ├── api_exposure/
+│   │   ├── mod.rs
+│   │   ├── game_object_api.rs
+│   │   ├── event_api.rs
+│   │   └── utility_api.rs
+│   ├── script_management/
+│   │   ├── mod.rs
+│   │   ├── script_cache.rs
+│   │   └── hot_reloading.rs
+│   └── debugging_and_profiling/
+│       ├── mod.rs
+│       ├── debug_interface.rs
+│       └── performance_profiler.rs
+└── tests/
+    └── lib.rs

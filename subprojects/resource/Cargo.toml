@@ -1,0 +1,12 @@
+# Cargo.toml - Rust package manager configuration for the Resource Management module
+
+[package]
+name = "resource_management"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+# List of dependencies will go here
+
+[lib]
+path = "lib.rs"
