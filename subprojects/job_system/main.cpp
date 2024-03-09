@@ -7,7 +7,7 @@
 #include <future>
 
 void terminateThreadPoolAfterDelay(ThreadPoolManager &threadPoolManager,
-JobManager &jobManager)
+                                   JobManager &jobManager)
 {
     std::cout << "Running wait timer\n";
     std::this_thread::sleep_for(std::chrono::seconds(5)); // Sleep in async task
@@ -35,10 +35,13 @@ int main()
     threadPoolManager.initialize();
 
     // Add jobs to the job queue
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 10000000; ++i)
     {
-        jobManager.addJob([i]
-                          { std::cout << "i am " << i << " job\n"; });
+        jobManager.addJob([i]()
+                          {
+                if (i % 1000000 == 0) {
+                    std::cout << "i am " << i << " job\n";
+                } });
     }
 
     auto future = std::async(

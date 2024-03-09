@@ -43,6 +43,8 @@
     "files.associations": {
         "atomic": "cpp",
         "iostream": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "memory": "cpp",
+        "vector": "cpp"
     }
 }
