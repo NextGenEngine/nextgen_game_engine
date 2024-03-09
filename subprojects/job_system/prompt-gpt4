@@ -1,0 +1,21 @@
+Generate a high quality design document that can be used by our project team to design the software described below. It should be complete and usable as the sole design documentation to get our team to complete our project.
+
+--
+
+create a job system using green threads concept.
+use c/c++.
+meson as build system.
+during initialization system checks how many cpu cores have the hardware it running on.
+saves it in global state as 'num_cores'
+next it spawns num_cores long living threads.
+stick each thread to its own cpu core.
+later these threads will be used to run jobs on it. so we fully avoid processor context switching. and we do not need to spawn threads anymore during application lifecycle.
+threads are waiting for new jobs (fibers).
+jobs are added to system queue on fly during system runtime.
+if there are not jobs left, then threads are idle and waiting for new jobs.
+system schedules jobs across available sticky threads somehow in most efficient way (choose a way or existing library for this).
+amount of running threads is always equals to number of available cpu cores.
+as example/test code create thousand of simple jobs.
+jobs must be stateful (they can execute another jobs and wait for result from them)
+
+use hwloc for sticky threads, boost.threads for thread pool, fibers for jobs

@@ -1,15 +1,19 @@
 {
     "cSpell.words": [
         "builddir",
+        "cpubind",
+        "cpuset",
         "embeddable",
         "gamepad",
         "gameplay",
         "glfw",
         "GLFW",
+        "hwloc",
         "libglfw",
         "libvulkan",
         "modders",
         "MSVC",
+        "nbobjs",
         "nextgen",
         "pacman",
         "Parallelo",
@@ -35,5 +39,10 @@
     "rust-analyzer.cargo.target": null,
     "rust-analyzer.procMacro.enable": true,
     "rust-analyzer.cargo.runBuildScripts": true,
-    "rust-analyzer.workspace.symbol.search.scope": "workspace_and_dependencies"
+    "rust-analyzer.workspace.symbol.search.scope": "workspace_and_dependencies",
+    "files.associations": {
+        "atomic": "cpp",
+        "iostream": "cpp",
+        "future": "cpp"
+    }
 }
