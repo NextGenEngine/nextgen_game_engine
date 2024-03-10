@@ -1,5 +1,5 @@
 #include "job_manager.h"
 
-JobManager::JobManager(JobQueue& jobQueue) : jobQueue(jobQueue) {}
+JobManager::JobManager(JobQueue &jobQueue) : jobQueue(jobQueue) {}
 
-void JobManager::addJob(const Job& job) { jobQueue.addJob(job); }
+void JobManager::addJob(const Job &job) { jobQueue.addJob(job); }

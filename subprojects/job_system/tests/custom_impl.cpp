@@ -7,50 +7,48 @@
 #include "../src/backend/custom_impl/thread_pool_manager.h"
 
 void terminateThreadPoolAfterDelay(ThreadPoolManager &threadPoolManager,
-								   JobManager &jobManager) {
-	std::cout << "Running wait timer\n";
-	std::this_thread::sleep_for(
-		std::chrono::seconds(5));  // Sleep in async task
-	std::cout
-		<< "Terminating thread pool manager (with its workers and jobs)\n";
-	jobManager.addJob([&threadPoolManager] { threadPoolManager.terminate(); });
+                                   JobManager &jobManager) {
+  std::cout << "Running wait timer\n";
+  std::this_thread::sleep_for(std::chrono::seconds(5));  // Sleep in async task
+  std::cout << "Terminating thread pool manager (with its workers and jobs)\n";
+  jobManager.addJob([&threadPoolManager] { threadPoolManager.terminate(); });
 }
 
 int main() {
-	std::cout << "main ";
+  std::cout << "main ";
 
-	CoreDetector coreDetector;
-	int numCores = coreDetector.detectCores();
+  CoreDetector coreDetector;
+  int numCores = coreDetector.detectCores();
 
-	std::cout << numCores;
+  std::cout << numCores;
 
-	JobQueue jobQueue;
-	ThreadPoolManager threadPoolManager(numCores, jobQueue);
-	JobManager jobManager(jobQueue);
+  JobQueue jobQueue;
+  ThreadPoolManager threadPoolManager(numCores, jobQueue);
+  JobManager jobManager(jobQueue);
 
-	std::cout << "JobManager";
+  std::cout << "JobManager";
 
-	// Initialize the thread pool and bind threads to cores
-	threadPoolManager.initialize();
+  // Initialize the thread pool and bind threads to cores
+  threadPoolManager.initialize();
 
-	// Add jobs to the job queue
-	for (int i = 0; i < 10000000; ++i) {
-		jobManager.addJob([i]() {
-			if (i % 1000000 == 0) {
-				std::cout << "i am " << i << " job\n";
-			}
-		});
-	}
+  // Add jobs to the job queue
+  for (int i = 0; i < 10000000; ++i) {
+    jobManager.addJob([i]() {
+      if (i % 1000000 == 0) {
+        std::cout << "i am " << i << " job\n";
+      }
+    });
+  }
 
-	auto future = std::async(std::launch::async, terminateThreadPoolAfterDelay,
-							 std::ref(threadPoolManager), std::ref(jobManager));
-	future.wait();
+  auto future = std::async(std::launch::async, terminateThreadPoolAfterDelay,
+                           std::ref(threadPoolManager), std::ref(jobManager));
+  future.wait();
 
-	// Start the job processing
-	threadPoolManager.start();
+  // Start the job processing
+  threadPoolManager.start();
 
-	// Wait for all jobs to complete
-	threadPoolManager.join();
+  // Wait for all jobs to complete
+  threadPoolManager.join();
 
-	return 0;
+  return 0;
 }

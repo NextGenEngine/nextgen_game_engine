@@ -3,14 +3,17 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
+
 This document outlines the design and implementation strategy for the Rendering Engine module of our game engine. The Rendering Engine is crucial for visual representation, supporting both 2D and 3D graphics. This document aims to ensure the engine is well-designed, reusable, and integrates seamlessly with other core modules.
 
 ### 1.2 Scope
+
 The scope of this document includes the architectural design, interfaces, and development practices specific to the Rendering Engine. It covers the engine's support for multiple rendering backends, its integration with other engine modules, and best practices for its implementation in Rust.
 
 ## 2. Rendering Engine Architecture
 
 ### 2.1 Overview
+
 The Rendering Engine is designed to be modular and flexible, supporting a wide range of graphics APIs (e.g., DirectX, Vulkan, OpenGL) and rendering techniques. It will provide an abstraction layer over these APIs to facilitate cross-platform graphics rendering.
 
 ### 2.2 Core Components
@@ -26,9 +29,11 @@ The Rendering Engine is designed to be modular and flexible, supporting a wide r
 ## 3. Rust Interface
 
 ### 3.1 Module Structure
+
 The Rendering Engine will be implemented in Rust, providing a safe and efficient interface. It will consist of several Rust crates, each focusing on specific aspects of rendering.
 
 ### 3.2 Public API
+
 The engine will expose a public API to the rest of the game engine, allowing for easy integration and use. This API will include:
 
 - Initialization and configuration functions
@@ -37,6 +42,7 @@ The engine will expose a public API to the rest of the game engine, allowing for
 - Utilities for camera and lighting setup
 
 ### 3.3 Integration Points
+
 The Rendering Engine will integrate with other engine modules through well-defined interfaces, ensuring compatibility and flexibility. For example, it will work closely with the Resource Management module for loading and managing graphical assets and the Game World Management module for rendering scenes.
 
 ## 4. Development Best Practices

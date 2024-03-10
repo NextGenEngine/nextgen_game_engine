@@ -2,8 +2,8 @@
 #define CORE_DETECTOR_H
 
 class CoreDetector {
-public:
-    int detectCores() const;
+ public:
+  int detectCores() const;
 };
 
-#endif // CORE_DETECTOR_H
+#endif  // CORE_DETECTOR_H
