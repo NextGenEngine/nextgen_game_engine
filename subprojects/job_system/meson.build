@@ -1,21 +1,20 @@
 project('green_threads_job_system', 'cpp', default_options: ['cpp_std=c++20'])
 
 hwloc_dep = dependency('hwloc')
-boost_dep = dependency('boost', modules: ['thread', 'fiber'])
+boost_dep = dependency('boost', modules: ['thread', 'fiber', 'context'])
 onetbb_dep = dependency('tbb')
 
 executable(
-    'green_threads_job_system',
+    'custom_impl',
     sources: [
-        'main.cpp',
-        'core_detector.cpp',
-        'thread_pool_manager.cpp',
-        'thread_worker.cpp',
-        'job_queue.cpp',
-        'job_manager.cpp',
+        'tests/custom_impl.cpp',
+        'src/backend/custom_impl/core_detector.cpp',
+        'src/backend/custom_impl/thread_pool_manager.cpp',
+        'src/backend/custom_impl/thread_worker.cpp',
+        'src/backend/custom_impl/job_queue.cpp',
+        'src/backend/custom_impl/job_manager.cpp',
     ],
     dependencies: [hwloc_dep, boost_dep],
-    install: true,
 )
 
 executable(
@@ -24,7 +23,6 @@ executable(
         'tests/pure_tbb.cpp',
     ],
     dependencies: [onetbb_dep],
-    install: true,
 )
 
 executable(
@@ -33,5 +31,12 @@ executable(
         'tests/tbb_with_job_interface.cpp',
     ],
     dependencies: [onetbb_dep],
-    install: true,
+)
+
+executable(
+    'pure_fibers',
+    sources: [
+        'tests/pure_fibers.cpp',
+    ],
+    dependencies: [boost_dep],
 )

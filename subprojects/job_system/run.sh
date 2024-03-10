@@ -5,6 +5,7 @@ apt install libboost-f-dev
 apt install libboost-dev
 apt install libboost-fiber-dev
 apt install libhwloc-dev
+apt install libboost-context-dev
 
 # Setup the build directory
 meson setup builddir

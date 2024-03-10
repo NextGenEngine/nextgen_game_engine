@@ -1,5 +1,5 @@
-#include "core_detector.h"
 #include <hwloc.h>
+#include "core_detector.h"
 
 int CoreDetector::detectCores() const {
     hwloc_topology_t topology;

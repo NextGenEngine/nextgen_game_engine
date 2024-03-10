@@ -11,9 +11,10 @@ class PrintJob : public Job
     int id;
 
 public:
+    PrintJob() {}
     PrintJob(int id) : id(id) {}
 
-    void execute() override
+    inline void execute() override
     {
         if (id % PRINT_EVERY_NUMBER == 0)
         {
@@ -22,7 +23,7 @@ public:
     }
 };
 
-Job *jobs[NUMBER_OF_TEST_JOBS]; // Static array of Job pointers
+PrintJob jobs[NUMBER_OF_TEST_JOBS]; // Static array of Job pointers
 
 int main()
 {
@@ -31,7 +32,7 @@ int main()
     // Allocate and initialize jobs
     for (int i = 0; i < NUMBER_OF_TEST_JOBS; ++i)
     {
-        jobs[i] = new PrintJob(i + 1);
+        jobs[i] = PrintJob(i + 1);
     }
 
     // Start timer
@@ -39,7 +40,7 @@ int main()
 
     // Execute the jobs in parallel
     tbb::parallel_for(0, NUMBER_OF_TEST_JOBS, [](int i)
-                      { jobs[i]->execute(); });
+                      { jobs[i].execute(); });
 
     // Stop timer
     auto end = std::chrono::high_resolution_clock::now();
@@ -51,10 +52,10 @@ int main()
     std::cout << "parallel_for execution took " << duration << " milliseconds.\n";
 
     // Clean up
-    for (int i = 0; i < NUMBER_OF_TEST_JOBS; ++i)
-    {
-        delete jobs[i]; // Manually delete allocated jobs
-    }
+    // for (int i = 0; i < NUMBER_OF_TEST_JOBS; ++i)
+    // {
+    //     delete jobs[i]; // Manually delete allocated jobs
+    // }
 
     // Stop timer
     auto end_full = std::chrono::high_resolution_clock::now();
