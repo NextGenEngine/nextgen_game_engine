@@ -1,1 +1,0 @@
-// Defines a generic interface for graphics operations
