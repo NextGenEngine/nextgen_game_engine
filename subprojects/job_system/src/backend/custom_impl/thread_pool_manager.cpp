@@ -10,7 +10,7 @@ ThreadPoolManager::ThreadPoolManager(int numCores, JobQueue &jobQueue)
 ThreadPoolManager::~ThreadPoolManager() { join(); }
 
 void ThreadPoolManager::initialize() {
-  hwloc_topology_t topology;
+  hwloc_topology_t topology = nullptr;
   hwloc_topology_init(&topology);
   hwloc_topology_load(topology);
 
@@ -30,8 +30,8 @@ void ThreadPoolManager::initialize() {
     //     hwloc_bitmap_free(cpuset); });
 
     workers.emplace_back(std::make_unique<ThreadWorker>(i, jobQueue));
-    workerThreads.emplace_back([this, cpuset, i, &worker = workers.back()]() {
-      hwloc_topology_t topology;
+    workerThreads.emplace_back([cpuset, &worker = workers.back()]() {
+      hwloc_topology_t topology = nullptr;
       hwloc_topology_init(&topology);
       hwloc_topology_load(topology);
       hwloc_set_cpubind(topology, cpuset, HWLOC_CPUBIND_THREAD);

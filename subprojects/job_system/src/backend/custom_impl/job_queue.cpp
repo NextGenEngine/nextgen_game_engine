@@ -1,7 +1,7 @@
 #include "job_queue.h"
 
 void JobQueue::addJob(const Job &job) {
-  std::lock_guard<std::mutex> lock(mutex);
+  std::lock_guard<std::mutex> const lock(mutex);
   queue.push(job);
   cv.notify_one();
 }

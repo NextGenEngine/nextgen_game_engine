@@ -17,8 +17,7 @@ void terminateThreadPoolAfterDelay(ThreadPoolManager &threadPoolManager,
 int main() {
   std::cout << "main ";
 
-  CoreDetector coreDetector;
-  int numCores = coreDetector.detectCores();
+  int const numCores = CoreDetector::detectCores();
 
   std::cout << numCores;
 

@@ -9,11 +9,13 @@
 #include "tests_constants.h"
 
 class PrintJob : public Job {
-  int id;
+  int id{};
 
  public:
-  PrintJob() {}
-  PrintJob(int id) : id(id) {}
+  PrintJob() = default;
+
+  // NOLINTNEXTLINE(readability-identifier-length)
+  explicit PrintJob(int id) : id(id) {}
 
   inline void execute() override {
     if (id % PRINT_EVERY_NUMBER == 0) {
@@ -22,6 +24,7 @@ class PrintJob : public Job {
   }
 };
 
+// NOLINTNEXTLINE(*avoid-c-arrays)
 PrintJob jobs[NUMBER_OF_TEST_JOBS];  // Static array of Job pointers
 
 int main() {
@@ -29,6 +32,7 @@ int main() {
   auto start_full = std::chrono::high_resolution_clock::now();
   // Allocate and initialize jobs
   for (int i = 0; i < NUMBER_OF_TEST_JOBS; ++i) {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-constant-array-index)
     jobs[i] = PrintJob(i + 1);
   }
 
@@ -36,7 +40,8 @@ int main() {
   auto start = std::chrono::high_resolution_clock::now();
 
   // Execute the jobs in parallel
-  tbb::parallel_for(0, NUMBER_OF_TEST_JOBS, [](int i) { jobs[i].execute(); });
+  tbb::parallel_for(0, NUMBER_OF_TEST_JOBS,
+                    [](int index) { jobs[index].execute(); });
 
   // Stop timer
   auto end = std::chrono::high_resolution_clock::now();

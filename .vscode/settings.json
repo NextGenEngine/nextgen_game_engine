@@ -15,6 +15,7 @@
     "MSVC",
     "nbobjs",
     "nextgen",
+    "NOLINTNEXTLINE",
     "pacman",
     "Parallelo",
     "runtimes",
@@ -31,15 +32,6 @@
     "Wwindow"
   ],
   "files.insertFinalNewline": true,
-  "C_Cpp.default.compileCommands": "${workspaceFolder}/builddir/compile_commands.json",
-  "rust-analyzer.linkedProjects": [
-    "subprojects/rendering/rust-project.json",
-    "subprojects/test/rust-project.json",
-    "subprojects/configuration/rust-project.json"
-  ],
-  "rust-analyzer.cargo.target": null,
-  "rust-analyzer.procMacro.enable": true,
-  "rust-analyzer.workspace.symbol.search.scope": "workspace_and_dependencies",
   "files.associations": {
     "atomic": "cpp",
     "iostream": "cpp",
@@ -109,8 +101,5 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp"
-  },
-  "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild",
-  "clang-tidy.fixOnSave": true,
-  "clang-tidy.executable": "clang-tidy -x c++"
+  }
 }

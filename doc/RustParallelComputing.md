@@ -41,7 +41,7 @@ To specifically address your need to avoid the overhead of frequently spawning O
 
 - For ultra-low-latency requirements, consider CPU pinning, where specific threads or processes are bound to specific CPU cores. This can prevent context switches and cache misses but requires a more manual and detailed approach. Libraries like `core_affinity` in Rust can help manage this.
 
-## Conclusion
+## Conclusion 1
 
 For most applications, starting with high-level abstractions like Rayon for CPU-bound tasks or Tokio/async-std for IO-bound tasks will yield good performance with minimal latency. If your application has specific needs or requires fine-tuned optimization, you might explore more specialized approaches such as custom thread pools, mio for event-driven IO, or even CPU pinning for critical tasks. Rust's ecosystem is rich and versatile, offering multiple ways to achieve efficient parallel processing.
 
@@ -67,7 +67,7 @@ Integrating Rust's concurrency and parallelism features into a game engine can s
 - **Profiling and Optimization**: Regularly profile your game engine to identify bottlenecks or inefficient parallel execution patterns. Rust's ecosystem includes several profiling tools that can help you optimize your game's performance.
 - **Safety and Concurrency Guarantees**: Rust's ownership and type system provide strong guarantees against common concurrency issues, such as data races. This safety allows you to focus on optimizing your game's performance without worrying about subtle bugs.
 
-### Conclusion
+### Conclusion 2
 
 By leveraging Rust's powerful concurrency and parallelism capabilities, you can build a game engine that efficiently utilizes all available processor cores, achieving low latency and high performance across various subsystems. Whether it's task parallelism for executing multiple subsystems concurrently or data parallelism for processing game world simulations, Rust provides the tools and libraries to meet the demands of modern game development.
 
@@ -100,7 +100,7 @@ To build a coroutines-based job system in Rust using these tools, you would:
 - **Manage Concurrency**: Control the level of concurrency using mechanisms like semaphores or controlling the number of spawned tasks, ensuring that your system doesn't get overwhelmed.
 - **Leverage Channels for Communication**: Use async channels (provided by Tokio, async-std, or crossbeam) for communication between tasks, allowing for message passing and coordination without blocking.
 
-### Conclusion
+### Conclusion 3
 
 A coroutines-based job system in Rust, built on top of asynchronous runtimes like Tokio or async-std, offers a scalable and efficient way to handle high concurrency and IO-bound tasks. This model is particularly effective in scenarios where tasks involve waiting or in highly interactive environments like game engines where responsiveness is crucial. By leveraging Rust's async ecosystem, you can achieve a high degree of parallelism with lower overhead compared to traditional thread-based models, aligning well with the needs of modern, high-performance applications.
 
@@ -148,6 +148,6 @@ To implement a job system using a fiber-like model in Rust, consider the followi
 - **Concurrency vs. Parallelism**: While fibers (and async tasks) can achieve high concurrency, true parallel execution still requires leveraging multiple threads. Combining async tasks with a multi-threaded executor (such as Tokio's multi-threaded runtime) can achieve both high concurrency and parallelism.
 - **Interoperability**: Consider how your fiber-like job system will interact with other parts of your application, especially if those parts use blocking IO or other synchronous operations. Proper integration can require careful design to avoid bottlenecks.
 
-### Conclusion
+### Conclusion 4
 
 While Rust does not directly support fibers in the traditional sense, its powerful asynchronous programming capabilities offer a comparable model for building efficient, high-concurrency job systems. By carefully designing your system around async tasks and leveraging the capabilities of async runtimes, you can achieve the benefits of a fibers-based system, including efficient task switching, fine-grained control over execution, and the ability to handle a large number of tasks concurrently.

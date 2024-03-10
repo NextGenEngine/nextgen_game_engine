@@ -3,7 +3,7 @@
 
 class CoreDetector {
  public:
-  int detectCores() const;
+  static int detectCores();
 };
 
 #endif  // CORE_DETECTOR_H

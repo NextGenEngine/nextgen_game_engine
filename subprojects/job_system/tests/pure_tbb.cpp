@@ -9,9 +9,9 @@ int main() {
   // Start timer
   auto start = std::chrono::high_resolution_clock::now();
 
-  tbb::parallel_for(1, NUMBER_OF_TEST_JOBS + 1, [](int i) {
-    if (i % PRINT_EVERY_NUMBER == 0) {
-      std::cout << "i am " << i << "th job\n";
+  tbb::parallel_for(1, NUMBER_OF_TEST_JOBS + 1, [](int index) {
+    if (index % PRINT_EVERY_NUMBER == 0) {
+      std::cout << "i am " << index << "th job\n";
     }
   });
 

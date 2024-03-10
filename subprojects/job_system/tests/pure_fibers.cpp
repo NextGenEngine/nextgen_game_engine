@@ -4,17 +4,20 @@
 
 #include "tests_constants.h"
 
-using namespace std::chrono;
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
 
 // Assuming NUMBER_OF_TEST_JOBS is a compile-time constant
+// NOLINTNEXTLINE(*-avoid-c-arrays)
 boost::fibers::fiber fibers[NUMBER_OF_TEST_JOBS];
 
 int main() {
   // Start timer
-  auto start = std::chrono::high_resolution_clock::now();
+  auto start = high_resolution_clock::now();
 
   // Create a fiber for each job
   for (int i = 0; i < NUMBER_OF_TEST_JOBS; ++i) {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-constant-array-index)
     fibers[i] = boost::fibers::fiber([i]() {
       if ((i + 1) % PRINT_EVERY_NUMBER == 0) {
         std::cout << "I am " << i + 1 << "th job\n";
@@ -23,9 +26,9 @@ int main() {
   }
 
   // Join all fibers
-  for (int i = 0; i < NUMBER_OF_TEST_JOBS; ++i) {
-    if (fibers[i].joinable()) {
-      fibers[i].join();
+  for (auto& fiber : fibers) {
+    if (fiber.joinable()) {
+      fiber.join();
     }
   }
 

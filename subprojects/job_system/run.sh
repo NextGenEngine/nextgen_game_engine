@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Install Meson and Ninja build system
 pip install meson ninja
 
