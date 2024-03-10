@@ -101,5 +101,6 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp"
-  }
+  },
+  "cSpell.spellCheckOnlyWorkspaceFiles": true
 }
