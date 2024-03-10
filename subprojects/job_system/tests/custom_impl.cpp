@@ -1,19 +1,19 @@
-#include <iostream>
 #include <future>
+#include <iostream>
+
+#include "../src/backend/custom_impl/core_detector.h"
 #include "../src/backend/custom_impl/job_manager.h"
 #include "../src/backend/custom_impl/job_queue.h"
-#include "../src/backend/custom_impl/core_detector.h"
 #include "../src/backend/custom_impl/thread_pool_manager.h"
 
 void terminateThreadPoolAfterDelay(ThreadPoolManager &threadPoolManager,
-		JobManager &jobManager) {
+								   JobManager &jobManager) {
 	std::cout << "Running wait timer\n";
-	std::this_thread::sleep_for(std::chrono::seconds(5)); // Sleep in async task
+	std::this_thread::sleep_for(
+		std::chrono::seconds(5));  // Sleep in async task
 	std::cout
-			<< "Terminating thread pool manager (with its workers and jobs)\n";
-	jobManager.addJob([&threadPoolManager] {
-		threadPoolManager.terminate();
-	});
+		<< "Terminating thread pool manager (with its workers and jobs)\n";
+	jobManager.addJob([&threadPoolManager] { threadPoolManager.terminate(); });
 }
 
 int main() {
@@ -43,7 +43,7 @@ int main() {
 	}
 
 	auto future = std::async(std::launch::async, terminateThreadPoolAfterDelay,
-			std::ref(threadPoolManager), std::ref(jobManager));
+							 std::ref(threadPoolManager), std::ref(jobManager));
 	future.wait();
 
 	// Start the job processing

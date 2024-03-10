@@ -2,6 +2,4 @@
 
 JobManager::JobManager(JobQueue& jobQueue) : jobQueue(jobQueue) {}
 
-void JobManager::addJob(const Job& job) {
-    jobQueue.addJob(job);
-}
+void JobManager::addJob(const Job& job) { jobQueue.addJob(job); }

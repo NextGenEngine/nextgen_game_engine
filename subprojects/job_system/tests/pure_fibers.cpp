@@ -1,7 +1,10 @@
-#include <iostream>
-#include <chrono>
 #include <boost/fiber/all.hpp>
+#include <chrono>
+#include <iostream>
+
 #include "tests_constants.h"
+
+using namespace std::chrono;
 
 // Assuming NUMBER_OF_TEST_JOBS is a compile-time constant
 boost::fibers::fiber fibers[NUMBER_OF_TEST_JOBS];
@@ -30,8 +33,9 @@ int main() {
 	auto end = std::chrono::high_resolution_clock::now();
 
 	// Calculate elapsed time
-	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-			end - start).count();
+	auto duration =
+		std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+			.count();
 
 	std::cout << "Execution took " << duration << " milliseconds.\n";
 
