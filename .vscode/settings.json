@@ -11,6 +11,7 @@
     "hwloc",
     "libglfw",
     "libvulkan",
+    "libyaml",
     "modders",
     "MSVC",
     "nbobjs",

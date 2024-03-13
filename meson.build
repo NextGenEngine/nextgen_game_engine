@@ -2,7 +2,7 @@ project('nextgen_game_engine', version: '0.1')
 
 # subproject('analytics_telemetry')
 # subproject('audio')
-# subproject('configuration')
+subproject('configuration')
 # subproject('engine')
 # subproject('game_world')
 # subproject('input')
