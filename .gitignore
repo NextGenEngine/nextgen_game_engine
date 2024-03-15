@@ -1,3 +1,5 @@
-.env
-!subprojects/*.wrap
-.cache
+# Bazel
+/bazel-*
+/external
+/.cache
+/compile_commands.json

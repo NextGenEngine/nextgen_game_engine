@@ -1,8 +1,0 @@
-Generate a high quality design document that can be used by our project team to design the software described below. It should be complete and usable as the sole design documentation to get our team to complete our project.
-
---
-
-Now I need design document for this core module: Audio Engine
-document must show overal structure. its core modules, its api, integrations with other core modules of game engine. use best practices in mind. exposed api is in rust language.
-Give me answer in Markdown format.
-
