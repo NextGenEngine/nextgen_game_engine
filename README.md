@@ -2,17 +2,32 @@
 
 First draft of game engine
 
-## Install Rust and Cargo (assumes rustup is already installed)
+## Install Bazel
+
+Use installation instrutions from official Bazel website -
+`https://bazel.build/install`
+
+Recommended way is to install Bazelisk (no need to configure it -
+just call it just like you would call Bazel)
+
+On macOS:
 
 ```bash
-rustup update
-rustup default stable
+brew install bazelisk
 ```
 
-## Install Meson and Ninja (assumes Python and pip are already installed)
+On Windows:
 
 ```bash
-pip install --user meson ninja
+choco install bazelisk
+```
+
+On Linux: You can download Bazelisk binary on our Releases page and add it to your PATH manually, which also works on macOS and Windows.
+
+Bazelisk is also published to npm. You may want to install it with
+
+```bash
+npm install -g @bazel/bazelisk
 ```
 
 ## Install Vulkan development packages (assumes a package manager like apt, dnf, or pacman is available)
@@ -23,50 +38,54 @@ This step is platform-dependent and may vary. The example below is for Ubuntu-li
 sudo apt install libvulkan-dev libglfw3-dev
 ```
 
-## Build project with Meson
+## Generate compile_commands.json
 
-GCC/MSVC:
+Bazel is supported with plugins in many different IDEs, including
+CLion, Visual Studio, VSCode, Eclipse, Emacs and Vim
 
-```bash
-meson builddir
-meson compile -C builddir
-```
-
-LLVM/CLANG:
-
-```bash
-meson setup --cross-file clang_cross_file.txt builddir
-meson compile -C builddir
-```
-
-Strip executable to remove debug symbols and make executable smaller:
-
-GCC:
+For VSCode and Sublime Text the preferred way is to use Clangd server
+for C/C++ language support. Obviously you want to have code navigation,
+auto-completion and refactoring features. For this you need to generate
+`compile_commands.json`:
 
 ```bash
-strip builddir/nextgen_game_engine
+bazel run @hedron_compile_commands//:refresh_all
 ```
 
-LLVM/CLANG:
+## Build and test project with Bazel
 
 ```bash
-llvm-strip-14 builddir/nextgen_game_engine
+bazel test //components/engine:tests
+bazel build //components/engine:engine
 ```
 
-**_NOTE_**: Building with LLVM/CLang may require additional configuration
-in `clang_cross_file.txt` file. For example, this line:
+## Code quality checking with Trunk
+
+I use Trunk.io for this - `trunk.io`
+
+To install and run it locally follow official documentation -
+`https://docs.trunk.io/check/advanced-setup/cli`
+
+With Bash:
 
 ```bash
-strip = 'llvm-strip-14' # or 'strip' if llvm-strip-14 is not available
+curl https://get.trunk.io -fsSL | bash -s -- -y
 ```
 
-is specific for LLVM version 14. If you have another version of LLVM/CLang,
-then you must specify there another command for stripping
-
-## Installing in current system
+With Npm:
 
 ```bash
-meson install
+npm install -D @trunkio/launcher
 ```
 
-This command will strip executable automatically.
+Executable name clashes with Rust Cargo's trunk package for WebAssembly
+development - `trunk`. If you have this problem, then you need to find
+a way to keep both of them in your system. Installation path is different,
+so you only need to choose between them. In my case I just renamed Trunk.io
+executable to `trunk_code`, and configured my IDE to use custom path for this.
+
+Check code quality:
+
+```bash
+trunk check -a
+```
