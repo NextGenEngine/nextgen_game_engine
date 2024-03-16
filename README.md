@@ -89,3 +89,32 @@ Check code quality:
 ```bash
 trunk check -a
 ```
+
+## Merge Queue
+
+Use Trunk.io Merge Queue, when working in large teams (10 and more engineers):
+
+`https://docs.trunk.io/merge/set-up-trunk-merge`
+
+`https://docs.trunk.io/merge/set-up-trunk-merge/merge-+-bazel`
+
+## IDEs recommendations
+
+Sublime Text:
+
+- auto-save
+- BazelSyntax
+- Gitignored File Excluder
+- SublimeLinter
+- SublimeLinter-contrib-clang-tidy
+- LSP
+- LSP-clangd
+- LSP-cspell
+
+VSCode:
+
+- clangd (disable Microsoft C/C++ extension)
+- clang-tidy
+- bazel
+- trunk
+- ... list is long, I'm specifying here mandatory ones
