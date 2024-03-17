@@ -112,6 +112,30 @@ clangd --version
 clang-tidy --version
 ```
 
+## Custom clang-tidy linter for Trunk.io
+
+We use Trunk.io for code quality management.
+
+By default it is using quite old version of clang-tidy.
+We want to use nightly builds of cland-tidy for development (check instructions
+above for LLVM toolchain installation).
+To use latest clang-tidy with Trunk.io we created an override plugin -
+`https://github.com/NextGenEngine/trunk-io-linter-clang-tidy-latest.git` and
+configured it in `.trunk/trunk.yaml` (order is critical):
+
+```yaml
+plugins:
+  sources:
+    - id: trunk
+      ref: v1.4.4
+      uri: https://github.com/trunk-io/plugins
+    - id: clang-tidy-latest
+      uri: https://github.com/NextGenEngine/trunk-io-linter-clang-tidy-latest
+      ref: v1.0
+```
+
+Read Trunk.io documentation for details.
+
 ## Generate compile_commands.json
 
 Bazel is supported with plugins in many different IDEs, including
@@ -164,14 +188,6 @@ Check code quality:
 trunk check -a
 ```
 
-## Merge Queue
-
-Use Trunk.io Merge Queue, when working in large teams (10 and more engineers):
-
-`https://docs.trunk.io/merge/set-up-trunk-merge`
-
-`https://docs.trunk.io/merge/set-up-trunk-merge/merge-+-bazel`
-
 ## IDEs recommendations
 
 Sublime Text:
@@ -192,3 +208,11 @@ VSCode:
 - bazel
 - trunk
 - ... list is long, I'm specifying here mandatory ones
+
+## Merge Queue
+
+Use Trunk.io Merge Queue, when working in large teams (10 and more engineers):
+
+`https://docs.trunk.io/merge/set-up-trunk-merge`
+
+`https://docs.trunk.io/merge/set-up-trunk-merge/merge-+-bazel`
