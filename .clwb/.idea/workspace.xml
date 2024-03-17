@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BlazeImportSettings">
+    <option name="buildSystem" value="Bazel" />
+    <option name="locationHash" value="nextgengameengine-9c462458" />
+    <option name="projectDataDirectory" value="$PROJECT_DIR$" />
+    <option name="projectName" value="nextgen_game_engine" />
+    <option name="projectViewFile" value="$PROJECT_DIR$/.bazelproject" />
+    <option name="workspaceRoot" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5039d5ed-c807-4263-a0e5-9acda2afac2a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../components/job_system/run.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/core_detector.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/core_detector.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/job_manager.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/job_manager.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/job_queue.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/job_queue.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/thread_pool_manager.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/thread_pool_manager.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/thread_worker.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/backend/custom_impl/thread_worker.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/src/job.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/tests/custom_impl.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/tests/pure_fibers.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/tests/pure_tbb.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/tests/tbb_with_job_interface.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../components/job_system/tests/tests_constants.h" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2dmDWZQWPp5bwksMC3cJuzKFAyn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Bazel Command.Bazel test //...:all.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.advertisement.text.has.clang-format&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/artem/projects/nextgen_game_engine&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;language.cpp.clang-tidy&quot;,
+    &quot;structure.view.defaults.are.configured&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="Bazel test //...:all" type="BlazeCommandRunConfigurationType" factoryName="Bazel Command" temporary="true" nameIsGenerated="true">
+      <blaze-settings handler-id="BlazeCommandGenericRunConfigurationHandlerProvider" blaze-command="test">
+        <blaze-target>//...:all</blaze-target>
+        <env_state>
+          <envs />
+        </env_state>
+      </blaze-settings>
+      <method v="2">
+        <option name="Blaze.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Bazel Command.Bazel test //...:all" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5039d5ed-c807-4263-a0e5-9acda2afac2a" name="Changes" comment="" />
+      <created>1710604400060</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1710604400060</updated>
+      <workItem from="1710604402747" duration="2606000" />
+      <workItem from="1710611346241" duration="3720000" />
+      <workItem from="1710698883698" duration="795000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

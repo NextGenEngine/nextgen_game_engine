@@ -1,0 +1,6 @@
+{
+    "settings":
+    {
+        "SublimeLinter.clang-tidy.compile_commands": "${project_path}"
+    }
+}

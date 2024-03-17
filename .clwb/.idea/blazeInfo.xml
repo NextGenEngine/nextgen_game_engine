@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BlazeCompilerInfoMap">
+    <option name="compilerVersionStringMap">
+      <map>
+        <entry key="//components/configuration:config_manager" value="x86_64-linux-gcc.br_real (Buildroot toolchains.bootlin.com-2021.11-5) 10.3.0&#10;Copyright (C) 2020 Free Software Foundation, Inc.&#10;This is free software; see the source for copying conditions.  There is NO&#10;warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&#10;&#10;" />
+        <entry key="//components/configuration:config_manager_test" value="x86_64-linux-gcc.br_real (Buildroot toolchains.bootlin.com-2021.11-5) 10.3.0&#10;Copyright (C) 2020 Free Software Foundation, Inc.&#10;This is free software; see the source for copying conditions.  There is NO&#10;warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&#10;&#10;" />
+        <entry key="@@bazel_tools//tools/cpp:malloc" value="x86_64-linux-gcc.br_real (Buildroot toolchains.bootlin.com-2021.11-5) 10.3.0&#10;Copyright (C) 2020 Free Software Foundation, Inc.&#10;This is free software; see the source for copying conditions.  There is NO&#10;warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&#10;&#10;" />
+        <entry key="@@googletest~//:gtest" value="x86_64-linux-gcc.br_real (Buildroot toolchains.bootlin.com-2021.11-5) 10.3.0&#10;Copyright (C) 2020 Free Software Foundation, Inc.&#10;This is free software; see the source for copying conditions.  There is NO&#10;warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&#10;&#10;" />
+        <entry key="@@googletest~//:gtest_main" value="x86_64-linux-gcc.br_real (Buildroot toolchains.bootlin.com-2021.11-5) 10.3.0&#10;Copyright (C) 2020 Free Software Foundation, Inc.&#10;This is free software; see the source for copying conditions.  There is NO&#10;warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&#10;&#10;" />
+        <entry key="@@yaml-cpp~//:yaml-cpp" value="x86_64-linux-gcc.br_real (Buildroot toolchains.bootlin.com-2021.11-5) 10.3.0&#10;Copyright (C) 2020 Free Software Foundation, Inc.&#10;This is free software; see the source for copying conditions.  There is NO&#10;warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&#10;&#10;" />
+      </map>
+    </option>
+  </component>
+</project>
