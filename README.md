@@ -38,6 +38,80 @@ This step is platform-dependent and may vary. The example below is for Ubuntu-li
 sudo apt install libvulkan-dev libglfw3-dev
 ```
 
+## Install latest LLVM toolchain for best developer experience
+
+I'm developing using LLVM/Cland. Build controlled with Bazel, and toolchain
+is configured there separately. But for IDE support for linting, cleanup code
+suggestions, warnings and autoformatting I'm using LLVM/Clang:
+clangd, clang-tidy, ... etc.
+
+Stable releases of Ubuntu (and probably other distributions) and also even
+IntelliJ Idea are not shipped with latest versions of LLVM.
+
+Here are the steps to install latest version of toolchain on Ubuntu 22.04 Jammy
+for the best developer experience. For other distributions check official
+LLVM documentation:
+
+`https://apt.llvm.org/` - Debian based
+
+`https://llvm.org/docs/index.html` - Documentation
+
+### LLVM toolchain on Ubuntu 22.04
+
+Check versions:
+
+```bash
+clangd --version
+clang-tidy --version
+```
+
+Remove your existing toolchain. It is optional step. If you do not remove
+default Ubuntu distribution toolchain, then after installing new one,
+you need to configure alternatives:
+
+```bash
+sudo apt-get install clang-format clang-tidy clang-tools clang clangd libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 liblldb-dev libllvm-ocaml-dev libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm python3-clang
+sudo apt-get purge clang-format clang-tidy clang-tools clang clangd libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 liblldb-dev libllvm-ocaml-dev libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm python3-clang
+sudo apt autoremove
+```
+
+Add LLVM Official APT repository and install toolchain:
+
+```bash
+wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg
+
+echo -e "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] https://apt.llvm.org/jammy/ llvm-toolchain-jammy main\ndeb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/jammy/ llvm-toolchain-jammy main" | sudo tee /etc/apt/sources.list.d/llvm.list
+
+sudo apt update
+
+sudo apt install clang-format clang-tidy clang-tools clang clangd libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 liblldb-dev libllvm-ocaml-dev libomp-dev libomp5 lld  llvm-dev llvm-runtime llvm python3-clang
+
+Bug:
+
+sudo apt-get install lldb-19 <use latest version here>
+```
+
+I had problem installing lldb-19, so in my case I solved it installing
+'python3-lldb-19' and `lldb-19` separately with apt commands (you can see them
+in commands list above). Maybe you are lucky and in your case you can just add
+`lldb` to the list of other packages and it will be installed without issues.
+
+Configure alternatives (in case you do not remove default toolchain):
+
+```bash
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-<version> 100
+sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-<version> 100
+sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-<version> 100
+... probably more alternaives to setup here
+```
+
+Check versions:
+
+```bash
+clangd --version
+clang-tidy --version
+```
+
 ## Generate compile_commands.json
 
 Bazel is supported with plugins in many different IDEs, including
