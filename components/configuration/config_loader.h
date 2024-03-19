@@ -1,6 +1,8 @@
 #ifndef NEXTGEN_ENGINE_CONFIG_LOADER_H
 #define NEXTGEN_ENGINE_CONFIG_LOADER_H
 
+#include <yaml-cpp/node/node.h>
+#include <yaml-cpp/node/parse.h>
 #include <yaml-cpp/yaml.h>
 
 class IConfigLoader {

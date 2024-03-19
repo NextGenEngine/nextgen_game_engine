@@ -2,14 +2,17 @@
 
 #include <exception>
 #include <iostream>
+#include <memory>
 #include <string>
+
+#include "components/configuration/config_loader.h"
 
 ConfigManager::ConfigManager(std::unique_ptr<IConfigLoader> loader,
                              const std::string &configFile) {
   try {
     config = loader->load(configFile);
   } catch (const std::exception &e) {
-    std::cerr << "Failed to load configuration: " << e.what() << std::endl;
+    std::cerr << "Failed to load configuration: " << e.what() << '\n';
     throw;
   }
 }
