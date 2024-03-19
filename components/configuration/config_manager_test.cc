@@ -26,24 +26,32 @@
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <yaml-cpp/node/node.h>
 
-using ::testing::_;
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <utility>
+
+#include "components/configuration/config_loader.h"
+
+using ::std::make_unique;
 using ::testing::NiceMock;
 using ::testing::Return;
 
 class MockConfigLoader : public IConfigLoader {
  public:
-  MOCK_METHOD(YAML::Node, load, (const std::string &), (override));
+  MOCK_METHOD(YAML::Node, load, (), (override));
 };
 
 TEST(ConfigManagerTest, SuccessfullyLoadsConfig) {
-  auto mockLoader = std::make_unique<NiceMock<MockConfigLoader>>();
+  auto mockLoader = make_unique<NiceMock<MockConfigLoader>>("dummy/path");
   YAML::Node fakeNode;
   fakeNode["database"]["host"] = "localhost";
 
-  EXPECT_CALL(*mockLoader, load(_)).WillOnce(Return(fakeNode));
+  EXPECT_CALL(*mockLoader, load()).WillOnce(Return(fakeNode));
 
-  ConfigManager manager(std::move(mockLoader), "dummy/path");
+  ConfigManager manager(std::move(mockLoader));
   auto host = manager.getSetting<std::string>("database", "host");
 
   EXPECT_EQ(host, "localhost");
@@ -54,14 +62,12 @@ TEST(ConfigManagerTest, ThrowsExceptionWhenFileNotFound) {
 
   // Ensure the method name matches what's declared in IConfigLoader. Adjust
   // "load" as necessary.
-  EXPECT_CALL(*mockLoader, load(_))
-      .WillOnce([](const std::string &) -> YAML::Node {
-        throw std::runtime_error("File not found");
-      });
+  EXPECT_CALL(*mockLoader, load()).WillOnce([]() -> YAML::Node {
+    throw std::runtime_error("File not found");
+  });
 
   // Since ConfigManager expects a std::unique_ptr<IConfigLoader>, we use
   // std::move to transfer ownership.
-  EXPECT_THROW(
-      { ConfigManager manager(std::move(mockLoader), "non/existent/path"); },
-      std::runtime_error);
+  EXPECT_THROW({ const ConfigManager manager(std::move(mockLoader)); },
+               std::runtime_error);
 }

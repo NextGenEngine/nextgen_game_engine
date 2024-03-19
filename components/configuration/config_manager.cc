@@ -3,14 +3,12 @@
 #include <exception>
 #include <iostream>
 #include <memory>
-#include <string>
 
 #include "components/configuration/config_loader.h"
 
-ConfigManager::ConfigManager(std::unique_ptr<IConfigLoader> loader,
-                             const std::string &configFile) {
+ConfigManager::ConfigManager(std::unique_ptr<IConfigLoader> loader) {
   try {
-    config = loader->load(configFile);
+    config = loader->load();
   } catch (const std::exception &e) {
     std::cerr << "Failed to load configuration: " << e.what() << '\n';
     throw;

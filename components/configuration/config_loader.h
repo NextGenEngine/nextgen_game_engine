@@ -8,11 +8,20 @@
 class IConfigLoader {
  public:
   virtual ~IConfigLoader() = default;
-  virtual YAML::Node load(const std::string &configFile) = 0;
+  // Delete copy constructor and copy assignment operator
+  IConfigLoader(const IConfigLoader&) = delete;
+  IConfigLoader& operator=(const IConfigLoader&) = delete;
+
+  // Optionally delete move constructor and move assignment operator
+  // if you do not want your implementations of this interface to be movable.
+  IConfigLoader(IConfigLoader&&) = delete;
+  IConfigLoader& operator=(IConfigLoader&&) = delete;
+
+  virtual YAML::Node load() = 0;
 };
 
 // Factory function declaration
 std::unique_ptr<IConfigLoader> CreateFileConfigLoader(
-    const std::string &configFile);
+    const std::string& configFile);
 
 #endif

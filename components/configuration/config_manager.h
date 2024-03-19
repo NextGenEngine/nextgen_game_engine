@@ -12,8 +12,7 @@ class ConfigManager {
   YAML::Node config;
 
  public:
-  explicit ConfigManager(std::unique_ptr<IConfigLoader> loader,
-                         const std::string &configFile);
+  explicit ConfigManager(std::unique_ptr<IConfigLoader> loader);
 
   template <typename T>
   T getSetting(const std::string &module, const std::string &setting) {
