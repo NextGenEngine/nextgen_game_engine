@@ -7,17 +7,9 @@
 
 class IConfigLoader {
  public:
-  virtual ~IConfigLoader() = default;
-  // Delete copy constructor and copy assignment operator
-  IConfigLoader(const IConfigLoader&) = delete;
-  IConfigLoader& operator=(const IConfigLoader&) = delete;
-
-  // Optionally delete move constructor and move assignment operator
-  // if you do not want your implementations of this interface to be movable.
-  IConfigLoader(IConfigLoader&&) = delete;
-  IConfigLoader& operator=(IConfigLoader&&) = delete;
-
   virtual YAML::Node load() = 0;
+
+  virtual ~IConfigLoader() = default;
 };
 
 // Factory function declaration

@@ -45,7 +45,7 @@ class MockConfigLoader : public IConfigLoader {
 };
 
 TEST(ConfigManagerTest, SuccessfullyLoadsConfig) {
-  auto mockLoader = make_unique<NiceMock<MockConfigLoader>>("dummy/path");
+  auto mockLoader = make_unique<NiceMock<MockConfigLoader>>();
   YAML::Node fakeNode;
   fakeNode["database"]["host"] = "localhost";
 
