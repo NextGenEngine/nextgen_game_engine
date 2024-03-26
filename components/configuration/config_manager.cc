@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "components/configuration/config_loader.h"
+#include "config_loader.h"
 
 template <typename LoaderType>
 ConfigManager::ConfigManager(LoaderType loader,
