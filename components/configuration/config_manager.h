@@ -5,19 +5,22 @@
 
 #include <string>
 
-#include "config_loader.h"
-
 class ConfigManager {
  private:
   YAML::Node config;
 
  public:
-  explicit ConfigManager(std::unique_ptr<IConfigLoader> loader);
+  template <typename LoaderType>
+  explicit ConfigManager(LoaderType loader,
+                         const std::string &fileNameOrYamlContent);
 
   template <typename T>
   T getSetting(const std::string &module, const std::string &setting) {
     return config[module][setting].as<T>();
   }
 };
+
+ConfigManager ConfigManager_File(const std::string &fileName);
+ConfigManager ConfigManager_String(const std::string &yamlContent);
 
 #endif

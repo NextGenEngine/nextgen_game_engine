@@ -5,15 +5,30 @@
 #include <yaml-cpp/node/parse.h>
 #include <yaml-cpp/yaml.h>
 
-class IConfigLoader {
+// Abstract base ConfigLoader class template
+template <typename LoaderType>
+class ConfigLoader {
  public:
-  virtual YAML::Node load() = 0;
-
-  virtual ~IConfigLoader() = default;
+  YAML::Node load(const std::string& fileNameOrYamlStr) {
+    // Forward the call to the loader-specific load implementation
+    return static_cast<LoaderType*>(this)->loadImpl(fileNameOrYamlStr);
+  }
 };
 
-// Factory function declaration
-std::unique_ptr<IConfigLoader> CreateFileConfigLoader(
-    const std::string& configFile);
+// Specialization for loading from a file
+class FileLoader : public ConfigLoader<FileLoader> {
+ public:
+  static YAML::Node loadImpl(const std::string& filePath) {
+    return YAML::LoadFile(filePath);
+  }
+};
+
+// Specialization for loading from a string
+class StringLoader : public ConfigLoader<StringLoader> {
+ public:
+  static YAML::Node loadImpl(const std::string& yamlContent) {
+    return YAML::Load(yamlContent);
+  }
+};
 
 #endif

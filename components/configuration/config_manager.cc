@@ -1,30 +1,18 @@
 #include "config_manager.h"
 
-#include <exception>
-#include <iostream>
-#include <memory>
+#include <string>
 
 #include "components/configuration/config_loader.h"
 
-ConfigManager::ConfigManager(std::unique_ptr<IConfigLoader> loader) {
-  try {
-    config = loader->load();
-  } catch (const std::exception &e) {
-    std::cerr << "Failed to load configuration: " << e.what() << '\n';
-    throw;
-  }
+template <typename LoaderType>
+ConfigManager::ConfigManager(LoaderType loader,
+                             const std::string &fileNameOrYamlContent)
+    : config(loader.load(fileNameOrYamlContent)) {}
+
+ConfigManager ConfigManager_File(const std::string &fileName) {
+  return ConfigManager((FileLoader()), fileName);
 }
 
-// // Usage
-// int main() {
-//   ConfigManager configManager("config.yaml");
-
-//   auto resolution =
-//       configManager.getSetting<std::string>("graphics", "resolution");
-//   auto volume = configManager.getSetting<int>("audio", "volume");
-
-//   std::cout << "Graphics Resolution: " << resolution << std::endl;
-//   std::cout << "Audio Volume: " << volume << std::endl;
-
-//   return 0;
-// }
+ConfigManager ConfigManager_String(const std::string &yamlContent) {
+  return ConfigManager((StringLoader()), yamlContent);
+}

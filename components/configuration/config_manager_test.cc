@@ -1,73 +1,35 @@
-// #include <gtest/gtest.h>
+#include "components/configuration/config_manager.h"
 
-// #include "config_manager.h"
-
-// class ConfigManagerTest : public ::testing::Test {
-// protected:
-//   // Setup and teardown if needed
-// };
-
-// TEST_F(ConfigManagerTest, GetSetting_ReturnsCorrectValue) {
-//   // Assuming ConfigManager now has a constructor that takes a YAML string
-//   for
-//   // testing
-//   std::string testConfig = "audio:\n  volume: 75\n  muted: false\n";
-//   ConfigManager configManager(testConfig); // Mocked or alternative
-//   constructor
-
-//   int volume = configManager.getSetting<int>("audio", "volume");
-//   bool muted = configManager.getSetting<bool>("audio", "muted");
-
-//   EXPECT_EQ(volume, 75);
-//   EXPECT_FALSE(muted);
-// }
-
-#include "components/configuration/config_manager.h"  // Adjust include path as necessary
-
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <yaml-cpp/node/node.h>
 
-#include <memory>
-#include <stdexcept>
+#include <cstdio>
+#include <fstream>
 #include <string>
-#include <utility>
 
-#include "components/configuration/config_loader.h"
+TEST(ConfigManagerTest, GetSettingFromFile) {
+  // Create a temporary YAML file for testing
+  std::ofstream file("test_config.yaml");
+  file << "module:\n";
+  file << "  setting: 42\n";
+  file.close();
 
-using ::std::make_unique;
-using ::testing::NiceMock;
-using ::testing::Return;
+  // Load the configuration from the file
+  ConfigManager manager = ConfigManager_File("test_config.yaml");
 
-class MockConfigLoader : public IConfigLoader {
- public:
-  MOCK_METHOD(YAML::Node, load, (), (override));
-};
+  // Test retrieving a setting
+  EXPECT_EQ(manager.getSetting<int>("module", "setting"), 42);
 
-TEST(ConfigManagerTest, SuccessfullyLoadsConfig) {
-  auto mockLoader = make_unique<NiceMock<MockConfigLoader>>();
-  YAML::Node fakeNode;
-  fakeNode["database"]["host"] = "localhost";
-
-  EXPECT_CALL(*mockLoader, load()).WillOnce(Return(fakeNode));
-
-  ConfigManager manager(std::move(mockLoader));
-  auto host = manager.getSetting<std::string>("database", "host");
-
-  EXPECT_EQ(host, "localhost");
+  // Clean up the temporary file
+  std::remove("test_config.yaml");
 }
 
-TEST(ConfigManagerTest, ThrowsExceptionWhenFileNotFound) {
-  auto mockLoader = std::make_unique<NiceMock<MockConfigLoader>>();
+TEST(ConfigManagerTest, GetSettingFromString) {
+  // YAML content for testing
+  std::string const yamlContent = "module:\n  setting: 42\n";
 
-  // Ensure the method name matches what's declared in IConfigLoader. Adjust
-  // "load" as necessary.
-  EXPECT_CALL(*mockLoader, load()).WillOnce([]() -> YAML::Node {
-    throw std::runtime_error("File not found");
-  });
+  // Load the configuration from the string
+  ConfigManager manager = ConfigManager_String(yamlContent);
 
-  // Since ConfigManager expects a std::unique_ptr<IConfigLoader>, we use
-  // std::move to transfer ownership.
-  EXPECT_THROW({ const ConfigManager manager(std::move(mockLoader)); },
-               std::runtime_error);
+  // Test retrieving a setting
+  EXPECT_EQ(manager.getSetting<int>("module", "setting"), 42);
 }
