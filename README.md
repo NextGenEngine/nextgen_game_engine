@@ -216,3 +216,13 @@ Use Trunk.io Merge Queue, when working in large teams (10 and more engineers):
 `https://docs.trunk.io/merge/set-up-trunk-merge`
 
 `https://docs.trunk.io/merge/set-up-trunk-merge/merge-+-bazel`
+
+## Benchmarks
+
+For more accurate benchmarking, it's recommended to disable CPU scaling. This can be done by setting the CPU governor to "performance" mode. However, changing this setting requires root access and can vary based on your operating system and hardware.
+
+For Linux, you can try:
+
+```bash
+sudo cpupower frequency-set --governor performance
+```

@@ -15,7 +15,13 @@ class ConfigManager {
                          const std::string &fileNameOrYamlContent);
 
   template <typename T>
-  T getSetting(const std::string &module, const std::string &setting) {
+  inline T getSetting(const std::string &module, const std::string &setting) {
+    return config[module][setting].as<T>();
+  }
+
+  template <typename T>
+  T getSetting_Not_Inline(const std::string &module,
+                          const std::string &setting) {
     return config[module][setting].as<T>();
   }
 };

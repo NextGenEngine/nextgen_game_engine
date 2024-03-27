@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
 cc_library(
     name = "config_loader",
@@ -28,5 +28,14 @@ cc_test(
     deps = [
         ":config_manager",
         "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "config_manager_benchmark",
+    srcs = ["config_manager_benchmark.cc"],
+    deps = [
+        ":config_manager",
+        "@google_benchmark//:benchmark_main",
     ],
 )
