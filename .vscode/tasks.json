@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "bazel: test config_manager_test",
+      "type": "shell",
+      "command": "bazel test //components/configuration:config_manager_test",
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      }
+    }
+  ]
+}
