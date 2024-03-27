@@ -19,7 +19,3 @@ git_override(
     # Replace the commit hash (above) with the latest (https://github.com/hedronvision/bazel-compile-commands-extractor/commits/main).
     # Even better, set up Renovate and let it do the work for you (see "Suggestion: Updates" in the README).
 )
-# local_path_override(
-#     module_name = "hedron_compile_commands",
-#     path = "../bazel-compile-commands-extractor" # Assuming this tool is cloned next to your project's repo
-# )

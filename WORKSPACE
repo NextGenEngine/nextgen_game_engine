@@ -11,19 +11,6 @@ http_archive(
     ],
 )
 
-# Google Tests framework
-# http_archive(
-#     name = "com_google_googletest",
-#     strip_prefix = "googletest-5ab508a01f9eb089207ee87fd547d290da39d015",
-#     urls = ["https://github.com/google/googletest/archive/5ab508a01f9eb089207ee87fd547d290da39d015.zip"],
-# )
-
-# http_archive(
-#     name = "yaml_cpp",
-#     strip_prefix = "yaml-cpp-yaml-cpp-0.6.3",
-#     urls = ["https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-0.6.3.tar.gz"],
-# )
-
 load("@aspect_gcc_toolchain//toolchain:repositories.bzl", "gcc_toolchain_dependencies")
 
 gcc_toolchain_dependencies()
