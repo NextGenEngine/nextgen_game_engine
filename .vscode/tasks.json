@@ -9,6 +9,15 @@
         "kind": "test",
         "isDefault": false
       }
+    },
+    {
+      "label": "bazel: benchmark config_manager_benchmark",
+      "type": "shell",
+      "command": "bazel run -c opt //components/configuration:config_manager_benchmark",
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      }
     }
   ]
 }
