@@ -4,7 +4,7 @@ First draft of game engine
 
 ## Install Bazel
 
-Use installation instrutions from official Bazel website -
+Use installation instructions from official Bazel website -
 `https://bazel.build/install`
 
 Recommended way is to install Bazelisk (no need to configure it -
@@ -40,7 +40,7 @@ sudo apt install libvulkan-dev libglfw3-dev
 
 ## Install latest LLVM toolchain for best developer experience
 
-I'm developing using LLVM/Cland. Build controlled with Bazel, and toolchain
+I'm developing using LLVM/Clang. Build controlled with Bazel, and toolchain
 is configured there separately. But for IDE support for linting, cleanup code
 suggestions, warnings and autoformatting I'm using LLVM/Clang:
 clangd, clang-tidy, ... etc.
@@ -102,7 +102,7 @@ Configure alternatives (in case you do not remove default toolchain):
 sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-<version> 100
 sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-<version> 100
 sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-<version> 100
-... probably more alternaives to setup here
+... probably more alternatives to setup here
 ```
 
 Check versions:
@@ -117,7 +117,7 @@ clang-tidy --version
 We use Trunk.io for code quality management.
 
 By default it is using quite old version of clang-tidy.
-We want to use nightly builds of cland-tidy for development (check instructions
+We want to use nightly builds of clang-tidy for development (check instructions
 above for LLVM toolchain installation).
 To use latest clang-tidy with Trunk.io we created an override plugin -
 `https://github.com/NextGenEngine/trunk-io-linter-clang-tidy-latest.git` and
