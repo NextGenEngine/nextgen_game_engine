@@ -4,12 +4,12 @@
     "StackBuild.bazel-stack-vscode",
     "StackBuild.bazel-stack-vscode-cc",
     "llvm-vs-code-extensions.vscode-clangd",
+    "Trunk.io",
     "cschlosser.doxdocgen",
     "dotenv.dotenv-vscode",
     "streetsidesoftware.code-spell-checker",
     "jeff-hykin.better-cpp-syntax",
     "eamodio.gitlens",
-    "esbenp.prettier-vscode",
     "wayou.vscode-todo-highlight",
     "Gruntfuggly.todo-tree",
     "redhat.vscode-yaml"
