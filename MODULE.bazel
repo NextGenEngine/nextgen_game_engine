@@ -4,6 +4,7 @@
 #
 # For more details, please check https://github.com/bazelbuild/bazel/issues/18958
 ###############################################################################
+"""NextGen Game Engine"""
 module(name = "nextgen_game_engine", version = "1.0")
 
 bazel_dep(name = "yaml-cpp", version = "0.8.0")
