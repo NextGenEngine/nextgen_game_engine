@@ -1,0 +1,11 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  compile_commands.json:
+    cmds:
+      - bazel run @hedron_compile_commands//:refresh_all

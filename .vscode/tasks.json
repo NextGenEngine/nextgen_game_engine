@@ -2,6 +2,15 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "generate: compile_commands.json",
+      "type": "shell",
+      "command": "bazel run @hedron_compile_commands//:refresh_all",
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      }
+    },
+    {
       "label": "bazel: test config_manager_test",
       "type": "shell",
       "command": "bazel test //components/configuration:config_manager_test",

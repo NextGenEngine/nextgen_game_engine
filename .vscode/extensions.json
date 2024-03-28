@@ -5,6 +5,7 @@
     "StackBuild.bazel-stack-vscode-cc",
     "llvm-vs-code-extensions.vscode-clangd",
     "Trunk.io",
+    "task.vscode-task",
     "cschlosser.doxdocgen",
     "dotenv.dotenv-vscode",
     "streetsidesoftware.code-spell-checker",
