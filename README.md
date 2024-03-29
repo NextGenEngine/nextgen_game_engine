@@ -2,6 +2,25 @@
 
 First draft of game engine
 
+## Contents
+
+<!-- TOC tocDepth:2..3 chapterDepth:2..6 -->
+
+- [Install C++ standart library dev packages](#install-c-standart-library-dev-packages)
+- [Install Bazel](#install-bazel)
+- [Install Vulkan development packages (assumes a package manager like apt, dnf, or pacman is available)](#install-vulkan-development-packages-assumes-a-package-manager-like-apt-dnf-or-pacman-is-available)
+- [Install latest LLVM toolchain for best developer experience](#install-latest-llvm-toolchain-for-best-developer-experience)
+  - [LLVM toolchain on Ubuntu 22.04](#llvm-toolchain-on-ubuntu-2204)
+- [Custom clang-tidy linter for Trunk.io](#custom-clang-tidy-linter-for-trunkio)
+- [Generate compile_commands.json](#generate-compile_commandsjson)
+- [Build and test project with Bazel](#build-and-test-project-with-bazel)
+- [Code quality checking with Trunk](#code-quality-checking-with-trunk)
+- [IDEs recommendations](#ides-recommendations)
+- [Merge Queue](#merge-queue)
+- [Benchmarks](#benchmarks)
+
+<!-- /TOC -->
+
 ## Install C++ standart library dev packages
 
 In case project is using non-hermetic toolchain, which is true at current
