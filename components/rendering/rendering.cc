@@ -6,5 +6,6 @@ int main() {
   vulkan_init();
   vulkan_create_device();
   vulkan_create_swapchain();
+  enumerateAvailableDevices();
   vulkan_cleanup();
 }
