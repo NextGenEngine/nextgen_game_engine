@@ -4,6 +4,7 @@
 #include <vulkan/vulkan_core.h>
 
 VkResult vulkan_init();
+VkResult enumerateAvailableDevices();
 void vulkan_cleanup();
 VkResult vulkan_create_device();
 VkResult vulkan_create_swapchain();

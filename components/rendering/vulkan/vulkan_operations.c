@@ -8,6 +8,8 @@
 #include <string.h>
 #include <vulkan/vulkan_core.h>
 
+#include "vulkan_device_priority.h"
+
 VkInstance instance;
 VkDevice device;
 VkPhysicalDevice physicalDevice;
@@ -248,4 +250,97 @@ void vulkan_cleanup() {
   glfwTerminate();
 
   printf("Vulkan and GLFW cleaned up.\n");
+}
+
+const char *getDeviceTypeName(VkPhysicalDeviceType deviceType) {
+  switch (deviceType) {
+    case VK_PHYSICAL_DEVICE_TYPE_OTHER:
+      return "Other";
+    case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
+      return "Integrated GPU";
+    case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
+      return "Discrete GPU";
+    case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
+      return "Virtual GPU";
+    case VK_PHYSICAL_DEVICE_TYPE_CPU:
+      return "CPU";
+    default:
+      return "Unknown";
+  }
+}
+
+VkResult enumerateAvailableDevices() {
+  VkResult result = 0;
+  uint32_t deviceCount = 0;
+
+  // Create Vulkan instance
+  VkApplicationInfo appInfo = {VK_STRUCTURE_TYPE_APPLICATION_INFO};
+  appInfo.pApplicationName = "Vulkan Device Listing";
+  appInfo.apiVersion = VK_API_VERSION_1_0;
+
+  VkInstanceCreateInfo createInfo = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO};
+  createInfo.pApplicationInfo = &appInfo;
+
+  result = vkCreateInstance(&createInfo, NULL, &instance);
+  if (result != VK_SUCCESS) {
+    printf("Failed to create Vulkan instance\n");
+    return EXIT_FAILURE;
+  }
+
+  // Enumerate physical devices
+  result = vkEnumeratePhysicalDevices(instance, &deviceCount, NULL);
+  if (result != VK_SUCCESS) {
+    printf("Failed to enumerate physical devices\n");
+    return EXIT_FAILURE;
+  }
+
+  if (deviceCount == 0) {
+    printf("No Vulkan-compatible devices found\n");
+    return EXIT_SUCCESS;
+  }
+
+  // Allocate memory for physical devices
+  VkPhysicalDevice *devices =
+      (VkPhysicalDevice *)malloc(sizeof(VkPhysicalDevice) * deviceCount);
+  if (!devices) {
+    printf("Failed to allocate memory for devices\n");
+    return EXIT_FAILURE;
+  }
+
+  // Retrieve physical devices
+  result = vkEnumeratePhysicalDevices(instance, &deviceCount, devices);
+  if (result != VK_SUCCESS) {
+    printf("Failed to enumerate physical devices\n");
+    free(devices);
+    return EXIT_FAILURE;
+  }
+
+  // Collect information about each physical device
+  VkPhysicalDeviceProperties *devicesProperties =
+      (VkPhysicalDeviceProperties *)malloc(sizeof(VkPhysicalDeviceProperties) *
+                                           deviceCount);
+
+  // Print information about each physical device
+  printf("Found %d Vulkan-compatible device(s):\n", deviceCount);
+  for (uint32_t i = 0; i < deviceCount; ++i) {
+    VkPhysicalDeviceProperties *deviceProperties = &devicesProperties[i];
+    vkGetPhysicalDeviceProperties(devices[i], deviceProperties);
+  }
+
+  uint32_t prioritizedIndexes[deviceCount];
+  sortDevicesByPriority(devicesProperties, deviceCount, &prioritizedIndexes[0]);
+
+  for (uint32_t i = 0; i < deviceCount; ++i) {
+    VkPhysicalDeviceProperties *deviceProperties =
+        &devicesProperties[prioritizedIndexes[i]];
+    printf("Device %d: %s, %s\n", prioritizedIndexes[i],
+           deviceProperties->deviceName,
+           getDeviceTypeName(deviceProperties->deviceType));
+  }
+
+  // Clean up
+  free(devicesProperties);
+  free(devices);
+
+  return EXIT_SUCCESS;
 }
