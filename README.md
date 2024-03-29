@@ -2,6 +2,17 @@
 
 First draft of game engine
 
+## Install C++ standart library dev packages
+
+In case project is using non-hermetic toolchain, which is true at current
+moment, because its hard to use Vulkan SDK and other system packages, which
+do not have Bazel package yet, you need to install libc++-dev package
+(standard C++ library development files) in order for Clangd to work properly.
+
+```bash
+sudo apt install libc++-19-dev
+```
+
 ## Install Bazel
 
 Use installation instructions from official Bazel website -
