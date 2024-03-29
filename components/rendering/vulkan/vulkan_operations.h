@@ -1,7 +1,7 @@
 #ifndef VULKAN_OPERATIONS_H
 #define VULKAN_OPERATIONS_H
 
-#include <vulkan/vulkan.h>
+#include <vulkan/vulkan_core.h>
 
 VkResult vulkan_init();
 void vulkan_cleanup();
