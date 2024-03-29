@@ -311,7 +311,7 @@ VkResult enumerateAvailableDevices() {
   result = vkEnumeratePhysicalDevices(instance, &deviceCount, devices);
   if (result != VK_SUCCESS) {
     printf("Failed to enumerate physical devices\n");
-    free(devices);
+    free((void *)devices);
     return EXIT_FAILURE;
   }
 
@@ -340,7 +340,7 @@ VkResult enumerateAvailableDevices() {
 
   // Clean up
   free(devicesProperties);
-  free(devices);
+  free((void *)devices);
 
   return EXIT_SUCCESS;
 }
