@@ -87,31 +87,6 @@ VkResult vulkan_create_device() {
   vkEnumeratePhysicalDevices(instance, &deviceCount, devices);
   physicalDevice = devices[0];  // Simplification: Just select the first device
 
-  // float queuePriority = 1.0f;
-  // VkDeviceQueueCreateInfo queueCreateInfo = {};
-  // queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-  // queueCreateInfo.queueFamilyIndex = 0; // Simplification: Assume first queue
-  // family supports graphics queueCreateInfo.queueCount = 1;
-  // queueCreateInfo.pQueuePriorities = &queuePriority;
-
-  // VkDeviceCreateInfo createInfo = {};
-  // createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-  // createInfo.queueCreateInfoCount = 1;
-  // createInfo.pQueueCreateInfos = &queueCreateInfo;
-
-  // if (vkCreateDevice(physicalDevice, &createInfo, NULL, &device) !=
-  // VK_SUCCESS)
-  // {
-  //     printf("Failed to create logical device.\n");
-  //     return VK_ERROR_INITIALIZATION_FAILED;
-  // }
-
-  // vkGetDeviceQueue(device, 0, 0, &graphicsQueue); // Simplification: Assume
-  // first queue is graphics queue
-
-  // printf("Logical device created.\n");
-  // return VK_SUCCESS;
-
   // Check for swap chain support
   uint32_t extensionCount = 0;
   vkEnumerateDeviceExtensionProperties(physicalDevice, NULL, &extensionCount,
