@@ -2,7 +2,6 @@
 #define NEXTGEN_ENGINE_RENDERING_H
 
 #include "components/configuration/config_manager.h"
-#include "vulkan/vulkan_rendering.h"
 
 template <typename T>
 concept RenderingApiConcept = requires(T api, ComponentConfig& configManager) {
@@ -20,8 +19,8 @@ class RenderingEngine {
   RenderingApi renderingApi;
 
  public:
-  explicit RenderingEngine(const ComponentConfig& configManager)
-      : renderingApi(RenderingApi(configManager)) {
+  explicit RenderingEngine(ComponentConfig configManager)
+      : renderingApi(RenderingApi(configManager.getSubConfig("rendering"))) {
     // Initialize modules with Api
   }
   void render() {
@@ -36,9 +35,8 @@ class SystemContext {
   // Other engine modules...
 
  public:
-  explicit SystemContext(const ComponentConfig& configManager)
-      : renderingEngine(RenderingEngine<RenderingApi>(
-            configManager.getSubConfig("rendering"))) {
+  explicit SystemContext(ComponentConfig configManager)
+      : renderingEngine(RenderingEngine<RenderingApi>(configManager)) {
     // Initialize modules with Api
   }
 
@@ -51,15 +49,9 @@ class SystemFactory {
  public:
   template <RenderingApiConcept RenderingApi>
   static SystemContext<RenderingApi> createSystemContext(
-      const ComponentConfig& configManager) {
+      ComponentConfig configManager) {
     return SystemContext<RenderingApi>(configManager);
   }
 };
-
-auto configManager = ConfigManager_File("");
-
-// Pass vulkanComponentConfig directly without taking its address.
-auto currentContext = SystemFactory::createSystemContext<VulkanApi>(
-    configManager.getComponentConfig());
 
 #endif

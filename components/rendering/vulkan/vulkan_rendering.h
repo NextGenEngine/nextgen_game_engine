@@ -6,21 +6,23 @@
 
 class VulkanApi {
  private:
-  const ComponentConfig &componentConfig;
+  ComponentConfig componentConfig;
 
  public:
-  explicit VulkanApi(const ComponentConfig &componentConfig)
-      : componentConfig(componentConfig) {}
+  explicit VulkanApi(ComponentConfig componentConfig)
+      : componentConfig(componentConfig.getSubConfig("vulkan")) {
+    this->componentConfig.config["api"] = "Hello world!!!";
+  }
 
   void render();
 
   // Delete copy constructor and copy assignment operator
   VulkanApi(const VulkanApi &) = delete;
   VulkanApi &operator=(const VulkanApi &) = delete;
-  ~VulkanApi() = default;            // Default destructor
-  VulkanApi(VulkanApi &&) = delete;  // Default move constructor
+  ~VulkanApi() = default;             // Default destructor
+  VulkanApi(VulkanApi &&) = default;  // Default move constructor
   VulkanApi &operator=(VulkanApi &&) =
-      delete;  // Default move assignment operator
+      default;  // Default move assignment operator
 };
 
 #endif
