@@ -6,3 +6,16 @@ build:linux --incompatible_strict_action_env=true
 build:linux --noincompatible_sandbox_hermetic_tmp
 # Enable the CC toolchain resolution based on platforms.
 build:linux --incompatible_enable_cc_toolchain_resolution
+
+
+# Define a debug build configuration
+build:debug --compilation_mode=dbg
+build:debug --copt=-DDEBUG
+# Define a release build configuration with debug info
+build:releasewithdebug --compilation_mode=opt
+build:releasewithdebug --copt=-DNDEBUG
+build:releasewithdebug --copt=-g  # Add debug symbols
+
+# Define a release build configuration
+build:release --compilation_mode=opt
+build:release --copt=-DNDEBUG

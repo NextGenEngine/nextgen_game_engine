@@ -1,0 +1,28 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug: rendering_engine",
+      "program": "${workspaceFolder}/bazel-bin/components/rendering/rendering_engine",
+      "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "bazel-build-debug: rendering_engine"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug/Release: rendering_engine",
+      "program": "${workspaceFolder}/bazel-bin/components/rendering/rendering_engine",
+      "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "bazel-build-release-with-debug: rendering_engine"
+    }
+  ]
+}

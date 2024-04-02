@@ -27,6 +27,24 @@
         "kind": "test",
         "isDefault": false
       }
+    },
+    {
+      "label": "bazel-build-debug: rendering_engine",
+      "type": "shell",
+      "command": "bazel build --config=debug //components/rendering:rendering_engine",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "bazel-build-release-with-debug: rendering_engine",
+      "type": "shell",
+      "command": "bazel build --config=releasewithdebug //components/rendering:rendering_engine",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }
