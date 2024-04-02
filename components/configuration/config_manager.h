@@ -9,9 +9,10 @@ class ConfigManager;
 
 class ComponentConfig {
  private:
- public:
   YAML::Node config;
-  explicit ComponentConfig(YAML::Node componentRootNode)
+
+ public:
+  explicit inline ComponentConfig(YAML::Node componentRootNode)
       : config(componentRootNode) {}
 
   template <typename T>
@@ -19,7 +20,9 @@ class ComponentConfig {
     return config[setting].as<T>();
   }
 
-  ComponentConfig getSubConfig(const std::string &path) {
+  inline YAML::Node operator[](const std::string &key) { return config[key]; }
+
+  inline ComponentConfig getSubConfig(const std::string &path) {
     if (!config[path]) {
       config[path] = YAML::Node();
     }
@@ -29,11 +32,12 @@ class ComponentConfig {
 
 class ConfigManager {
  private:
- public:
   YAML::Node config;
+
+ public:
   template <typename LoaderType>
-  explicit ConfigManager(LoaderType loader,
-                         const std::string &fileNameOrYamlContent);
+  explicit inline ConfigManager(LoaderType loader,
+                                const std::string &fileNameOrYamlContent);
 
   // DEPRECATED: use ComponentConfigManager, because module config can
   // have more then one level depth
@@ -53,7 +57,9 @@ class ConfigManager {
     return config[module][setting].as<T>();
   }
 
-  ComponentConfig getComponentConfig() {
+  inline YAML::Node operator[](const std::string &key) { return config[key]; }
+
+  inline ComponentConfig getComponentConfig() {
     if (config.IsNull()) {
       config = YAML::Load("{}");
     }

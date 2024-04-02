@@ -21,12 +21,11 @@ int main() {
   enumerateAvailableDevices();
   vulkan_cleanup();
 
-  std::cout << (configManager.config["rendering"]["vulkan"]["api"].IsDefined()
+  std::cout << (configManager["rendering"]["vulkan"]["api"].IsDefined()
                     ? "true"
                     : "false")
             << '\n';
 
-  std::cout
-      << configManager.config["rendering"]["vulkan"]["api"].as<std::string>()
-      << '\n';
+  std::cout << configManager["rendering"]["vulkan"]["api"].as<std::string>()
+            << '\n';
 }

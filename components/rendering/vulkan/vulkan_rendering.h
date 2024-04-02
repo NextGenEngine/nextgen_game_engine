@@ -11,7 +11,7 @@ class VulkanApi {
  public:
   explicit VulkanApi(ComponentConfig componentConfig)
       : componentConfig(componentConfig.getSubConfig("vulkan")) {
-    this->componentConfig.config["api"] = "Hello world!!!";
+    this->componentConfig["api"] = "Hello world!!!";
   }
 
   void render();
