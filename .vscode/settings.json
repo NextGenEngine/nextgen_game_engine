@@ -8,6 +8,7 @@
     "builddir",
     "choco",
     "clangd",
+    "codelldb",
     "cpubind",
     "cpupower",
     "cpuset",

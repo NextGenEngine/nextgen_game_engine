@@ -15,6 +15,7 @@ First draft of game engine
 - [Generate compile_commands.json](#generate-compile_commandsjson)
 - [Build and test project with Bazel](#build-and-test-project-with-bazel)
 - [Code quality checking with Trunk](#code-quality-checking-with-trunk)
+- [Debug with CodeLLDB](#debug-with-codelldb)
 - [IDEs recommendations](#ides-recommendations)
 - [Merge Queue](#merge-queue)
 - [Benchmarks](#benchmarks)
@@ -218,6 +219,16 @@ Check code quality:
 trunk check -a
 ```
 
+## Debug with CodeLLDB
+
+Debug configurations are defined for VSCode (launch configurations and
+appropriate tasks).
+
+We use following principle: for each target there are two build targets:
+
+- standart Bazel debug build
+- release build with debug info (to see optimized binary code in disassembly view)
+
 ## IDEs recommendations
 
 Sublime Text:
@@ -237,6 +248,7 @@ VSCode:
 - clang-tidy
 - bazel
 - trunk
+- codelldb
 - ... list is long, I'm specifying here mandatory ones
 
 ## Merge Queue
