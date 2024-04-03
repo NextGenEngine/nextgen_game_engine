@@ -16,16 +16,14 @@ concept RenderingApiConcept = requires(T api, ComponentConfig& configManager) {
 template <RenderingApiConcept RenderingApi>
 class RenderingEngine {
  private:
+  ComponentConfig config;
   RenderingApi renderingApi;
 
  public:
-  explicit RenderingEngine(ComponentConfig configManager)
-      : renderingApi(RenderingApi(configManager.getSubConfig("rendering"))) {
-    // Initialize modules with Api
-  }
-  void render() {
-    // API-specific rendering logic
-  }
+  explicit RenderingEngine(ComponentConfig config)
+      : config(config.getSubConfig("rendering")), renderingApi(this->config) {}
+
+  void render() {}
 };
 
 template <RenderingApiConcept RenderingApi>
