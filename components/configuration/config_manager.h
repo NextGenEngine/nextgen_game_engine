@@ -21,6 +21,7 @@ class ComponentConfig {
   }
 
   inline YAML::Node operator[](const std::string &key) { return config[key]; }
+  inline YAML::Node operator()() { return config; }
 
   inline ComponentConfig getSubConfig(const std::string &path) {
     if (!config[path]) {
