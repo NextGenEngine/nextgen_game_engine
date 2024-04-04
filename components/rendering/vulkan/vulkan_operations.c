@@ -1,5 +1,6 @@
 #include "vulkan_operations.h"
 
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -17,6 +18,13 @@ VkQueue graphicsQueue;
 VkSurfaceKHR surface;
 VkSwapchainKHR swapchain;
 GLFWwindow *window;
+
+// Calculated values
+VkPhysicalDevice *devices = NULL;
+VkPhysicalDeviceProperties *devicesProperties = NULL;
+uint32_t *prioritizedIndexes = NULL;
+uint32_t deviceCount = 0;
+const GLFWvidmode *glfw_currentVideoMode = NULL;
 
 VkResult vulkan_init() {
   // Initialize the Vulkan library
@@ -249,6 +257,11 @@ void vulkan_cleanup() {
   glfwDestroyWindow(window);
   glfwTerminate();
 
+  // free memory
+  free(devicesProperties);
+  free((void *)devices);
+  free(prioritizedIndexes);
+
   printf("Vulkan and GLFW cleaned up.\n");
 }
 
@@ -271,7 +284,6 @@ const char *getDeviceTypeName(VkPhysicalDeviceType deviceType) {
 
 VkResult enumerateAvailableDevices() {
   VkResult result = 0;
-  uint32_t deviceCount = 0;
 
   // Create Vulkan instance
   VkApplicationInfo appInfo = {VK_STRUCTURE_TYPE_APPLICATION_INFO};
@@ -300,8 +312,7 @@ VkResult enumerateAvailableDevices() {
   }
 
   // Allocate memory for physical devices
-  VkPhysicalDevice *devices =
-      (VkPhysicalDevice *)malloc(sizeof(VkPhysicalDevice) * deviceCount);
+  devices = (VkPhysicalDevice *)malloc(sizeof(VkPhysicalDevice) * deviceCount);
   if (!devices) {
     printf("Failed to allocate memory for devices\n");
     return EXIT_FAILURE;
@@ -316,9 +327,8 @@ VkResult enumerateAvailableDevices() {
   }
 
   // Collect information about each physical device
-  VkPhysicalDeviceProperties *devicesProperties =
-      (VkPhysicalDeviceProperties *)malloc(sizeof(VkPhysicalDeviceProperties) *
-                                           deviceCount);
+  devicesProperties = (VkPhysicalDeviceProperties *)malloc(
+      sizeof(VkPhysicalDeviceProperties) * deviceCount);
 
   // Print information about each physical device
   printf("Found %d Vulkan-compatible device(s):\n", deviceCount);
@@ -327,20 +337,30 @@ VkResult enumerateAvailableDevices() {
     vkGetPhysicalDeviceProperties(devices[i], deviceProperties);
   }
 
-  uint32_t prioritizedIndexes[deviceCount];
+  prioritizedIndexes = (uint32_t *)malloc(sizeof(uint32_t) * deviceCount);
   sortDevicesByPriority(devicesProperties, deviceCount, &prioritizedIndexes[0]);
 
   for (uint32_t i = 0; i < deviceCount; ++i) {
     VkPhysicalDeviceProperties *deviceProperties =
         &devicesProperties[prioritizedIndexes[i]];
-    printf("Device %d: %s, %s\n", prioritizedIndexes[i],
-           deviceProperties->deviceName,
+    printf("Device %d (id=%d): %s, %s\n", prioritizedIndexes[i],
+           deviceProperties->deviceID, deviceProperties->deviceName,
            getDeviceTypeName(deviceProperties->deviceType));
   }
 
-  // Clean up
-  free(devicesProperties);
-  free((void *)devices);
-
   return EXIT_SUCCESS;
+}
+
+void getRecommendedResolutionForDevice() {
+  // Get the primary monitor. For a specific monitor, you might need a different
+  // approach.
+  GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
+  if (!primaryMonitor) {
+    return;
+  }
+
+  // Get the current video mode of the monitor
+  glfw_currentVideoMode = glfwGetVideoMode(primaryMonitor);
+
+  // Cleanup GLFW
 }

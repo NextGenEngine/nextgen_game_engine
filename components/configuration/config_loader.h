@@ -5,6 +5,8 @@
 #include <yaml-cpp/node/parse.h>
 #include <yaml-cpp/yaml.h>
 
+#include <fstream>
+
 /* NOTE: Curiously Recurring Template Pattern (CRTP)
 
    **How It Works**: ConfigLoader is a template that takes a LoaderType as its
@@ -21,30 +23,35 @@
 
 */
 
-// Abstract base ConfigLoader class template
-template <typename LoaderType>
-class ConfigLoader {
- public:
-  YAML::Node load(const std::string& fileNameOrYamlStr) {
-    // Forward the call to the loader-specific load implementation
-    return static_cast<LoaderType*>(this)->loadImpl(fileNameOrYamlStr);
-  }
-};
-
 // Specialization for loading from a file
-class FileLoader : public ConfigLoader<FileLoader> {
+class FileLoader {
+ private:
+  std::string filePath;
+
  public:
-  static YAML::Node loadImpl(const std::string& filePath) {
+  inline YAML::Node Load(const std::string& filePath) {
+    this->filePath = filePath;
     return YAML::LoadFile(filePath);
+  }
+
+  // Implementation of the save functionality for files
+  inline void Save(const YAML::Node& config) const {
+    std::ofstream outputStream(filePath);
+    if (!outputStream) {
+      throw std::runtime_error("Unable to open file for writing: " + filePath);
+    }
+    outputStream << config;
   }
 };
 
 // Specialization for loading from a string
-class StringLoader : public ConfigLoader<StringLoader> {
+class StringLoader {
  public:
-  static YAML::Node loadImpl(const std::string& yamlContent) {
+  inline static YAML::Node Load(const std::string& yamlContent) {
     return YAML::Load(yamlContent);
   }
+
+  inline void Save(const YAML::Node& config) {}
 };
 
 #endif

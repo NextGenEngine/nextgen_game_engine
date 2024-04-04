@@ -1,3 +1,5 @@
+#ifndef NEXTGEN_ENGINE_VULKAN_CONFIG_H
+#define NEXTGEN_ENGINE_VULKAN_CONFIG_H
 #include <vulkan/vulkan.h>
 #include <yaml-cpp/yaml.h>
 
@@ -34,3 +36,5 @@ struct convert<VulkanConfig> {
   }
 };
 }  // namespace YAML
+
+#endif

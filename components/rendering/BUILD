@@ -10,6 +10,7 @@ cc_binary(
         "vulkan/vulkan_device_priority.h",
         "vulkan/vulkan_operations.c",
         "vulkan/vulkan_operations.h",
+        "vulkan/vulkan_rendering.cc",
         "vulkan/vulkan_rendering.h",
         "vulkan/vulkan_config.h",
     ],

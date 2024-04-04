@@ -5,8 +5,6 @@
 
 #include <string>
 
-class ConfigManager;
-
 class ComponentConfig {
  private:
   YAML::Node config;
@@ -31,21 +29,30 @@ class ComponentConfig {
   }
 };
 
+template <typename T>
+concept LoaderTypeConcept =
+    requires(T api, const YAML::Node &config, const std::string &filePath) {
+      { api.Load(filePath) } -> std::same_as<YAML::Node>;
+      { api.Save(config) } -> std::same_as<void>;
+      //   { api.loadConfig(configManager) } -> std::same_as<void>;
+      //   { api.getState() } -> std::convertible_to<std::string>;
+      //   { api.loadState(std::string{}) } -> std::same_as<void>;
+      //   { api.loadDefaultConfig() } -> std::same_as<void>;
+      //   { T(configManager) };  // Ensure constructible from ConfigManager
+    };
+
+template <LoaderTypeConcept LoaderType>
 class ConfigManager {
  private:
+  LoaderType loader;
   YAML::Node config;
 
  public:
-  template <typename LoaderType>
   explicit inline ConfigManager(LoaderType loader,
-                                const std::string &fileNameOrYamlContent);
+                                const std::string &yamlStringOrString)
+      : loader(loader), config(loader.Load(yamlStringOrString)) {}
 
-  // DEPRECATED: use ComponentConfigManager, because module config can
-  // have more then one level depth
-  template <typename T>
-  inline T getSetting(const std::string &module, const std::string &setting) {
-    return config[module][setting].as<T>();
-  }
+  void Save() { loader.Save(config); }
 
   template <typename T>
   inline T getSetting(const std::string &module) {
@@ -59,6 +66,7 @@ class ConfigManager {
   }
 
   inline YAML::Node operator[](const std::string &key) { return config[key]; }
+  inline YAML::Node GetConfigRootNode() { return config; }
 
   inline ComponentConfig getComponentConfig() {
     if (config.IsNull()) {
@@ -68,7 +76,7 @@ class ConfigManager {
   }
 };
 
-ConfigManager ConfigManager_File(const std::string &fileName);
-ConfigManager ConfigManager_String(const std::string &yamlContent);
+// ConfigManager &ConfigManager_File(const std::string &fileName);
+// ConfigManager &ConfigManager_String(const std::string &yamlContent);
 
 #endif
