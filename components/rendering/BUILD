@@ -1,18 +1,19 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
-cc_binary(
+cc_library(
     name = "rendering_engine",
     srcs = [
-        "rendering.cc",
-        "rendering.h",
         # Vulkan API
         "vulkan/vulkan_device_priority.c",
         "vulkan/vulkan_device_priority.h",
         "vulkan/vulkan_operations.c",
         "vulkan/vulkan_operations.h",
         "vulkan/vulkan_rendering.cc",
-        "vulkan/vulkan_rendering.h",
+    ],
+    hdrs = [
+        "rendering.h",
         "vulkan/vulkan_config.h",
+        "vulkan/vulkan_rendering.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
