@@ -258,9 +258,17 @@ void vulkan_cleanup() {
   glfwTerminate();
 
   // free memory
-  free(devicesProperties);
-  free((void *)devices);
-  free(prioritizedIndexes);
+  if (devicesProperties != NULL) {
+    free(devicesProperties);
+  }
+
+  if (devices != NULL) {
+    free((void *)devices);
+  }
+
+  if (prioritizedIndexes != NULL) {
+    free(prioritizedIndexes);
+  }
 
   printf("Vulkan and GLFW cleaned up.\n");
 }

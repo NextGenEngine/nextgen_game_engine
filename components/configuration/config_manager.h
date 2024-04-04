@@ -50,7 +50,7 @@ class ConfigManager {
  public:
   explicit inline ConfigManager(LoaderType loader,
                                 const std::string &yamlStringOrString)
-      : loader(loader), config(loader.Load(yamlStringOrString)) {}
+      : loader(loader), config(this->loader.Load(yamlStringOrString)) {}
 
   void Save() { loader.Save(config); }
 
@@ -70,7 +70,7 @@ class ConfigManager {
 
   inline ComponentConfig getComponentConfig() {
     if (config.IsNull()) {
-      config = YAML::Load("{}");
+      config = YAML::Load("");
     }
     return ComponentConfig(config);
   }
