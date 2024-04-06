@@ -12,7 +12,7 @@
 #include "components/configuration/config_manager.h"
 #include "components/rendering/vulkan/vulkan_rendering.h"
 
-auto createConfigManager() -> std::optional<ConfigManager<FileLoader>> {
+auto CreateConfigManager() -> std::optional<ConfigManager<FileLoader>> {
   while (true) {
     try {
       auto configManager = ConfigManager(FileLoader(), "config.yaml");
@@ -31,7 +31,7 @@ auto createConfigManager() -> std::optional<ConfigManager<FileLoader>> {
 }
 
 int main() {
-  auto configManager = createConfigManager();
+  auto configManager = CreateConfigManager();
   if (!configManager.has_value()) {
     vulkan_cleanup();
     return EXIT_FAILURE;

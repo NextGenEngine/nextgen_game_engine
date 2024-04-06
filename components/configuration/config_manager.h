@@ -10,7 +10,7 @@ class ComponentConfig {
   YAML::Node config;
 
  public:
-  explicit inline ComponentConfig(YAML::Node componentRootNode)
+  explicit inline ComponentConfig(const YAML::Node &componentRootNode)
       : config(componentRootNode) {}
 
   template <typename T>
@@ -75,8 +75,5 @@ class ConfigManager {
     return ComponentConfig(config);
   }
 };
-
-// ConfigManager &ConfigManager_File(const std::string &fileName);
-// ConfigManager &ConfigManager_String(const std::string &yamlContent);
 
 #endif
