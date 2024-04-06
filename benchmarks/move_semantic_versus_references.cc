@@ -59,7 +59,7 @@ auto CreateConfigManager_Move() -> std::optional<
 }
 
 inline void DoTestIteration(auto configManager, auto componentConfig) {
-  auto host = (*configManager)["database"]["host"];
+  auto host = configManager["database"]["host"];
   componentConfig = componentConfig.getSubConfig("module_subconfig");
   benchmark::DoNotOptimize(host);
   benchmark::DoNotOptimize(componentConfig);
@@ -76,10 +76,22 @@ static void BM_CONFIG_MANAGER_MOVE(benchmark::State& state) {
   // NOLINTNEXTLINE(readability-identifier-length)
   for (auto _ : state) {
     (void)_;  // Explicitly mark the loop variable as unused
-    auto host = (*configManager)["database"]["host"];
-    componentConfig = componentConfig.getSubConfig("module_subconfig");
-    benchmark::DoNotOptimize(host);
-    benchmark::DoNotOptimize(componentConfig);
+    DoTestIteration(*configManager, componentConfig);
+  }
+}
+
+// Benchmark for getSetting
+// NOLINTNEXTLINE(misc-use-anonymous-namespace)
+static void BM_CONFIG_MANAGER_REF(benchmark::State& state) {
+  auto configManager = CreateConfigManager();
+  if (!configManager.has_value()) {
+    return;
+  }
+  auto componentConfig = (*configManager).getComponentConfig();
+  // NOLINTNEXTLINE(readability-identifier-length)
+  for (auto _ : state) {
+    (void)_;  // Explicitly mark the loop variable as unused
+    DoTestIteration(*configManager, componentConfig);
   }
 }
 
@@ -93,20 +105,6 @@ BENCHMARK(BM_CONFIG_MANAGER_MOVE)
     ->Unit(benchmark::kMicrosecond)
     ->Iterations(ITERATIONS);
 
-// Benchmark for getSetting
-// NOLINTNEXTLINE(misc-use-anonymous-namespace)
-static void BM_CONFIG_MANAGER_REF(benchmark::State& state) {
-  auto configManager = CreateConfigManager();
-  if (!configManager.has_value()) {
-    return;
-  }
-  auto componentConfig = (*configManager).getComponentConfig();
-  // NOLINTNEXTLINE(readability-identifier-length)
-  for (auto _ : state) {
-    (void)_;  // Explicitly mark the loop variable as unused
-    DoTestIteration(configManager, componentConfig);
-  }
-}
 // NOLINTNEXTLINE(misc-use-anonymous-namespace, cppcoreguidelines-owning-memory)
 BENCHMARK(BM_CONFIG_MANAGER_REF)
     ->Unit(benchmark::kMicrosecond)
