@@ -45,6 +45,15 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "bazel-build-debug: benchmarks_move_semantic",
+      "type": "shell",
+      "command": "bazel build --config=debug //benchmarks:benchmarks_move_semantic",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }

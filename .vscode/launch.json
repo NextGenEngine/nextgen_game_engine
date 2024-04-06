@@ -23,6 +23,16 @@
       "args": [],
       "cwd": "${workspaceFolder}",
       "preLaunchTask": "bazel-build-release-with-debug: nextgen_game_engine"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug/Release: benchmarks_move_semantic",
+      "program": "${workspaceFolder}/bazel-bin/benchmarks/benchmarks_move_semantic",
+      "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "bazel-build-debug: benchmarks_move_semantic"
     }
   ]
 }
