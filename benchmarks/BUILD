@@ -11,3 +11,10 @@ cc_binary(
         "@google_benchmark//:benchmark_main",
     ],
 )
+
+cc_binary(
+    name = "templated_structure_accessor",
+    srcs = [
+        "templated_structure_accessor.cc",
+    ],
+)

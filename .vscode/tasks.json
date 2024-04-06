@@ -54,6 +54,15 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "bazel-build-release-with-debug: templated_structure_accessor",
+      "type": "shell",
+      "command": "bazel build --config=debug //benchmarks:templated_structure_accessor",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }
