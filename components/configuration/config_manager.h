@@ -12,6 +12,7 @@ class ComponentConfig {
  public:
   explicit inline ComponentConfig(const YAML::Node &componentRootNode)
       : config(componentRootNode) {}
+  explicit inline ComponentConfig() {}
 
   template <typename T>
   inline T getSetting(const std::string &setting) const {

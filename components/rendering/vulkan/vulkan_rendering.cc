@@ -1,26 +1,18 @@
 #include "vulkan_rendering.h"
 
-#include <vulkan/vulkan_core.h>
+#include <iostream>
 
-#include <cstdint>
+#include "components/configuration/config_manager.h"
+#include "vulkan_init.h"
 
-#include "components/rendering/vulkan/vulkan_operations.h"
-#include "vulkan_config.h"
+namespace rendering {
 
-VulkanConfig getDefaultConfig() {
-  enumerateAvailableDevices();
-  getRecommendedResolutionForDevice();
-
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-  const uint32_t defaultDeviceIndex = prioritizedIndexes[0];
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-  const VkPhysicalDeviceProperties& defaultDeviceProperties = devicesProperties
-      [defaultDeviceIndex];  // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-  const auto* currentVideoMode = glfw_currentVideoMode;
-
-  return VulkanConfig{
-      .deviceID = defaultDeviceProperties.deviceID,
-      .width = static_cast<uint32_t>(currentVideoMode->width),
-      .height = static_cast<uint32_t>(currentVideoMode->height),
-      .refreshRate = static_cast<float>(currentVideoMode->refreshRate)};
+void VulkanRenderer::init(const ComponentConfig& componentConfig) {
+  SetComponentConfig(componentConfig);
+  LoadVulkanConfig();
+  std::cout << "Vulkan initialized\n";
 }
+
+void VulkanRenderer::render() { std::cout << "Rendering with Vulkan\n"; }
+
+}  // namespace rendering
