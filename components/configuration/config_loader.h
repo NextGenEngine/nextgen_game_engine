@@ -6,52 +6,77 @@
 #include <yaml-cpp/yaml.h>
 
 #include <fstream>
+#include <utility>
 
-/* NOTE: Curiously Recurring Template Pattern (CRTP)
+namespace nextgen::engine::configuration {
 
-   **How It Works**: ConfigLoader is a template that takes a LoaderType as its
-     parameter. LoaderType is expected to be a derived class that implements a
-     static loadImpl function. The load function then calls loadImpl, using
-     static polymorphism. This is achieved by casting this to LoaderType* and
-     calling the method directly.
+class IConfigLoader {
+ public:
+  virtual YAML::Node Load() const = 0;
+  virtual void Save(const YAML::Node* config) const = 0;
 
-  **Performance**: This method does not incur the runtime overhead
-    associated with virtual function calls because the method to call is
-    resolved at compile time. The compiler has complete information about the
-    derived type (LoaderType) and can inline calls to loadImpl, further
-    improving performance.
+  IConfigLoader() = default;
+  virtual ~IConfigLoader() = 0;
 
-*/
+ protected:
+  //  -- Assignment --
+  IConfigLoader& operator=(const IConfigLoader&) = default;
+  IConfigLoader& operator=(IConfigLoader&&) = default;
+  IConfigLoader(const IConfigLoader&) = default;
+  IConfigLoader(IConfigLoader&&) = default;
+};
 
 // Specialization for loading from a file
-class FileLoader {
+class FileLoader : public IConfigLoader {
  private:
   std::string filePath;
 
  public:
-  inline YAML::Node Load(const std::string& filePath) {
-    this->filePath = filePath;
-    return YAML::LoadFile(filePath);
-  }
+  explicit FileLoader(std::string filePath) : filePath(std::move(filePath)) {}
+
+  YAML::Node Load() const override { return YAML::LoadFile(filePath); }
 
   // Implementation of the save functionality for files
-  inline void Save(const YAML::Node& config) const {
+  void Save(const YAML::Node* config) const override {
     std::ofstream outputStream(filePath);
     if (!outputStream) {
       throw std::runtime_error("Unable to open file for writing: " + filePath);
     }
-    outputStream << config;
+    outputStream << *config;
   }
+
+  ~FileLoader() override = default;
+
+ protected:
+  //  -- Assignment --
+  FileLoader& operator=(const FileLoader&) = default;
+  FileLoader& operator=(FileLoader&&) = default;
+  FileLoader(const FileLoader&) = default;
+  FileLoader(FileLoader&&) = default;
 };
 
 // Specialization for loading from a string
-class StringLoader {
- public:
-  inline static YAML::Node Load(const std::string& yamlContent) {
-    return YAML::Load(yamlContent);
-  }
+class StringLoader : public IConfigLoader {
+ private:
+  std::string yamlContent;
 
-  inline void Save(const YAML::Node& config) {}
+ public:
+  explicit StringLoader(std::string yamlContent)
+      : yamlContent(std::move(yamlContent)) {}
+
+  YAML::Node Load() const override { return YAML::Load(yamlContent); }
+  void Save(const YAML::Node* config) const override {}
+
+  ~StringLoader() override = default;
+
+ protected:
+  //  -- Assignment --
+  StringLoader& operator=(const StringLoader&) = default;
+  StringLoader& operator=(StringLoader&&) = default;
+  StringLoader(const StringLoader&) = default;
+  StringLoader(StringLoader&&) = default;
 };
+
+}  // namespace nextgen::engine::configuration
 
 #endif

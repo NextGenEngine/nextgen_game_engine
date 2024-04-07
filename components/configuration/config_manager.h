@@ -3,78 +3,69 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <iostream>
+#include <memory>
 #include <string>
+
+#include "components/configuration/config_loader.h"
+
+namespace nextgen::engine::configuration {
+
+class ComponentConfig;
+
+/*= == == == == == == == == == == == == == == == == == == ==
+                    CONFIG MANAGER
+= = == == == == == == == == == == == == == == == == == == ==*/
+
+class ConfigManager {
+ private:
+  std::unique_ptr<IConfigLoader> loader;
+  YAML::Node config;
+
+ public:
+  explicit ConfigManager(std::unique_ptr<IConfigLoader> loader);
+
+  void Save();
+  YAML::Node operator[](const std::string& key);
+  YAML::Node GetConfigRootNode();
+  ComponentConfig getComponentConfig();
+};
+
+/*= == == == == == == == == == == == == == == == == == == ==
+                    COMPONENT CONFIG
+= = == == == == == == == == == == == == == == == == == == ==*/
 
 class ComponentConfig {
  private:
+  ConfigManager* configManager;
   YAML::Node config;
 
  public:
-  explicit inline ComponentConfig(const YAML::Node &componentRootNode)
-      : config(componentRootNode) {}
-  explicit inline ComponentConfig() {}
+  explicit ComponentConfig(ConfigManager* configManager,
+                           const YAML::Node& componentRootNode);
 
-  template <typename T>
-  inline T getSetting(const std::string &setting) const {
-    return config[setting].as<T>();
-  }
+  YAML::Node operator[](const std::string& key);
+  YAML::Node operator()();
+  ComponentConfig getSubConfig(const std::string& path);
 
-  inline YAML::Node operator[](const std::string &key) { return config[key]; }
-  inline YAML::Node operator()() { return config; }
-
-  inline ComponentConfig getSubConfig(const std::string &path) {
-    if (!config[path]) {
-      config[path] = YAML::Node();
+  template <typename ConfigType>
+  ConfigType LoadConfigOrDefault(std::function<ConfigType()> getDefaultConfig) {
+    try {
+      // Attempt to use the provided configuration
+      return config.as<ConfigType>();
+    } catch (const YAML::Exception& e) {
+      // Log the error and use default values on failure
+      std::cerr << "Failed to decode config: " << e.what() << "\n";
+      auto defaultConfig = getDefaultConfig();
+      // Update the config node
+      config = defaultConfig;
+      // And a method in ConfigManager to save the configuration
+      configManager->Save();
+      return defaultConfig;
     }
-    return ComponentConfig(config[path]);
   }
 };
 
-template <typename T>
-concept LoaderTypeConcept =
-    requires(T api, const YAML::Node &config, const std::string &filePath) {
-      { api.Load(filePath) } -> std::same_as<YAML::Node>;
-      { api.Save(config) } -> std::same_as<void>;
-      //   { api.loadConfig(configManager) } -> std::same_as<void>;
-      //   { api.getState() } -> std::convertible_to<std::string>;
-      //   { api.loadState(std::string{}) } -> std::same_as<void>;
-      //   { api.loadDefaultConfig() } -> std::same_as<void>;
-      //   { T(configManager) };  // Ensure constructible from ConfigManager
-    };
-
-template <LoaderTypeConcept LoaderType>
-class ConfigManager {
- private:
-  LoaderType loader;
-  YAML::Node config;
-
- public:
-  explicit inline ConfigManager(LoaderType loader,
-                                const std::string &yamlStringOrString)
-      : loader(loader), config(this->loader.Load(yamlStringOrString)) {}
-
-  void Save() { loader.Save(config); }
-
-  template <typename T>
-  inline T getSetting(const std::string &module) {
-    return config[module].as<T>();
-  }
-
-  template <typename T>
-  T getSetting_Not_Inline(const std::string &module,
-                          const std::string &setting) {
-    return config[module][setting].as<T>();
-  }
-
-  inline YAML::Node operator[](const std::string &key) { return config[key]; }
-  inline YAML::Node GetConfigRootNode() { return config; }
-
-  inline ComponentConfig getComponentConfig() {
-    if (config.IsNull()) {
-      config = YAML::Load("");
-    }
-    return ComponentConfig(config);
-  }
-};
+}  // namespace nextgen::engine::configuration
 
 #endif

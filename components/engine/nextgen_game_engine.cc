@@ -1,25 +1,59 @@
+#include <yaml-cpp/exceptions.h>
+
 #include <cstdlib>
+#include <exception>
+#include <fstream>
 #include <iostream>
+#include <memory>
+#include <optional>
 
+#include "components/configuration/config_loader.h"
 #include "components/configuration/config_manager.h"
-#include "components/configuration/config_manager_globals.h"
 #include "components/rendering/rendering.h"
-#include "components/rendering/vulkan/vulkan_rendering.h"
+#include "components/rendering/vulkan/vulkan_operations.h"
 
-using VulkanRenderer = rendering::RenderingEngine<rendering::VulkanRenderer>;
+using nextgen::engine::configuration::ConfigManager;
+using nextgen::engine::configuration::FileLoader;
+using nextgen::engine::rendering::RenderingEngine;
+
+auto CreateConfigManager() -> std::optional<ConfigManager> {
+  while (true) {
+    try {
+      ConfigManager configManager(std::make_unique<FileLoader>("config.yaml"));
+      return configManager;  // Successfully created, return it
+    } catch (const YAML::BadFile& e) {
+      std::cerr << "Failed to load or create the config file: " << e.what()
+                << ". Retrying..." << '\n';
+      // You might want to include a sleep here to prevent a tight retry loop
+      std::ofstream const give_me_a_name("config.yaml");
+      std::cerr << "Configuration file config.yaml created" << '\n';
+    } catch (const std::exception& e) {
+      std::cerr << "An unexpected error occurred: " << e.what() << '\n';
+      return std::nullopt;
+    }
+  }
+}
 
 int main() {
-  VulkanRenderer::init(CONFIG_MANAGER.getComponentConfig()
-                           .getSubConfig("rendering")
-                           .getSubConfig("vulkan"));
+  auto config_manager = CreateConfigManager();
+  if (!config_manager.has_value()) {
+    vulkan_cleanup();
+    return EXIT_FAILURE;
+  }
 
-  std::cout << (CONFIG_MANAGER["rendering"]["vulkan"]["refreshRate"].IsDefined()
+  auto component_config = config_manager.value().getComponentConfig();
+
+  const RenderingEngine rendering_engine(
+      component_config.getSubConfig("rendering"));
+
+  std::cout << (config_manager.value()["rendering"]["vulkan"]["refreshRate"]
+                        .IsDefined()
                     ? "true"
                     : "false")
             << '\n';
 
-  std::cout << "Vulkan config: " << CONFIG_MANAGER["rendering"]["vulkan"]
-            << '\n';
+  std::cout << "Vulkan config: "
+            << config_manager.value()["rendering"]["vulkan"] << '\n';
 
   std::cout << "Successful exit.\n";
   return EXIT_SUCCESS;
