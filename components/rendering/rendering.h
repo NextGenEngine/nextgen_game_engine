@@ -16,7 +16,7 @@ class RenderingEngine {
   std::unique_ptr<IRenderingApi> api;
 
  public:
-  explicit RenderingEngine(const ComponentConfig& _componentConfig);
+  explicit RenderingEngine(ComponentConfig _componentConfig);
 };
 
 }  // namespace nextgen::engine::rendering

@@ -3,6 +3,7 @@
 #include <vulkan/vulkan_core.h>
 
 #include <cstdint>
+#include <utility>
 
 #include "components/configuration/config_manager.h"
 #include "components/rendering/vulkan/vulkan_config.h"
@@ -36,8 +37,9 @@ auto inline LoadConfig(auto& componentConfig) {
       DefaultConfig);
 }
 
-VulkanRenderingApi::VulkanRenderingApi(const ComponentConfig& _componentConfig)
-    : componentConfig(_componentConfig), config(LoadConfig(componentConfig)) {}
+VulkanRenderingApi::VulkanRenderingApi(ComponentConfig _componentConfig)
+    : componentConfig(std::move(_componentConfig)),
+      config(LoadConfig(componentConfig)) {}
 
 void VulkanRenderingApi::render() {}
 

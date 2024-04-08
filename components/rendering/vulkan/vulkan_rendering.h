@@ -15,7 +15,7 @@ class VulkanRenderingApi : public IRenderingApi {
   VulkanConfig config;
 
  public:
-  explicit VulkanRenderingApi(const ComponentConfig& componentConfig);
+  explicit VulkanRenderingApi(ComponentConfig componentConfig);
   void render() override;
 };
 

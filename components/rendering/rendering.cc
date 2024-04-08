@@ -3,6 +3,7 @@
 #include <cctype>
 #include <memory>
 #include <stdexcept>
+#include <utility>
 
 #include "components/configuration/config_manager.h"
 #include "components/rendering/rendering_api.h"
@@ -41,8 +42,8 @@ auto inline LoadConfig(auto& componentConfig) {
       DefaultConfig);
 }
 
-RenderingEngine::RenderingEngine(const ComponentConfig& _componentConfig)
-    : componentConfig(_componentConfig),
+RenderingEngine::RenderingEngine(ComponentConfig _componentConfig)
+    : componentConfig(std::move(_componentConfig)),
       config(LoadConfig(componentConfig)),
       api(SelectRenderingApi(&config, &componentConfig)) {}
 
