@@ -4,6 +4,7 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <optional>
 #include <string>
 
@@ -20,10 +21,14 @@ database:
 
 constexpr int ITERATIONS = 1000000;
 
-auto CreateConfigManager() -> std::optional<ConfigManager<StringLoader>> {
+using nextgen::engine::configuration::ConfigManager;
+using nextgen::engine::configuration::StringLoader;
+
+auto CreateConfigManager() -> std::optional<std::shared_ptr<ConfigManager>> {
   while (true) {
     try {
-      auto configManager = ConfigManager(StringLoader(), yamlContent);
+      auto configManager = std::make_shared<ConfigManager>(
+          std::make_unique<StringLoader>(yamlContent));
       return configManager;  // Successfully created, return it
     } catch (const YAML::BadFile& e) {
       std::cerr << "Failed to load or create the config file: " << e.what()
@@ -59,6 +64,13 @@ auto CreateConfigManager_Move() -> std::optional<
 }
 
 inline void DoTestIteration(auto configManager, auto componentConfig) {
+  auto host = (*configManager)["database"]["host"];
+  componentConfig = componentConfig.getSubConfig("module_subconfig");
+  benchmark::DoNotOptimize(host);
+  benchmark::DoNotOptimize(componentConfig);
+}
+
+inline void DoTestIterationShared(auto configManager, auto componentConfig) {
   auto host = configManager["database"]["host"];
   componentConfig = componentConfig.getSubConfig("module_subconfig");
   benchmark::DoNotOptimize(host);
@@ -72,11 +84,11 @@ static void BM_CONFIG_MANAGER_MOVE(benchmark::State& state) {
   if (!configManager.has_value()) {
     return;
   }
-  auto componentConfig = (*configManager).getComponentConfig();
+  auto componentConfig = configManager->getComponentConfig();
   // NOLINTNEXTLINE(readability-identifier-length)
   for (auto _ : state) {
     (void)_;  // Explicitly mark the loop variable as unused
-    DoTestIteration(*configManager, componentConfig);
+    DoTestIterationShared(*configManager, componentConfig);
   }
 }
 
@@ -87,7 +99,7 @@ static void BM_CONFIG_MANAGER_REF(benchmark::State& state) {
   if (!configManager.has_value()) {
     return;
   }
-  auto componentConfig = (*configManager).getComponentConfig();
+  auto componentConfig = (*configManager)->getComponentConfig();
   // NOLINTNEXTLINE(readability-identifier-length)
   for (auto _ : state) {
     (void)_;  // Explicitly mark the loop variable as unused
