@@ -7,22 +7,22 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug: nextgen_game_engine",
-      "program": "${workspaceFolder}/bazel-bin/components/engine/nextgen_game_engine",
+      "name": "Debug: nextgen_game_engine_test",
+      "program": "${workspaceFolder}/bazel-bin/components/engine/nextgen_game_engine_test",
       "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
       "args": [],
       "cwd": "${workspaceFolder}",
-      "preLaunchTask": "bazel-build-debug: nextgen_game_engine"
+      "preLaunchTask": "bazel-build-debug: nextgen_game_engine_test"
     },
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug/Release: nextgen_game_engine",
-      "program": "${workspaceFolder}/bazel-bin/components/engine/nextgen_game_engine",
+      "name": "Debug/Release: nextgen_game_engine_test",
+      "program": "${workspaceFolder}/bazel-bin/components/engine/nextgen_game_engine_test",
       "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
       "args": [],
       "cwd": "${workspaceFolder}",
-      "preLaunchTask": "bazel-build-release-with-debug: nextgen_game_engine"
+      "preLaunchTask": "bazel-build-release-with-debug: nextgen_game_engine_test"
     },
     {
       "type": "lldb",

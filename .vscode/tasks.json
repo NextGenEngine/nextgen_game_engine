@@ -29,18 +29,18 @@
       }
     },
     {
-      "label": "bazel-build-debug: nextgen_game_engine",
+      "label": "bazel-build-debug: nextgen_game_engine_test",
       "type": "shell",
-      "command": "bazel build --config=debug //components/engine:nextgen_game_engine",
+      "command": "bazel build --config=debug //components/engine:nextgen_game_engine_test",
       "group": {
         "kind": "build",
         "isDefault": true
       }
     },
     {
-      "label": "bazel-build-release-with-debug: nextgen_game_engine",
+      "label": "bazel-build-release-with-debug: nextgen_game_engine_test",
       "type": "shell",
-      "command": "bazel build --config=releasewithdebug //components/engine:nextgen_game_engine",
+      "command": "bazel build --config=releasewithdebug //components/engine:nextgen_game_engine_test",
       "group": {
         "kind": "build",
         "isDefault": true
