@@ -39,8 +39,14 @@ auto inline LoadConfig(auto& componentConfig) {
 
 VulkanRenderingApi::VulkanRenderingApi(ComponentConfig _componentConfig)
     : componentConfig(std::move(_componentConfig)),
-      config(LoadConfig(componentConfig)) {}
+      config(LoadConfig(componentConfig)) {
+  // Initialize Vulkan device
+  vulkan_create_device();
+  vulkan_create_swapchain();
+}
 
 void VulkanRenderingApi::render() {}
+
+VulkanRenderingApi::~VulkanRenderingApi() { vulkan_cleanup(); }
 
 }  // namespace nextgen::engine::rendering::vulkan
