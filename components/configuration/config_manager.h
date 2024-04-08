@@ -61,10 +61,44 @@ class ComponentConfig {
                 << configManager->GetConfigRootNode() << "\n";
       auto defaultConfig = getDefaultConfig();
       // Update the config node
-      config = defaultConfig;
+      MergeYAMLNodes(config, YAML::Node(defaultConfig));
       // And a method in ConfigManager to save the configuration
       configManager->Save();
       return defaultConfig;
+    }
+  }
+
+  void MergeYAMLNodes(YAML::Node currentConfig,
+                      const YAML::Node& defaultConfig) {
+    if (!defaultConfig.IsMap()) {
+      currentConfig = defaultConfig;
+      return;
+    }
+
+    if (!currentConfig.IsMap()) {
+      currentConfig = defaultConfig;
+      return;
+    }
+
+    for (YAML::const_iterator it = defaultConfig.begin();
+         it != defaultConfig.end(); ++it) {
+      std::string key = it->first.Scalar();
+      YAML::Node defaultVal = it->second;
+
+      // If the key does not exist in currentConfig, or if the key exists but
+      // the corresponding value is not a map, replace the value in
+      // currentConfig with the value from defaultConfig.
+      if (!currentConfig[key] || !currentConfig[key].IsMap() ||
+          !defaultVal.IsMap()) {
+        currentConfig.remove(key);
+        currentConfig[key] = defaultVal;
+      } else if (currentConfig[key].IsMap() && defaultVal.IsMap()) {
+        // If both current and default values for the key are maps, merge them
+        // recursively.
+        MergeYAMLNodes(currentConfig[key], defaultVal);
+      }
+      // If currentConfig has the key with a scalar value and defaultVal is also
+      // scalar, the value in currentConfig has already been replaced above.
     }
   }
 };
