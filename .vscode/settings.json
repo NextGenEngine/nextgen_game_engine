@@ -51,6 +51,7 @@
     "swapchain",
     "Swapchain",
     "tokio",
+    "tparam",
     "trunkio",
     "vulkan",
     "Vulkan",
