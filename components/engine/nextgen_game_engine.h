@@ -11,7 +11,7 @@ using configuration::IConfigLoader;
 using rendering::RenderingEngine;
 
 class NextGenEngine {
-  configuration::ConfigManager configManager;
+  std::shared_ptr<ConfigManager> configManager;
   std::unique_ptr<RenderingEngine> renderingEngine;
 
  public:

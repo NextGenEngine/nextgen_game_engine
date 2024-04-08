@@ -37,14 +37,21 @@ inline std::unique_ptr<IRenderingApi> SelectRenderingApi(
   }
 }
 
-auto inline LoadConfig(auto& componentConfig) {
-  return componentConfig.template LoadConfigOrDefault<RenderingEngineConfig>(
-      DefaultConfig);
+auto inline LoadConfigOrDefault(ComponentConfig& componentConfig) {
+  auto config = componentConfig.LoadConfig<RenderingEngineConfig>();
+  if (config) {
+    return config.value();
+  }
+  // If configuration was not loaded, than fall back to default one
+  auto defaultConfig = DefaultConfig();
+  componentConfig.UpdateConfig(defaultConfig);
+  componentConfig.SaveConfig();
+  return defaultConfig;
 }
 
 RenderingEngine::RenderingEngine(ComponentConfig _componentConfig)
     : componentConfig(std::move(_componentConfig)),
-      config(LoadConfig(componentConfig)),
+      config(LoadConfigOrDefault(componentConfig)),
       api(SelectRenderingApi(&config, &componentConfig)) {}
 
 }  // namespace nextgen::engine::rendering

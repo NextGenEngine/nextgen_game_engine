@@ -21,11 +21,11 @@ using nextgen::engine::configuration::IConfigLoader;
 using nextgen::engine::rendering::RenderingEngine;
 
 auto CreateConfigManager(std::unique_ptr<IConfigLoader> loader)
-    -> ConfigManager {
+    -> std::shared_ptr<ConfigManager> {
   while (true) {
     try {
-      ConfigManager configManager(std::move(loader));
-      return configManager;  // Successfully created, return it
+      return std::make_shared<ConfigManager>(
+          std::move(loader));  // Successfully created, return it
     } catch (const YAML::BadFile& e) {
       std::cerr << "Failed to load or create the config file: " << e.what()
                 << ". Retrying..." << '\n';
@@ -47,14 +47,15 @@ auto CreateConfigManager(std::unique_ptr<IConfigLoader> loader)
 NextGenEngine::NextGenEngine(std::unique_ptr<IConfigLoader> _loader)
     : configManager(CreateConfigManager(std::move(_loader))),
       renderingEngine(std::make_unique<RenderingEngine>(
-          configManager.getComponentConfig().getSubConfig("rendering"))) {
-  auto component_config = configManager.getComponentConfig();
-  std::cout << (configManager["rendering"]["vulkan"]["refreshRate"].IsDefined()
-                    ? "true"
-                    : "false")
-            << '\n';
+          configManager->getComponentConfig().getSubConfig("rendering"))) {
+  auto component_config = configManager->getComponentConfig();
+  std::cout
+      << (component_config["rendering"]["vulkan"]["refreshRate"].IsDefined()
+              ? "true"
+              : "false")
+      << '\n';
 
-  std::cout << "Vulkan config: " << configManager["rendering"]["vulkan"]
+  std::cout << "Vulkan config: " << component_config["rendering"]["vulkan"]
             << '\n';
 }
 

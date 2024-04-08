@@ -31,15 +31,22 @@ auto DefaultConfig = []() -> VulkanConfig {
       .refreshRate = static_cast<float>(currentVideoMode->refreshRate)};
 };
 
-auto inline LoadConfig(auto& componentConfig) {
+auto inline LoadConfigOrDefault(ComponentConfig& componentConfig) {
   vulkan_init();
-  return componentConfig.template LoadConfigOrDefault<VulkanConfig>(
-      DefaultConfig);
+  auto config = componentConfig.LoadConfig<VulkanConfig>();
+  if (config) {
+    return config.value();
+  }
+  // If configuration was not loaded, than fall back to default one
+  auto defaultConfig = DefaultConfig();
+  componentConfig.UpdateConfig(defaultConfig);
+  componentConfig.SaveConfig();
+  return defaultConfig;
 }
 
 VulkanRenderingApi::VulkanRenderingApi(ComponentConfig _componentConfig)
     : componentConfig(std::move(_componentConfig)),
-      config(LoadConfig(componentConfig)) {
+      config(LoadConfigOrDefault(componentConfig)) {
   // Initialize Vulkan device
   vulkan_create_device();
   vulkan_create_swapchain();
