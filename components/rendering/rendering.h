@@ -8,6 +8,7 @@
 namespace nextgen::engine::rendering {
 
 using nextgen::engine::configuration::ComponentConfig;
+using nextgen::engine::rendering::api::IRenderingApi;
 
 class RenderingEngine {
   configuration::ComponentConfig componentConfig;
@@ -15,7 +16,7 @@ class RenderingEngine {
   std::unique_ptr<IRenderingApi> api;
 
  public:
-  explicit RenderingEngine(ComponentConfig _componentConfig);
+  explicit RenderingEngine(const ComponentConfig& _componentConfig);
 };
 
 }  // namespace nextgen::engine::rendering

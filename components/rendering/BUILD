@@ -33,6 +33,7 @@ cc_library(
     deps = [
         ":rendering_api",
         "//components/configuration:config_manager",
+        "//lib:std_ext",
         "@libglfw",
         "@libvulkan",
     ],

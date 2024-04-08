@@ -52,10 +52,13 @@ class ComponentConfig {
   ConfigType LoadConfigOrDefault(std::function<ConfigType()> getDefaultConfig) {
     try {
       // Attempt to use the provided configuration
+      std::cerr << "Want to decode this: " << config << "\n";
       return config.as<ConfigType>();
     } catch (const YAML::Exception& e) {
       // Log the error and use default values on failure
       std::cerr << "Failed to decode config: " << e.what() << "\n";
+      std::cerr << "It is current config state: "
+                << configManager->GetConfigRootNode() << "\n";
       auto defaultConfig = getDefaultConfig();
       // Update the config node
       config = defaultConfig;

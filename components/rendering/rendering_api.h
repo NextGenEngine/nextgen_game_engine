@@ -1,6 +1,8 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_API_H
 #define NEXTGEN_ENGINE_RENDERING_API_H
 
+namespace nextgen::engine::rendering::api {
+
 class IRenderingApi {
  public:
   virtual void render() = 0;
@@ -15,5 +17,7 @@ class IRenderingApi {
   IRenderingApi(const IRenderingApi&) = default;
   IRenderingApi(IRenderingApi&&) = default;
 };
+
+}  // namespace nextgen::engine::rendering::api
 
 #endif

@@ -3,14 +3,14 @@
 #include <vulkan/vulkan_core.h>
 
 #include <cstdint>
-#include <utility>
 
 #include "components/configuration/config_manager.h"
 #include "components/rendering/vulkan/vulkan_config.h"
 #include "vulkan_operations.h"
 
 using nextgen::engine::configuration::ComponentConfig;
-using nextgen::engine::rendering::vulkan::VulkanRenderingApi;
+
+namespace nextgen::engine::rendering::vulkan {
 
 auto DefaultConfig = []() -> VulkanConfig {
   enumerateAvailableDevices();
@@ -30,14 +30,15 @@ auto DefaultConfig = []() -> VulkanConfig {
       .refreshRate = static_cast<float>(currentVideoMode->refreshRate)};
 };
 
-auto LoadConfigOrDefault(auto componentConfig) {
+auto inline LoadConfig(auto& componentConfig) {
   vulkan_init();
   return componentConfig.template LoadConfigOrDefault<VulkanConfig>(
       DefaultConfig);
 }
 
-VulkanRenderingApi::VulkanRenderingApi(ComponentConfig _componentConfig)
-    : componentConfig(std::move(_componentConfig)),
-      config(LoadConfigOrDefault(componentConfig)) {}
+VulkanRenderingApi::VulkanRenderingApi(const ComponentConfig& _componentConfig)
+    : componentConfig(_componentConfig), config(LoadConfig(componentConfig)) {}
 
 void VulkanRenderingApi::render() {}
+
+}  // namespace nextgen::engine::rendering::vulkan

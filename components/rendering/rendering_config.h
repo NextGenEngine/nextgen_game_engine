@@ -3,6 +3,8 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "lib/std_ext.h"
+
 namespace nextgen::engine::rendering {
 
 enum class RenderingAPI {
@@ -17,11 +19,10 @@ struct RenderingEngineConfig {
 
 }  // namespace nextgen::engine::rendering
 
-std::string toLowerCase(const std::string& input);
-
 namespace YAML {
 using nextgen::engine::rendering::RenderingAPI;
 using nextgen::engine::rendering::RenderingEngineConfig;
+using nextgen::lib::std_ext::toLowerCase;
 
 template <>
 struct convert<RenderingEngineConfig> {
@@ -36,7 +37,7 @@ struct convert<RenderingEngineConfig> {
     // ...
 
     // decode
-    rhs.api = node["deviceID"].as<RenderingAPI>();
+    rhs.api = node["api"].as<RenderingAPI>();
     // Decode other settings as needed
     return true;
   }

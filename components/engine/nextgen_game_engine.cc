@@ -27,6 +27,10 @@ auto CreateConfigManager() -> std::optional<ConfigManager> {
       // You might want to include a sleep here to prevent a tight retry loop
       std::ofstream const give_me_a_name("config.yaml");
       std::cerr << "Configuration file config.yaml created" << '\n';
+    } catch (const YAML::ParserException& e) {
+      std::cerr << "Configuration file was corrupted: " << e.what() << '\n';
+      std::ofstream const give_me_a_name("config.yaml");
+      std::cerr << "Default configuration file config.yaml created" << '\n';
     } catch (const std::exception& e) {
       std::cerr << "An unexpected error occurred: " << e.what() << '\n';
       return std::nullopt;
@@ -37,7 +41,6 @@ auto CreateConfigManager() -> std::optional<ConfigManager> {
 int main() {
   auto config_manager = CreateConfigManager();
   if (!config_manager.has_value()) {
-    vulkan_cleanup();
     return EXIT_FAILURE;
   }
 
