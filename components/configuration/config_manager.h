@@ -19,11 +19,12 @@ class ComponentConfig;
 
 class ConfigManager : public std::enable_shared_from_this<ConfigManager> {
  private:
-  std::unique_ptr<IConfigLoader> m_loader;
   YAML::Node m_config;
+  std::unique_ptr<IConfigLoader> m_loader;
 
  public:
-  explicit ConfigManager(std::unique_ptr<IConfigLoader> loader);
+  explicit ConfigManager(YAML::Node config,
+                         std::unique_ptr<IConfigLoader> loader);
 
   void Save();
   YAML::Node operator[](const std::string& key);

@@ -23,7 +23,9 @@ auto CreateConfigManager(std::unique_ptr<IConfigLoader> loader)
     -> std::shared_ptr<ConfigManager> {
   while (true) {
     try {
+      auto config = loader->Load();
       return std::make_shared<ConfigManager>(
+          std::move(config),
           std::move(loader));  // Successfully created, return it
     } catch (const YAML::BadFile& e) {
       std::cerr << "Failed to load or create the config file: " << e.what()

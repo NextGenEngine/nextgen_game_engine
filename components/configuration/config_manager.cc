@@ -76,8 +76,9 @@ void ComponentConfig::MergeYAMLNodes(YAML::Node current_config,
                     CONFIG MANAGER
 = = == == == == == == == == == == == == == == == == == == ==*/
 
-ConfigManager::ConfigManager(std::unique_ptr<IConfigLoader> loader)
-    : m_loader(std::move(loader)), m_config(this->m_loader->Load()) {}
+ConfigManager::ConfigManager(YAML::Node config,
+                             std::unique_ptr<IConfigLoader> loader)
+    : m_config(config), m_loader(std::move(loader)) {}
 
 void ConfigManager::Save() { m_loader->Save(&m_config); }
 
