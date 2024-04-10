@@ -3,7 +3,15 @@
 
 #include <vulkan/vulkan_core.h>
 
-void sortDevicesByPriority(const VkPhysicalDeviceProperties* deviceProperties,
-                           uint32_t deviceCount, uint32_t* deviceIndices);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void sortDevicesByPriority(const VkPhysicalDeviceProperties* device_properties,
+                           uint32_t device_count, uint32_t* device_indices);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

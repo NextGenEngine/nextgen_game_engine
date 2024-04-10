@@ -16,6 +16,7 @@ class NextGenEngine {
 
  public:
   explicit NextGenEngine(std::unique_ptr<IConfigLoader> _loader);
+  void Loop();
 };
 
 }  // namespace nextgen::engine

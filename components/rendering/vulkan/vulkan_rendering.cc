@@ -1,59 +1,40 @@
 #include "vulkan_rendering.h"
 
-#include <vulkan/vulkan_core.h>
-
-#include <cstdint>
 #include <utility>
 
 #include "components/configuration/config_manager.h"
 #include "components/rendering/vulkan/vulkan_config.h"
-#include "vulkan_operations.h"
+#include "components/rendering/vulkan/vulkan_context.h"
+#include "components/rendering/vulkan/vulkan_device.hh"
+#include "components/rendering/vulkan/vulkan_instance.h"
+#include "vulkan_config.h"
 
 using nextgen::engine::configuration::ComponentConfig;
 
 namespace nextgen::engine::rendering::vulkan {
 
-auto DefaultConfig = []() -> VulkanConfig {
-  enumerateAvailableDevices();
-  getRecommendedResolutionForDevice();
+VulkanRenderingApi::VulkanRenderingApi(ComponentConfig component_config)
+    : m_componentConfig(std::move(component_config)),
+      m_vulkan_context(VulkanContext{}),
+      m_vulkan_instance(VulkanInstance(&this->m_vulkan_context)),
+      m_config(LoadConfigOrDefault()),
+      m_vulkan_device(VulkanDevice(&this->m_vulkan_context)),
+      m_vulkan_swap_chain(&this->m_vulkan_context) {}
 
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-  const uint32_t defaultDeviceIndex = prioritizedIndexes[0];
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-  const VkPhysicalDeviceProperties& defaultDeviceProperties = devicesProperties
-      [defaultDeviceIndex];  // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-  const auto* currentVideoMode = glfw_currentVideoMode;
-
-  return VulkanConfig{
-      .deviceID = defaultDeviceProperties.deviceID,
-      .width = static_cast<uint32_t>(currentVideoMode->width),
-      .height = static_cast<uint32_t>(currentVideoMode->height),
-      .refreshRate = static_cast<float>(currentVideoMode->refreshRate)};
-};
-
-auto inline LoadConfigOrDefault(ComponentConfig& componentConfig) {
-  vulkan_init();
-  auto config = componentConfig.LoadConfig<VulkanConfig>();
+VulkanConfig VulkanRenderingApi::LoadConfigOrDefault() {
+  auto config = m_componentConfig.LoadConfig<VulkanConfig>();
   if (config) {
     return config.value();
   }
   // If configuration was not loaded, than fall back to default one
-  auto defaultConfig = DefaultConfig();
-  componentConfig.UpdateConfig(defaultConfig);
-  componentConfig.SaveConfig();
+  auto defaultConfig = m_vulkan_instance.DefaultConfiguration();
+  m_componentConfig.UpdateConfig(defaultConfig);
+  m_componentConfig.SaveConfig();
   return defaultConfig;
-}
-
-VulkanRenderingApi::VulkanRenderingApi(ComponentConfig _componentConfig)
-    : componentConfig(std::move(_componentConfig)),
-      config(LoadConfigOrDefault(componentConfig)) {
-  // Initialize Vulkan device
-  vulkan_create_device();
-  vulkan_create_swapchain();
 }
 
 void VulkanRenderingApi::render() {}
 
-VulkanRenderingApi::~VulkanRenderingApi() { vulkan_cleanup(); }
+VulkanRenderingApi::~VulkanRenderingApi() = default;
 
 }  // namespace nextgen::engine::rendering::vulkan

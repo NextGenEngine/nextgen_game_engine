@@ -1,3 +1,10 @@
+/* WARNING!!!
+   This file is not used in project anymore. I leave it here as an example of
+   implementation in pure C-language (which is 100% binary compatible with
+   Vulkan API). It can be used for comparison reasons in case of C++ have some
+   issues with types or definitions.
+*/
+
 #include "vulkan_operations.h"
 
 #define GLFW_INCLUDE_VULKAN

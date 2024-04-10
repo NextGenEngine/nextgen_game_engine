@@ -29,18 +29,20 @@ class IConfigLoader {
 // Specialization for loading from a file
 class FileLoader : public IConfigLoader {
  private:
-  std::string filePath;
+  std::string m_file_path;
 
  public:
-  explicit FileLoader(std::string filePath) : filePath(std::move(filePath)) {}
+  explicit FileLoader(std::string file_path)
+      : m_file_path(std::move(file_path)) {}
 
-  YAML::Node Load() const override { return YAML::LoadFile(filePath); }
+  YAML::Node Load() const override { return YAML::LoadFile(m_file_path); }
 
   // Implementation of the save functionality for files
   void Save(const YAML::Node* config) const override {
-    std::ofstream outputStream(filePath);
+    std::ofstream outputStream(m_file_path);
     if (!outputStream) {
-      throw std::runtime_error("Unable to open file for writing: " + filePath);
+      throw std::runtime_error("Unable to open file for writing: " +
+                               m_file_path);
     }
     outputStream << *config;
   }
@@ -58,13 +60,13 @@ class FileLoader : public IConfigLoader {
 // Specialization for loading from a string
 class StringLoader : public IConfigLoader {
  private:
-  std::string yamlContent;
+  std::string m_yaml_content;
 
  public:
-  explicit StringLoader(std::string yamlContent)
-      : yamlContent(std::move(yamlContent)) {}
+  explicit StringLoader(std::string yaml_content)
+      : m_yaml_content(std::move(yaml_content)) {}
 
-  YAML::Node Load() const override { return YAML::Load(yamlContent); }
+  YAML::Node Load() const override { return YAML::Load(m_yaml_content); }
   void Save(const YAML::Node* config) const override {}
 
   ~StringLoader() override = default;

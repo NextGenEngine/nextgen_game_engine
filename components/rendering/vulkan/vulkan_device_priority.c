@@ -5,12 +5,12 @@
 
 typedef struct {
   uint32_t index;
-  const VkPhysicalDeviceProperties* deviceProperties;
+  const VkPhysicalDeviceProperties* device_properties;
 } IndexWithValueWrapper;
 
 // Function to determine priority of a device
-int getDevicePriority(const IndexWithValueWrapper* wrappedIndex) {
-  switch (wrappedIndex->deviceProperties->deviceType) {
+int getDevicePriority(const IndexWithValueWrapper* wrapped_index) {
+  switch (wrapped_index->device_properties->deviceType) {
     case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
       return 1;
     case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
@@ -28,30 +28,30 @@ int getDevicePriority(const IndexWithValueWrapper* wrappedIndex) {
 
 // Comparison function for qsort
 int compareDevices(const void* first, const void* second) {
-  const IndexWithValueWrapper* deviceA = (const IndexWithValueWrapper*)first;
-  const IndexWithValueWrapper* deviceB = (const IndexWithValueWrapper*)second;
+  const IndexWithValueWrapper* device_a = (const IndexWithValueWrapper*)first;
+  const IndexWithValueWrapper* device_b = (const IndexWithValueWrapper*)second;
 
-  int priorityA = getDevicePriority(deviceA);
-  int priorityB = getDevicePriority(deviceB);
+  int priorityA = getDevicePriority(device_a);
+  int priorityB = getDevicePriority(device_b);
 
   return priorityA - priorityB;
 }
 
 // Function to sort device indices by priority
-void sortDevicesByPriority(const VkPhysicalDeviceProperties* deviceProperties,
-                           uint32_t deviceCount, uint32_t* deviceIndices) {
+void sortDevicesByPriority(const VkPhysicalDeviceProperties* device_properties,
+                           uint32_t device_count, uint32_t* device_indices) {
   // Create an array of indices
-  IndexWithValueWrapper wrappedIndexes[deviceCount];
-  for (int i = 0; i < deviceCount; ++i) {
-    wrappedIndexes[i].index = i;
-    wrappedIndexes[i].deviceProperties = &deviceProperties[i];
+  IndexWithValueWrapper wrapped_indexes[device_count];
+  for (int i = 0; i < device_count; ++i) {
+    wrapped_indexes[i].index = i;
+    wrapped_indexes[i].device_properties = &device_properties[i];
   }
 
   // Sort the indices array based on device priority
-  qsort(&wrappedIndexes, deviceCount, sizeof(IndexWithValueWrapper),
+  qsort(&wrapped_indexes, device_count, sizeof(IndexWithValueWrapper),
         compareDevices);
 
-  for (int i = 0; i < deviceCount; ++i) {
-    deviceIndices[i] = wrappedIndexes[i].index;
+  for (int i = 0; i < device_count; ++i) {
+    device_indices[i] = wrapped_indexes[i].index;
   }
 }

@@ -20,51 +20,52 @@ IConfigLoader::~IConfigLoader() = default;
                     COMPONENT CONFIG
 = = == == == == == == == == == == == == == == == == == == ==*/
 
-ComponentConfig::ComponentConfig(std::shared_ptr<ConfigManager> _configManager,
-                                 const YAML::Node& componentRootNode)
-    : configManager(std::move(_configManager)), config(componentRootNode) {}
+ComponentConfig::ComponentConfig(std::shared_ptr<ConfigManager> config_manager,
+                                 const YAML::Node& component_root_node)
+    : m_config_manager(std::move(config_manager)),
+      m_config(component_root_node) {}
 
 YAML::Node ComponentConfig::operator[](const std::string& key) const {
-  return config[key];
+  return m_config[key];
 }
 
-YAML::Node ComponentConfig::operator()() const { return config; }
+YAML::Node ComponentConfig::operator()() const { return m_config; }
 
 ComponentConfig ComponentConfig::getSubConfig(const std::string& path) {
-  if (!config[path]) {
-    config[path] = YAML::Node();
+  if (!m_config[path]) {
+    m_config[path] = YAML::Node();
   }
-  return ComponentConfig(configManager, config[path]);
+  return ComponentConfig(m_config_manager, m_config[path]);
 }
 
-void ComponentConfig::MergeYAMLNodes(YAML::Node currentConfig,
-                                     const YAML::Node& newConfig) {
-  if (!newConfig.IsMap()) {
-    currentConfig = newConfig;
+void ComponentConfig::MergeYAMLNodes(YAML::Node current_config,
+                                     const YAML::Node& new_config) {
+  if (!new_config.IsMap()) {
+    current_config = new_config;
     return;
   }
 
-  if (!currentConfig.IsMap()) {
-    currentConfig = newConfig;
+  if (!current_config.IsMap()) {
+    current_config = new_config;
     return;
   }
 
-  for (YAML::const_iterator it = newConfig.begin(); it != newConfig.end();
+  for (YAML::const_iterator it = new_config.begin(); it != new_config.end();
        ++it) {
     std::string const key = it->first.Scalar();
-    YAML::Node const defaultVal = it->second;
+    YAML::Node const default_val = it->second;
 
     // If the key does not exist in currentConfig, or if the key exists but
     // the corresponding value is not a map, replace the value in
     // currentConfig with the value from defaultConfig.
-    if (!currentConfig[key] || !currentConfig[key].IsMap() ||
-        !defaultVal.IsMap()) {
-      currentConfig.remove(key);
-      currentConfig[key] = defaultVal;
-    } else if (currentConfig[key].IsMap() && defaultVal.IsMap()) {
+    if (!current_config[key] || !current_config[key].IsMap() ||
+        !default_val.IsMap()) {
+      current_config.remove(key);
+      current_config[key] = default_val;
+    } else if (current_config[key].IsMap() && default_val.IsMap()) {
       // If both current and default values for the key are maps, merge them
       // recursively.
-      MergeYAMLNodes(currentConfig[key], defaultVal);
+      MergeYAMLNodes(current_config[key], default_val);
     }
     // If currentConfig has the key with a scalar value and defaultVal is also
     // scalar, the value in currentConfig has already been replaced above.
@@ -76,19 +77,19 @@ void ComponentConfig::MergeYAMLNodes(YAML::Node currentConfig,
 = = == == == == == == == == == == == == == == == == == == ==*/
 
 ConfigManager::ConfigManager(std::unique_ptr<IConfigLoader> loader)
-    : loader(std::move(loader)), config(this->loader->Load()) {}
+    : m_loader(std::move(loader)), m_config(this->m_loader->Load()) {}
 
-void ConfigManager::Save() { loader->Save(&config); }
+void ConfigManager::Save() { m_loader->Save(&m_config); }
 
 YAML::Node ConfigManager::operator[](const std::string& key) {
-  return config[key];
+  return m_config[key];
 }
 
-YAML::Node ConfigManager::GetConfigRootNode() { return config; }
+YAML::Node ConfigManager::GetConfigRootNode() { return m_config; }
 
 ComponentConfig ConfigManager::getComponentConfig() {
-  if (config.IsNull()) {
-    config = YAML::Load("");
+  if (m_config.IsNull()) {
+    m_config = YAML::Load("");
   }
-  return ComponentConfig(shared_from_this(), config);
+  return ComponentConfig(shared_from_this(), m_config);
 }

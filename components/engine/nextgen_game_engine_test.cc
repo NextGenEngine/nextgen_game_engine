@@ -21,7 +21,9 @@ auto inline init_engine() -> std::optional<std::unique_ptr<NextGenEngine>> {
   }
 }
 
-void inline game_loop() {}
+void inline game_loop(std::unique_ptr<NextGenEngine>& engine) {
+  engine->Loop();
+}
 
 int inline successful_exit(int code) {
   std::cout << "Successful exit"
@@ -35,7 +37,7 @@ int main() {
     return successful_exit(EXIT_FAILURE);
   }
 
-  game_loop();
+  game_loop(engine.value());
 
   engine.reset();
 

@@ -12,7 +12,6 @@
 #include "components/configuration/config_loader.h"
 #include "components/configuration/config_manager.h"
 #include "components/rendering/rendering.h"
-#include "components/rendering/vulkan/vulkan_operations.h"
 
 namespace nextgen::engine {
 
@@ -58,5 +57,7 @@ NextGenEngine::NextGenEngine(std::unique_ptr<IConfigLoader> _loader)
   std::cout << "Vulkan config: " << component_config["rendering"]["vulkan"]
             << '\n';
 }
+
+void NextGenEngine::Loop() { renderingEngine->render(); }
 
 }  // namespace nextgen::engine

@@ -49,9 +49,17 @@ auto inline LoadConfigOrDefault(ComponentConfig& componentConfig) {
   return defaultConfig;
 }
 
-RenderingEngine::RenderingEngine(ComponentConfig _componentConfig)
-    : componentConfig(std::move(_componentConfig)),
-      config(LoadConfigOrDefault(componentConfig)),
-      api(SelectRenderingApi(&config, &componentConfig)) {}
+RenderingEngine::RenderingEngine(ComponentConfig component_config)
+    : m_component_config(std::move(component_config)),
+      m_config(LoadConfigOrDefault(m_component_config)),
+      m_api(SelectRenderingApi(&m_config, &m_component_config)) {}
+
+void RenderingEngine::render() {
+  for (int i = 0; i < 3; i++) {
+    m_api.reset();
+    m_api = std::make_unique<VulkanRenderingApi>(
+        m_component_config.getSubConfig("vulkan"));
+  }
+}
 
 }  // namespace nextgen::engine::rendering

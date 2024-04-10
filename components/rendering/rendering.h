@@ -11,12 +11,13 @@ using nextgen::engine::configuration::ComponentConfig;
 using nextgen::engine::rendering::api::IRenderingApi;
 
 class RenderingEngine {
-  configuration::ComponentConfig componentConfig;
-  RenderingEngineConfig config;
-  std::unique_ptr<IRenderingApi> api;
+  configuration::ComponentConfig m_component_config;
+  RenderingEngineConfig m_config;
+  std::unique_ptr<IRenderingApi> m_api;
 
  public:
-  explicit RenderingEngine(ComponentConfig _componentConfig);
+  explicit RenderingEngine(ComponentConfig component_config);
+  void render();
 };
 
 }  // namespace nextgen::engine::rendering

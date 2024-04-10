@@ -19,8 +19,8 @@ class ComponentConfig;
 
 class ConfigManager : public std::enable_shared_from_this<ConfigManager> {
  private:
-  std::unique_ptr<IConfigLoader> loader;
-  YAML::Node config;
+  std::unique_ptr<IConfigLoader> m_loader;
+  YAML::Node m_config;
 
  public:
   explicit ConfigManager(std::unique_ptr<IConfigLoader> loader);
@@ -37,8 +37,8 @@ class ConfigManager : public std::enable_shared_from_this<ConfigManager> {
 
 class ComponentConfig {
  public:
-  explicit ComponentConfig(std::shared_ptr<ConfigManager> configManager,
-                           const YAML::Node& componentRootNode);
+  explicit ComponentConfig(std::shared_ptr<ConfigManager> config_manager,
+                           const YAML::Node& component_root_node);
 
   YAML::Node operator[](const std::string& key) const;
   YAML::Node operator()() const;
@@ -47,7 +47,7 @@ class ComponentConfig {
   template <typename ConfigType>
   std::optional<ConfigType> LoadConfig() const {
     try {
-      return config.as<ConfigType>();
+      return m_config.as<ConfigType>();
     } catch (const YAML::Exception& e) {
       return std::nullopt;
     } catch (...) {
@@ -96,12 +96,12 @@ class ComponentConfig {
    * configuration state.
    */
   template <typename ConfigType>
-  void UpdateConfig(ConfigType newConfig) {
+  void UpdateConfig(ConfigType new_config) {
     try {
       // Implementation details here...
-      MergeYAMLNodes(config, YAML::Node(newConfig));
+      MergeYAMLNodes(m_config, YAML::Node(new_config));
     } catch (const YAML::Exception& e) {
-      config = newConfig;
+      m_config = new_config;
     } catch (...) {
       // Handle or rethrow all other exceptions
       throw std::runtime_error(
@@ -109,13 +109,13 @@ class ComponentConfig {
     }
   }
 
-  void SaveConfig() const { configManager->Save(); }
+  void SaveConfig() const { m_config_manager->Save(); }
 
  private:
-  std::shared_ptr<ConfigManager> configManager;
-  YAML::Node config;
+  std::shared_ptr<ConfigManager> m_config_manager;
+  YAML::Node m_config;
 
-  void MergeYAMLNodes(YAML::Node currentConfig, const YAML::Node& newConfig);
+  void MergeYAMLNodes(YAML::Node current_config, const YAML::Node& new_config);
 };
 
 }  // namespace nextgen::engine::configuration
