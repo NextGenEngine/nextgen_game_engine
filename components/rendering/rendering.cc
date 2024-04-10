@@ -18,10 +18,17 @@ using nextgen::engine::rendering::vulkan::VulkanRenderingApi;
 IRenderingApi::~IRenderingApi() = default;
 
 auto DefaultConfig = []() -> RenderingEngineConfig {
-  return RenderingEngineConfig({});
+  return RenderingEngineConfig({.api = RenderingAPI::Vulkan});
 };
 
-inline std::unique_ptr<IRenderingApi> SelectRenderingApi(
+auto UpdateComponentConfigDefault(ComponentConfig* component_config) {
+  auto default_config = DefaultConfig();
+  component_config->UpdateConfig(default_config);
+  component_config->SaveConfig();
+  return default_config;
+}
+
+std::unique_ptr<IRenderingApi> SelectRenderingApi(
     RenderingEngineConfig* config, ComponentConfig* componentConfig) {
   switch (config->api) {
     case RenderingAPI::Vulkan:
@@ -30,23 +37,19 @@ inline std::unique_ptr<IRenderingApi> SelectRenderingApi(
     case RenderingAPI::DirectX:
       throw std::runtime_error("Ha-ha: no DirectX yet");
     default:
-      config->api = RenderingAPI::Vulkan;
-      (*componentConfig)() = *config;
+      UpdateComponentConfigDefault(componentConfig);
       return std::make_unique<VulkanRenderingApi>(
           componentConfig->getSubConfig("vulkan"));
   }
 }
 
-auto inline LoadConfigOrDefault(ComponentConfig& componentConfig) {
-  auto config = componentConfig.LoadConfig<RenderingEngineConfig>();
+auto LoadConfigOrDefault(ComponentConfig& component_config) {
+  auto config = component_config.LoadConfig<RenderingEngineConfig>();
   if (config) {
     return config.value();
   }
   // If configuration was not loaded, than fall back to default one
-  auto defaultConfig = DefaultConfig();
-  componentConfig.UpdateConfig(defaultConfig);
-  componentConfig.SaveConfig();
-  return defaultConfig;
+  return UpdateComponentConfigDefault(&component_config);
 }
 
 RenderingEngine::RenderingEngine(ComponentConfig component_config)
