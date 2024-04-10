@@ -3,6 +3,7 @@
 #include <cctype>
 #include <memory>
 #include <stdexcept>
+#include <thread>
 #include <utility>
 
 #include "components/configuration/config_manager.h"
@@ -58,11 +59,8 @@ RenderingEngine::RenderingEngine(ComponentConfig component_config)
       m_api(SelectRenderingApi(&m_config, &m_component_config)) {}
 
 void RenderingEngine::render() {
-  for (int i = 0; i < 3; i++) {
-    m_api.reset();
-    m_api = std::make_unique<VulkanRenderingApi>(
-        m_component_config.getSubConfig("vulkan"));
-  }
+  std::this_thread::sleep_for(
+      std::chrono::milliseconds(16));  // Simulate rendering time
 }
 
 }  // namespace nextgen::engine::rendering

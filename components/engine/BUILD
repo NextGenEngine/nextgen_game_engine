@@ -10,6 +10,7 @@ cc_library(
     deps = [
         "//components/configuration:config_manager",
         "//components/rendering:rendering_engine",
+        "@onetbb//:tbb",
     ],
 )
 
