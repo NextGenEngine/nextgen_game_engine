@@ -6,13 +6,13 @@
 #include <yaml-cpp/yaml.h>
 
 #include <fstream>
+#include <string_view>
 #include <utility>
 
 namespace nextgen::engine::configuration {
 
 class IConfigLoader {
  public:
-  virtual YAML::Node Load() const = 0;
   virtual void Save(const YAML::Node* config) const = 0;
 
   IConfigLoader() = default;
@@ -29,20 +29,17 @@ class IConfigLoader {
 // Specialization for loading from a file
 class FileLoader : public IConfigLoader {
  private:
-  std::string m_file_path;
+  std::string_view m_file_path;
 
  public:
-  explicit FileLoader(std::string file_path)
-      : m_file_path(std::move(file_path)) {}
-
-  YAML::Node Load() const override { return YAML::LoadFile(m_file_path); }
+  explicit FileLoader(std::string_view file_path) : m_file_path(file_path) {}
 
   // Implementation of the save functionality for files
   void Save(const YAML::Node* config) const override {
     std::ofstream outputStream(m_file_path);
     if (!outputStream) {
       throw std::runtime_error("Unable to open file for writing: " +
-                               m_file_path);
+                               std::string(m_file_path));
     }
     outputStream << *config;
   }
@@ -66,7 +63,6 @@ class StringLoader : public IConfigLoader {
   explicit StringLoader(std::string yaml_content)
       : m_yaml_content(std::move(yaml_content)) {}
 
-  YAML::Node Load() const override { return YAML::Load(m_yaml_content); }
   void Save(const YAML::Node* config) const override {}
 
   ~StringLoader() override = default;

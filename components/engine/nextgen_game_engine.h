@@ -10,12 +10,15 @@ using configuration::ConfigManager;
 using configuration::IConfigLoader;
 using rendering::RenderingEngine;
 
+constexpr std::string_view CONFIG_FILE_PATH = "config.yaml";
+
 class NextGenEngine {
-  std::shared_ptr<ConfigManager> configManager;
-  std::unique_ptr<RenderingEngine> renderingEngine;
+  std::shared_ptr<ConfigManager> m_config_manager;
+  std::unique_ptr<RenderingEngine> m_rendering_engine;
 
  public:
-  explicit NextGenEngine(std::unique_ptr<IConfigLoader> _loader);
+  explicit NextGenEngine(std::shared_ptr<ConfigManager> config_manager,
+                         std::unique_ptr<RenderingEngine> rendering_engine);
   void Loop();
 };
 
