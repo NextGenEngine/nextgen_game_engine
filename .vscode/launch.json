@@ -43,6 +43,16 @@
       "args": [],
       "cwd": "${workspaceFolder}",
       "preLaunchTask": "bazel-build-release-with-debug: templated_structure_accessor"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug/Release: singleton_direct_access",
+      "program": "${workspaceFolder}/bazel-bin/benchmarks/singleton_direct_access",
+      "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "bazel-build-release-with-debug: singleton_direct_access"
     }
   ]
 }

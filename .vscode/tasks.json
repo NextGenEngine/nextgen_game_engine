@@ -63,6 +63,15 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "bazel-build-release-with-debug: singleton_direct_access",
+      "type": "shell",
+      "command": "bazel build --config=debug //benchmarks:singleton_direct_access",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }

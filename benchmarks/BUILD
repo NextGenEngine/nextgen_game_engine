@@ -18,3 +18,10 @@ cc_binary(
         "templated_structure_accessor.cc",
     ],
 )
+
+cc_binary(
+    name = "singleton_direct_access",
+    srcs = [
+        "singleton_direct_access.cc",
+    ],
+)

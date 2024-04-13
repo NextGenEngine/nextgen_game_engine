@@ -15,6 +15,8 @@ build:debug --copt=-DDEBUG
 build:releasewithdebug --compilation_mode=opt
 build:releasewithdebug --copt=-DNDEBUG
 build:releasewithdebug --copt=-g  # Add debug symbols
+build:releasewithdebug --copt=-O3  # Enable high optimization level
+
 
 # Define a release build configuration
 build:release --compilation_mode=opt
