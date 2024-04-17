@@ -7,20 +7,20 @@
 
 namespace nextgen::engine::rendering {
 
-enum class RenderingAPI {
+enum class RenderingAPIEnum {
   Vulkan,
   DirectX,
   OpenGL,
 };
 
 struct RenderingEngineConfig {
-  RenderingAPI api;
+  RenderingAPIEnum api;
 };
 
 }  // namespace nextgen::engine::rendering
 
 namespace YAML {
-using nextgen::engine::rendering::RenderingAPI;
+using nextgen::engine::rendering::RenderingAPIEnum;
 using nextgen::engine::rendering::RenderingEngineConfig;
 using nextgen::lib::std_ext::toLowerCase;
 
@@ -37,24 +37,24 @@ struct convert<RenderingEngineConfig> {
     // ...
 
     // decode
-    rhs.api = node["api"].as<RenderingAPI>();
+    rhs.api = node["api"].as<RenderingAPIEnum>();
     // Decode other settings as needed
     return true;
   }
 };
 
 template <>
-struct convert<nextgen::engine::rendering::RenderingAPI> {
-  static Node encode(const nextgen::engine::rendering::RenderingAPI& rhs) {
+struct convert<nextgen::engine::rendering::RenderingAPIEnum> {
+  static Node encode(const nextgen::engine::rendering::RenderingAPIEnum& rhs) {
     Node node;
     switch (rhs) {
-      case nextgen::engine::rendering::RenderingAPI::Vulkan:
+      case nextgen::engine::rendering::RenderingAPIEnum::Vulkan:
         node = "Vulkan";
         break;
-      case nextgen::engine::rendering::RenderingAPI::DirectX:
+      case nextgen::engine::rendering::RenderingAPIEnum::DirectX:
         node = "DirectX";
         break;
-      case nextgen::engine::rendering::RenderingAPI::OpenGL:
+      case nextgen::engine::rendering::RenderingAPIEnum::OpenGL:
         node = "OpenGL";
         break;
     }
@@ -62,17 +62,17 @@ struct convert<nextgen::engine::rendering::RenderingAPI> {
   }
 
   static bool decode(const Node& node,
-                     nextgen::engine::rendering::RenderingAPI& rhs) {
+                     nextgen::engine::rendering::RenderingAPIEnum& rhs) {
     if (!node.IsScalar()) {
       return false;
     }
     auto api = toLowerCase(node.as<std::string>());
     if (api == "vulkan") {
-      rhs = nextgen::engine::rendering::RenderingAPI::Vulkan;
+      rhs = nextgen::engine::rendering::RenderingAPIEnum::Vulkan;
     } else if (api == "directx") {
-      rhs = nextgen::engine::rendering::RenderingAPI::DirectX;
+      rhs = nextgen::engine::rendering::RenderingAPIEnum::DirectX;
     } else if (api == "opengl") {
-      rhs = nextgen::engine::rendering::RenderingAPI::OpenGL;
+      rhs = nextgen::engine::rendering::RenderingAPIEnum::OpenGL;
     } else {
       return false;  // Unknown value
     }

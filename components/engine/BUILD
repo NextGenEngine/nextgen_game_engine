@@ -1,13 +1,26 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 cc_library(
+    name = "nextgen_game_engine_types",
+    hdrs = [
+        "nextgen_game_engine_interfaces.h",
+        "nextgen_game_engine_results.h",
+        "nextgen_game_engine_templates.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
     name = "nextgen_game_engine",
     srcs = [
         "nextgen_game_engine.cc",
     ],
-    hdrs = ["nextgen_game_engine.h"],
+    hdrs = [
+        "nextgen_game_engine.h",
+    ],
     visibility = ["//visibility:public"],
     deps = [
+        ":nextgen_game_engine_types",
         "//components/configuration:config_manager",
         "//components/rendering:rendering_engine",
         "@onetbb//:tbb",

@@ -2,24 +2,12 @@
 
 #include <chrono>
 #include <cstdlib>
-#include <memory>
-#include <utility>
 
-#include "components/configuration/config_manager.h"
-#include "components/rendering/rendering.h"
-#include "oneapi/tbb/global_control.h"
 #include "oneapi/tbb/task_group.h"
-#include "oneapi/tbb/tick_count.h"
 
 namespace nextgen::engine {
 
-using nextgen::engine::configuration::ConfigManager;
-using nextgen::engine::rendering::RenderingEngine;
-
-NextGenEngine::NextGenEngine(std::shared_ptr<ConfigManager> config_manager,
-                             std::unique_ptr<RenderingEngine> rendering_engine)
-    : m_config_manager(std::move(config_manager)),
-      m_rendering_engine(std::move(rendering_engine)) {}
+NextGenEngine ENGINE;
 
 void ProcessInput() {}
 
@@ -34,6 +22,7 @@ void NextGenEngine::Loop() {
 
   auto isExiting = false;
 
+  // NOLINTNEXTLINE(bugprone-infinite-loop)
   while (!isExiting) {
     auto currentTime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> const elapsed = currentTime - lastTime;
@@ -50,7 +39,7 @@ void NextGenEngine::Loop() {
       taskGroup.wait();
 
       // Mark as ready for rendering and run rendering task
-      taskGroup.run([this] { m_rendering_engine->render(); });
+      taskGroup.run([this] { rendering_engine_.render(); });
 
       // After starting the render task, main loop can proceed to the next
       // update or perform other tasks

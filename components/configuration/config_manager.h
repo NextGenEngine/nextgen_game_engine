@@ -23,6 +23,7 @@ class ConfigManager : public std::enable_shared_from_this<ConfigManager> {
   std::unique_ptr<IConfigLoader> m_loader;
 
  public:
+  explicit ConfigManager() = default;
   explicit ConfigManager(YAML::Node config,
                          std::unique_ptr<IConfigLoader> loader);
 
@@ -33,11 +34,12 @@ class ConfigManager : public std::enable_shared_from_this<ConfigManager> {
 };
 
 /*= == == == == == == == == == == == == == == == == == == ==
-                    COMPONENT CONFIG
+                      COMPONENT CONFIG
 = = == == == == == == == == == == == == == == == == == == ==*/
 
 class ComponentConfig {
  public:
+  explicit ComponentConfig() = default;
   explicit ComponentConfig(std::shared_ptr<ConfigManager> config_manager,
                            const YAML::Node& component_root_node);
 

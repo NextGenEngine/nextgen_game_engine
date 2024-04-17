@@ -1,18 +1,25 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_VULKAN_INSTANCE_H
 #define NEXTGEN_ENGINE_RENDERING_VULKAN_INSTANCE_H
 
+#include <iostream>
+
 #include "components/rendering/vulkan/vulkan_config.h"
 #include "components/rendering/vulkan/vulkan_context.h"
 
 namespace nextgen::engine::rendering::vulkan {
 
-class VulkanInstance {
-  VulkanContext* m_vulkan_context;
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes)
+struct VulkanInstance {
+  VulkanContext* vulkan_context_{};
 
  public:
-  explicit VulkanInstance(VulkanContext* vulkan_context);
-  VulkanConfig DefaultConfiguration();
+  explicit VulkanInstance() { std::cout << "VulkanInstance object created\n"; }
+
+  void Initialize(VulkanContext& vulkan_context);
+
   ~VulkanInstance();
+
+  VulkanConfig GetDefaultConfiguration() const;
 
   // copy
   VulkanInstance& operator=(const VulkanInstance&) = delete;
@@ -21,6 +28,7 @@ class VulkanInstance {
   VulkanInstance& operator=(VulkanInstance&&) = default;
   VulkanInstance(VulkanInstance&&) = default;
 };
+// NOLINTEND(misc-non-private-member-variables-in-classes)
 
 }  // namespace nextgen::engine::rendering::vulkan
 

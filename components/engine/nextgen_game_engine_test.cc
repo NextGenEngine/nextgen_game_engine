@@ -1,7 +1,8 @@
-#include "components/engine/nextgen_game_engine.h"
+#include "nextgen_game_engine.h"
 
 #include <yaml-cpp/node/parse.h>
 
+#include <cstddef>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -14,12 +15,11 @@
 
 #include "components/configuration/config_loader.h"
 #include "components/configuration/config_manager.h"
-#include "components/rendering/rendering.h"
 
 using nextgen::engine::CONFIG_FILE_PATH;
 using nextgen::engine::NextGenEngine;
+using nextgen::engine::configuration::ComponentConfig;
 using nextgen::engine::configuration::ConfigManager;
-using nextgen::engine::rendering::RenderingEngine;
 
 auto GetDefaultConfig() -> std::string_view {
   // NOTE: there is no need to implement this function at the moment.
@@ -39,7 +39,7 @@ auto PrepareConfigFile(std::string_view config_file_path) {
     // config
     std::cerr << "Creating default configuration file: " << config_file_path
               << '\n';
-    std::ofstream outputFile(config_file_path);
+    std::ofstream outputFile((std::string(config_file_path)));
     if (!outputFile) {
       throw std::runtime_error("Unable to create default configuration file.");
     }
@@ -52,7 +52,7 @@ auto PrepareConfigFile(std::string_view config_file_path) {
   }
 }
 
-auto InitEngine() -> std::optional<std::unique_ptr<NextGenEngine>> {
+auto InitConfigManager() -> std::optional<ComponentConfig> {
   try {
     // Prepare the configuration file
     auto config = PrepareConfigFile(CONFIG_FILE_PATH);
@@ -62,15 +62,7 @@ auto InitEngine() -> std::optional<std::unique_ptr<NextGenEngine>> {
     auto config_manager =
         std::make_shared<ConfigManager>(config, std::move(loader));
 
-    // Create the rendering engine with the config manager
-    auto rendering_component_config =
-        config_manager->getComponentConfig().getSubConfig("rendering");
-    auto rendering_engine =
-        std::make_unique<RenderingEngine>(rendering_component_config);
-
-    // Create the game engine with its dependencies
-    return std::make_unique<NextGenEngine>(std::move(config_manager),
-                                           std::move(rendering_engine));
+    return config_manager->getComponentConfig();
   } catch (...) {
     return std::nullopt;
   }
@@ -85,14 +77,27 @@ int SuccessfulExit(int code) {
 }
 
 int main() {
-  auto engine = InitEngine();
-  if (!engine) {
+  auto component_config = InitConfigManager();
+  if (!component_config) {
     return SuccessfulExit(EXIT_FAILURE);
   }
 
-  GameLoop(engine.value());
+  // GameLoop(engine.value());
 
-  engine.reset();
+  // engine.reset();
+
+  std::cout << "sizeof(NextGenEngine) = " << sizeof(NextGenEngine)
+            << " bytes\n";
+
+  try {
+    nextgen::engine::ENGINE.Initialize(*component_config);
+  } catch (...) {
+    return SuccessfulExit(EXIT_FAILURE);
+  }
+
+  nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
+
+  // nextgen::engine::ENGINE.Loop();
 
   return SuccessfulExit(EXIT_SUCCESS);
 }

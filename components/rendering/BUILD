@@ -21,6 +21,8 @@ cc_library(
         "vulkan/vulkan_buffer.h",
         "vulkan/vulkan_command_pool.h",
         "vulkan/vulkan_config.h",
+        "vulkan/vulkan_config_strategy.h",
+        "vulkan/vulkan_config_strategy.cc",
         "vulkan/vulkan_context.h",
         "vulkan/vulkan_device_priority.c",
         "vulkan/vulkan_device_priority.h",
@@ -37,14 +39,18 @@ cc_library(
         "vulkan/vulkan_swapchain.cc",
         "vulkan/vulkan_swapchain.h",
         "vulkan/window_surface.h",
+        # DIRECTX API
+        "directx/directx_config_strategy.h",
     ],
     hdrs = [
         "rendering.h",
+        "rendering_config_strategy.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
         ":rendering_api",
         "//components/configuration:config_manager",
+        "//components/engine:nextgen_game_engine_types",
         "//lib:std_ext",
         "@libglfw",
         "@libvulkan",

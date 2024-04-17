@@ -32,13 +32,13 @@ VkApplicationInfo appInfo = {
     .apiVersion = VK_API_VERSION_1_0,
 };
 
-VulkanInstance::VulkanInstance(VulkanContext* vulkan_context)
-    : m_vulkan_context(vulkan_context) {
+void VulkanInstance::Initialize(VulkanContext& vulkan_context) {
+  vulkan_context_ = &vulkan_context;
   // Initialize the Vulkan library
   // Initialize GLFW
-  auto& window = m_vulkan_context->window;
-  auto& instance = m_vulkan_context->instance;
-  auto& surface = m_vulkan_context->surface;
+  auto& window = vulkan_context_->window;
+  auto& instance = vulkan_context_->instance;
+  auto& surface = vulkan_context_->surface;
 
   if (glfwInit() == 0) {
     throw std::runtime_error("Failed to initialize GLFW: glfwInit()");
@@ -53,9 +53,9 @@ VulkanInstance::VulkanInstance(VulkanContext* vulkan_context)
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
   // Create a windowed mode window and its OpenGL context
-  vulkan_context->window =
+  vulkan_context_->window =
       glfwCreateWindow(800, 600, "Hello Vulkan", nullptr, nullptr);
-  if (vulkan_context->window == nullptr) {
+  if (vulkan_context_->window == nullptr) {
     glfwTerminate();
     throw std::runtime_error(
         "Failed to create GLFW window: glfwCreateWindow()");
@@ -90,8 +90,8 @@ uint32_t* prioritizedIndexes = nullptr;
 uint32_t deviceCount = 0;
 const GLFWvidmode* glfw_currentVideoMode = nullptr;
 
-VulkanConfig VulkanInstance::DefaultConfiguration() {
-  enumerateAvailableDevices(m_vulkan_context->instance);
+VulkanConfig VulkanInstance::GetDefaultConfiguration() const {
+  enumerateAvailableDevices(vulkan_context_->instance);
   getRecommendedResolutionForDevice();
 
   // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
@@ -213,22 +213,22 @@ const char* GetDeviceTypeName(VkPhysicalDeviceType deviceType) {
 }
 
 VulkanInstance::~VulkanInstance() {
-  if (m_vulkan_context == nullptr) {
+  if (vulkan_context_ == nullptr) {
     return;
   }
 
-  if (m_vulkan_context->instance != nullptr &&
-      m_vulkan_context->surface != nullptr) {
-    vkDestroySurfaceKHR(m_vulkan_context->instance, m_vulkan_context->surface,
+  if (vulkan_context_->instance != nullptr &&
+      vulkan_context_->surface != nullptr) {
+    vkDestroySurfaceKHR(vulkan_context_->instance, vulkan_context_->surface,
                         nullptr);
   }
 
-  if (m_vulkan_context->instance != nullptr) {
-    vkDestroyInstance(m_vulkan_context->instance, nullptr);
+  if (vulkan_context_->instance != nullptr) {
+    vkDestroyInstance(vulkan_context_->instance, nullptr);
   }
 
-  if (m_vulkan_context->window != nullptr) {
-    glfwDestroyWindow(m_vulkan_context->window);
+  if (vulkan_context_->window != nullptr) {
+    glfwDestroyWindow(vulkan_context_->window);
   }
   glfwTerminate();
 }

@@ -3,14 +3,19 @@
 #include <vulkan/vulkan.h>
 #include <yaml-cpp/yaml.h>
 
-using VulkanConfig = struct VulkanConfig {
+namespace nextgen::engine::rendering::vulkan {
+
+struct VulkanConfig {
   uint32_t device_id;  // ID for the physical device (GPU) to be used
   uint32_t width;      // Width of the window or surface
   uint32_t height;     // Height of the window or surface
   float refresh_rate;  // Refresh rate in Hz
 };
 
+}  // namespace nextgen::engine::rendering::vulkan
+
 namespace YAML {
+using nextgen::engine::rendering::vulkan::VulkanConfig;
 template <>
 struct convert<VulkanConfig> {
   static Node encode(const VulkanConfig& rhs) {

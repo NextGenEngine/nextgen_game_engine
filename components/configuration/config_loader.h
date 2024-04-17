@@ -11,25 +11,16 @@
 
 namespace nextgen::engine::configuration {
 
-class IConfigLoader {
- public:
+// NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
+struct IConfigLoader {
   virtual void Save(const YAML::Node* config) const = 0;
-
-  IConfigLoader() = default;
   virtual ~IConfigLoader() = 0;
-
- protected:
-  //  -- Assignment --
-  IConfigLoader& operator=(const IConfigLoader&) = default;
-  IConfigLoader& operator=(IConfigLoader&&) = default;
-  IConfigLoader(const IConfigLoader&) = default;
-  IConfigLoader(IConfigLoader&&) = default;
 };
 
 // Specialization for loading from a file
 class FileLoader : public IConfigLoader {
  private:
-  std::string_view m_file_path;
+  std::string m_file_path;
 
  public:
   explicit FileLoader(std::string_view file_path) : m_file_path(file_path) {}
@@ -46,7 +37,6 @@ class FileLoader : public IConfigLoader {
 
   ~FileLoader() override = default;
 
- protected:
   //  -- Assignment --
   FileLoader& operator=(const FileLoader&) = default;
   FileLoader& operator=(FileLoader&&) = default;
@@ -67,7 +57,6 @@ class StringLoader : public IConfigLoader {
 
   ~StringLoader() override = default;
 
- protected:
   //  -- Assignment --
   StringLoader& operator=(const StringLoader&) = default;
   StringLoader& operator=(StringLoader&&) = default;
