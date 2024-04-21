@@ -15,7 +15,6 @@ struct RenderingConfigurationDefaultStrategy
     : RenderingConfigurationDefaultStrategyData,
       IConfigurationStrategy {
   bool Configure() override;
-
   void Initialize(
       ComponentConfig component_config, RenderingEngine& rendering_engine,
       RenderingConfigurationStrategySelector& api_strategy_selector);
