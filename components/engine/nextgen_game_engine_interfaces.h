@@ -12,7 +12,7 @@ struct IComponent {
 
 // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 struct IConfigurationStrategy {
-  virtual void Configure() = 0;
+  virtual bool Configure() = 0;
   virtual ~IConfigurationStrategy() = default;
 };
 

@@ -14,7 +14,7 @@ struct VulkanDefaultConfigStrategy : IConfigurationStrategy {
   ComponentConfig component_config_;
   VulkanRenderingApi* vulkan_rendering_api_;
 
-  void Configure() override;
+  bool Configure() override;
   void Initialize(ComponentConfig component_config,
                   VulkanRenderingApi& vulkan_rendering_api) {
     component_config_ = component_config;

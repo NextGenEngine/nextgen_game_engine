@@ -11,7 +11,7 @@ using interfaces::IConfigurationStrategy;
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
 struct DirectXDefaultConfigStrategy
     : public interfaces::IConfigurationStrategy {
-  void Configure() override {}
+  bool Configure() override { return false; }
 
   configuration::ComponentConfig component_config_;
 };

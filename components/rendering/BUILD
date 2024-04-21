@@ -17,6 +17,16 @@ cc_library(
     srcs = [
         "rendering.cc",
         "rendering_config.h",
+        "rendering_config_strategy.h",
+        "rendering_config_strategy.cc",
+        "rendering_config_strategy_default.h",
+        "rendering_config_strategy_default.cc",
+        "rendering_config_strategy_primary.h",
+        "rendering_config_strategy_primary.cc",
+        "rendering_config_sub_strategy_selector.h",
+        "rendering_config_sub_strategy_selector.cc",
+        "rendering_config_validator.h",
+        "rendering_config_validator.cc",
         # Vulkan API
         "vulkan/vulkan_buffer.h",
         "vulkan/vulkan_command_pool.h",

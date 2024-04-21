@@ -6,12 +6,13 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-void VulkanDefaultConfigStrategy::Configure() {
+bool VulkanDefaultConfigStrategy::Configure() {
   VulkanConfig const config =
       vulkan_rendering_api_->vulkan_instance_.GetDefaultConfiguration();
   vulkan_rendering_api_->set_config(config);
   component_config_.UpdateConfig(config);
   component_config_.SaveConfig();  // Save configuration after applying
+  return true;
 }
 
 }  // namespace nextgen::engine::rendering::vulkan

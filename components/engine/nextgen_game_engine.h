@@ -13,8 +13,8 @@ namespace nextgen::engine {
 
 using configuration::ComponentConfig;
 using configuration::IConfigLoader;
-using rendering::RenderingConfigurationFallbackStrategy;
 using rendering::RenderingConfigurationPrimaryStrategy;
+using rendering::RenderingConfigurationStrategy;
 using rendering::RenderingEngine;
 using templates::FallbackConfigurationStrategyTemplate;
 
@@ -48,7 +48,7 @@ struct NextGenEngine {
   ComponentConfig component_config_;
   RenderingEngine rendering_engine_;
 
-  RenderingConfigurationFallbackStrategy rendering_config_strategy_;
+  RenderingConfigurationStrategy rendering_config_strategy_;
   // RenderingConfigurationStrategy rendering_config_strategy_;
 };
 // NOLINTEND(misc-non-private-member-variables-in-classes)
