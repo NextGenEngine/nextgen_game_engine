@@ -2,6 +2,7 @@
 
 #include "components/configuration/config_manager.h"
 #include "components/rendering/api/vulkan/config_strategy/vulkan_config_validator.h"
+#include "components/rendering/api/vulkan/vulkan_config.h"
 
 namespace nextgen::engine::rendering::vulkan {
 

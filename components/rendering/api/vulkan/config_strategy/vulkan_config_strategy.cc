@@ -1,5 +1,7 @@
 #include "vulkan_config_strategy.h"
 
+#include "components/rendering/api/vulkan/vulkan_rendering.h"
+
 namespace nextgen::engine::rendering::vulkan {
 
 void VulkanConfigStrategy::Initialize(
