@@ -8,7 +8,7 @@ namespace nextgen::engine::rendering {
 
 struct RenderingConfigurationDefaultStrategyData {
   ComponentConfig component_config_;
-  RenderingConfigurationStrategySelector api_strategy_selector_;
+  RenderingConfigurationStrategySelector* api_strategy_selector_;
   RenderingEngine* rendering_engine_;
 };
 struct RenderingConfigurationDefaultStrategy
@@ -16,8 +16,9 @@ struct RenderingConfigurationDefaultStrategy
       IConfigurationStrategy {
   bool Configure() override;
 
-  void Initialize(ComponentConfig component_config,
-                  RenderingEngine& rendering_engine);
+  void Initialize(
+      ComponentConfig component_config, RenderingEngine& rendering_engine,
+      RenderingConfigurationStrategySelector& api_strategy_selector);
 };
 
 }  // namespace nextgen::engine::rendering

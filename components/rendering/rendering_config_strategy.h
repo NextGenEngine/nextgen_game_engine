@@ -18,8 +18,12 @@ using interfaces::IConfigurationStrategy;
 using templates::FallbackConfigurationStrategyTemplate;
 using vulkan::VulkanDefaultConfigStrategy;
 
+struct RenderingConfigurationStrategyData {
+  RenderingConfigurationStrategySelector api_strategy_selector_;
+};
 struct RenderingConfigurationStrategy
-    : FallbackConfigurationStrategyTemplate<
+    : RenderingConfigurationStrategyData,
+      FallbackConfigurationStrategyTemplate<
           RenderingConfigurationPrimaryStrategy,
           RenderingConfigurationDefaultStrategy> {
   void Initialize(ComponentConfig component_config,
