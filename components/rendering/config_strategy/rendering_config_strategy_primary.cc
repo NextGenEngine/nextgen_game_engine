@@ -1,10 +1,10 @@
-#include "components/rendering/rendering_config_strategy_primary.h"
+#include "rendering_config_strategy_primary.h"
 
 #include "components/configuration/config_manager.h"
 #include "components/rendering/rendering.h"
 #include "components/rendering/rendering_config.h"
-#include "components/rendering/rendering_config_sub_strategy_selector.h"
-#include "components/rendering/rendering_config_validator.h"
+#include "rendering_config_sub_strategy_selector.h"
+#include "rendering_config_validator.h"
 
 namespace nextgen::engine::rendering {
 

@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include "components/rendering/vulkan/vulkan_config.h"
-#include "components/rendering/vulkan/vulkan_context.h"
+#include "components/rendering/api/vulkan/vulkan_config.h"
+#include "components/rendering/api/vulkan/vulkan_context.h"
 
 namespace nextgen::engine::rendering::vulkan {
 

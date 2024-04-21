@@ -3,9 +3,9 @@
 
 #include "components/configuration/config_manager.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
+#include "components/rendering/api/vulkan/vulkan_rendering.h"
 #include "components/rendering/rendering_api.h"
 #include "components/rendering/rendering_config.h"
-#include "components/rendering/vulkan/vulkan_rendering.h"
 
 namespace nextgen::engine::rendering {
 

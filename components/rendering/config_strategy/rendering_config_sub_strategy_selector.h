@@ -1,10 +1,10 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_CONFIG_SUB_STRATEGY_SELECTOR_H
 #define NEXTGEN_ENGINE_RENDERING_CONFIG_SUB_STRATEGY_SELECTOR_H
 
-#include "components/rendering/directx/directx_config_strategy.h"
+#include "components/rendering/api/directx/directx_config_strategy.h"
+#include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy.h"
 #include "components/rendering/rendering.h"
 #include "components/rendering/rendering_config.h"
-#include "components/rendering/vulkan/config_strategy/vulkan_config_strategy.h"
 
 namespace nextgen::engine::rendering {
 

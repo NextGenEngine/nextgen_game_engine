@@ -1,4 +1,4 @@
-#include "components/rendering/rendering_config_sub_strategy_selector.h"
+#include "rendering_config_sub_strategy_selector.h"
 
 #include <stdexcept>
 

@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "components/rendering/vulkan/vulkan_config.h"
+#include "components/rendering/api/vulkan/vulkan_config.h"
 #include "vulkan_context.h"
 #include "vulkan_device_priority.h"
 

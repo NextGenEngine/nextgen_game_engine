@@ -1,7 +1,7 @@
-#include "components/rendering/vulkan/config_strategy/vulkan_config_strategy_default.h"
+#include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy_default.h"
 
 #include "components/configuration/config_manager.h"
-#include "components/rendering/vulkan/config_strategy/vulkan_config_validator.h"
+#include "components/rendering/api/vulkan/config_strategy/vulkan_config_validator.h"
 
 namespace nextgen::engine::rendering::vulkan {
 

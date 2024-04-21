@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "components/rendering/vulkan/vulkan_config.h"
+#include "components/rendering/api/vulkan/vulkan_config.h"
 
 namespace nextgen::engine::rendering::vulkan {
 

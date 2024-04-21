@@ -5,11 +5,11 @@
 
 #include "components/configuration/config_manager.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
+#include "components/rendering/api/vulkan/vulkan_context.h"
+#include "components/rendering/api/vulkan/vulkan_device.hh"
+#include "components/rendering/api/vulkan/vulkan_instance.h"
+#include "components/rendering/api/vulkan/vulkan_swapchain.h"
 #include "components/rendering/rendering_api.h"
-#include "components/rendering/vulkan/vulkan_context.h"
-#include "components/rendering/vulkan/vulkan_device.hh"
-#include "components/rendering/vulkan/vulkan_instance.h"
-#include "components/rendering/vulkan/vulkan_swapchain.h"
 #include "vulkan_config.h"
 
 namespace nextgen::engine::rendering::vulkan {

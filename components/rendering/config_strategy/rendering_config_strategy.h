@@ -4,8 +4,8 @@
 #include "components/configuration/config_manager.h"
 #include "components/engine/nextgen_game_engine_templates.h"
 #include "components/rendering/rendering.h"
-#include "components/rendering/rendering_config_strategy_default.h"
-#include "components/rendering/rendering_config_strategy_primary.h"
+#include "rendering_config_strategy_default.h"
+#include "rendering_config_strategy_primary.h"
 
 namespace nextgen::engine::rendering {
 

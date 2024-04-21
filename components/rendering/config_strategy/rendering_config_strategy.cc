@@ -1,4 +1,4 @@
-#include "components/rendering/rendering_config_strategy.h"
+#include "rendering_config_strategy.h"
 
 #include "components/configuration/config_manager.h"
 #include "components/rendering/rendering.h"

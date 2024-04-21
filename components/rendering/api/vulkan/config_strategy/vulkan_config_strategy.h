@@ -4,9 +4,9 @@
 #include "components/configuration/config_manager.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
 #include "components/engine/nextgen_game_engine_templates.h"
-#include "components/rendering/vulkan/config_strategy/vulkan_config_strategy_default.h"
-#include "components/rendering/vulkan/config_strategy/vulkan_config_strategy_primary.h"
-#include "components/rendering/vulkan/vulkan_rendering.h"
+#include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy_default.h"
+#include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy_primary.h"
+#include "components/rendering/api/vulkan/vulkan_rendering.h"
 
 namespace nextgen::engine::rendering::vulkan {
 using configuration::ComponentConfig;

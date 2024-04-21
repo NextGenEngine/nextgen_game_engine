@@ -6,8 +6,8 @@
 #include "components/configuration/config_loader.h"
 #include "components/configuration/config_manager.h"
 #include "components/engine/nextgen_game_engine_templates.h"
+#include "components/rendering/config_strategy/rendering_config_strategy.h"
 #include "components/rendering/rendering.h"
-#include "components/rendering/rendering_config_strategy.h"
 
 namespace nextgen::engine {
 

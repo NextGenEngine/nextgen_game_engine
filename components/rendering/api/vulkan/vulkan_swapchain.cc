@@ -1,10 +1,10 @@
-#include "components/rendering/vulkan/vulkan_swapchain.h"
+#include "components/rendering/api/vulkan/vulkan_swapchain.h"
 
 #include <vulkan/vulkan_core.h>
 
 #include <stdexcept>
 
-#include "components/rendering/vulkan/vulkan_context.h"
+#include "components/rendering/api/vulkan/vulkan_context.h"
 
 namespace nextgen::engine::rendering::vulkan {
 

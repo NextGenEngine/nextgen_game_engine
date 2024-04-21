@@ -1,4 +1,4 @@
-#include "components/rendering/rendering_config_validator.h"
+#include "rendering_config_validator.h"
 
 #include "components/rendering/rendering_config.h"
 
