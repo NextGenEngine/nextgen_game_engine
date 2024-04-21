@@ -13,6 +13,7 @@
     "cpubind",
     "cpupower",
     "cpuset",
+    "cstyle",
     "dearmor",
     "directx",
     "DIRECTX",
@@ -43,11 +44,13 @@
     "opengl",
     "pacman",
     "Parallelo",
+    "Pimpl",
     "runtimes",
     "rustup",
     "smol",
     "spatialization",
     "SPIR",
+    "struct",
     "subprojects",
     "swapchain",
     "Swapchain",
@@ -60,5 +63,9 @@
     "Wwindow"
   ],
   "files.insertFinalNewline": true,
-  "cSpell.spellCheckOnlyWorkspaceFiles": true
+  "cSpell.spellCheckOnlyWorkspaceFiles": true,
+  "lldb.displayFormat": "auto",
+  "lldb.dereferencePointers": true,
+  "lldb.consoleMode": "commands",
+  "lldb.showDisassembly": "auto"
 }
