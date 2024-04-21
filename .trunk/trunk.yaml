@@ -23,7 +23,7 @@ lint:
   enabled:
     - clang-tidy@16.0.3
     - buildifier@7.1.0
-    - checkov@3.2.53
+    - checkov@3.2.60
     - clang-format@16.0.3
     - git-diff-check
     - markdownlint@0.39.0
