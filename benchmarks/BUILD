@@ -33,6 +33,7 @@ cc_binary(
     ],
     deps = [
         "//components/configuration:config_manager",
+        "//components/engine:nextgen_game_engine",
         "//components/rendering:rendering_engine",
         "@google_benchmark//:benchmark_main",
     ],

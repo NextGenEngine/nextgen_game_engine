@@ -16,18 +16,18 @@ bool VulkanConfigurationDefaultStrategy::Configure() {
     return false;
   }
 
-  component_config_.UpdateConfig(config);
-  component_config_.SaveConfig();
+  component_config_->UpdateConfig(config);
+  component_config_->SaveConfig();
   vulkan_rendering_api_->ApplyConfiguration(&config);
 
   return true;
 }
 
 void VulkanConfigurationDefaultStrategy::Initialize(
-    ComponentConfig component_config,
+    ComponentConfig& component_config,
     VulkanRenderingApi& vulkan_rendering_api) {
   vulkan_rendering_api_ = &vulkan_rendering_api;
-  component_config_ = component_config;
+  component_config_ = &component_config;
 }
 
 }  // namespace nextgen::engine::rendering::vulkan

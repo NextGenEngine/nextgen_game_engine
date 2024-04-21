@@ -4,11 +4,10 @@
 #include "components/rendering/api/vulkan/vulkan_rendering.h"
 
 namespace nextgen::engine::rendering::vulkan {
-
 using interfaces::IConfigurationStrategy;
 
 struct VulkanConfigurationPrimaryStrategyData {
-  ComponentConfig component_config_;
+  ComponentConfig* component_config_;
   vulkan::VulkanRenderingApi* vulkan_rendering_api_;
 };
 struct VulkanConfigurationPrimaryStrategy
@@ -16,7 +15,7 @@ struct VulkanConfigurationPrimaryStrategy
       IConfigurationStrategy {
   bool Configure() override;
 
-  void Initialize(ComponentConfig component_config,
+  void Initialize(ComponentConfig& component_config,
                   VulkanRenderingApi& vulkan_rendering_api);
 };
 

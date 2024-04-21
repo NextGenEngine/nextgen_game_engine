@@ -9,7 +9,7 @@ namespace nextgen::engine::rendering::vulkan {
 using configuration::ComponentConfig;
 
 bool VulkanConfigurationPrimaryStrategy::Configure() {
-  auto vulkan_config = component_config_.LoadConfig<VulkanConfig>();
+  auto vulkan_config = component_config_->LoadConfig<VulkanConfig>();
 
   if (!vulkan_config) {
     return false;
@@ -25,10 +25,10 @@ bool VulkanConfigurationPrimaryStrategy::Configure() {
 }
 
 void VulkanConfigurationPrimaryStrategy::Initialize(
-    ComponentConfig component_config,
+    ComponentConfig& component_config,
     VulkanRenderingApi& vulkan_rendering_api) {
   vulkan_rendering_api_ = &vulkan_rendering_api;
-  component_config_ = component_config;
+  component_config_ = &component_config;
 }
 
 }  // namespace nextgen::engine::rendering::vulkan

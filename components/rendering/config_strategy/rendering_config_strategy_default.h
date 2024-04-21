@@ -7,7 +7,7 @@
 namespace nextgen::engine::rendering {
 
 struct RenderingConfigurationDefaultStrategyData {
-  ComponentConfig component_config_;
+  ComponentConfig* component_config_;
   RenderingConfigurationStrategySelector* api_strategy_selector_;
   RenderingEngine* rendering_engine_;
 };

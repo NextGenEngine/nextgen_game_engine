@@ -12,10 +12,14 @@ namespace nextgen::engine::rendering::vulkan {
 using configuration::ComponentConfig;
 using interfaces::IConfigurationStrategy;
 
-struct VulkanConfigStrategy : templates::FallbackConfigurationStrategyTemplate<
+struct VulkanConfigStrategyData {
+  ComponentConfig component_config_;
+};
+struct VulkanConfigStrategy : VulkanConfigStrategyData,
+                              templates::FallbackConfigurationStrategyTemplate<
                                   VulkanConfigurationPrimaryStrategy,
                                   VulkanConfigurationDefaultStrategy> {
-  void Initialize(ComponentConfig component_config,
+  void Initialize(ComponentConfig& component_config,
                   VulkanRenderingApi& vulkan_rendering_api);
 };
 

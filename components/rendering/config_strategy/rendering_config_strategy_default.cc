@@ -21,8 +21,8 @@ bool RenderingConfigurationDefaultStrategy::Configure() {
     return false;
   }
 
-  component_config_.UpdateConfig(rendering_engine_config);
-  component_config_.SaveConfig();
+  component_config_->UpdateConfig(rendering_engine_config);
+  component_config_->SaveConfig();
   rendering_engine_->ApplyConfiguration(&rendering_engine_config);
 
   auto* sub_component_strategy =
@@ -34,10 +34,10 @@ void RenderingConfigurationDefaultStrategy::Initialize(
     ComponentConfig component_config, RenderingEngine& rendering_engine,
     RenderingConfigurationStrategySelector& api_strategy_selector) {
   rendering_engine_ = &rendering_engine;
-  component_config_ = component_config;
+  component_config_ = &component_config;
   api_strategy_selector_ = &api_strategy_selector;
 
-  InitializeSubStrategies(component_config_, *api_strategy_selector_,
+  InitializeSubStrategies(*component_config_, *api_strategy_selector_,
                           *rendering_engine_);
 }
 

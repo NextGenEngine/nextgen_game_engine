@@ -5,10 +5,11 @@
 namespace nextgen::engine::rendering::vulkan {
 
 void VulkanConfigStrategy::Initialize(
-    ComponentConfig component_config,
+    ComponentConfig& component_config,
     VulkanRenderingApi& vulkan_rendering_api) {
-  primary_strategy_.Initialize(component_config, vulkan_rendering_api);
-  default_strategy_.Initialize(component_config, vulkan_rendering_api);
+  component_config_ = component_config;
+  primary_strategy_.Initialize(component_config_, vulkan_rendering_api);
+  default_strategy_.Initialize(component_config_, vulkan_rendering_api);
 }
 
 }  // namespace nextgen::engine::rendering::vulkan

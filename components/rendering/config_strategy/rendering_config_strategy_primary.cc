@@ -12,7 +12,7 @@ using configuration::ComponentConfig;
 
 bool RenderingConfigurationPrimaryStrategy::Configure() {
   auto rendering_engine_config =
-      component_config_.LoadConfig<RenderingEngineConfig>();
+      component_config_->LoadConfig<RenderingEngineConfig>();
 
   if (!rendering_engine_config) {
     return false;
@@ -30,13 +30,13 @@ bool RenderingConfigurationPrimaryStrategy::Configure() {
 }
 
 void RenderingConfigurationPrimaryStrategy::Initialize(
-    ComponentConfig component_config, RenderingEngine& rendering_engine,
+    ComponentConfig& component_config, RenderingEngine& rendering_engine,
     RenderingConfigurationStrategySelector& api_strategy_selector) {
-  component_config_ = component_config;
+  component_config_ = &component_config;
   rendering_engine_ = &rendering_engine;
   api_strategy_selector_ = &api_strategy_selector;
 
-  InitializeSubStrategies(component_config_, *api_strategy_selector_,
+  InitializeSubStrategies(*component_config_, *api_strategy_selector_,
                           *rendering_engine_);
 }
 

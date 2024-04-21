@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "components/configuration/config_manager.h"
+#include "components/engine/nextgen_game_engine.h"
 #include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy.h"
 #include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy_default.h"
 #include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy_primary.h"
@@ -77,7 +78,7 @@ int main() {
                     VulkanConfigurationDefaultStrategyData)
       << "\n"
       << "nextgen::engine::rendering::vulkan::"
-         "VulkanConfigurationDefaultStrategy"
+         "VulkanConfigurationDefaultStrategy: "
       << sizeof(nextgen::engine::rendering::vulkan::
                     VulkanConfigurationDefaultStrategy)
       << "\n"
@@ -85,19 +86,22 @@ int main() {
       << sizeof(nextgen::engine::rendering::vulkan::VulkanConfigStrategy)
       << "\n"
 
-      << "nextgen::engine::rendering::vulkan::VulkanInstance"
+      << "nextgen::engine::rendering::vulkan::VulkanInstance: "
       << sizeof(nextgen::engine::rendering::vulkan::VulkanInstance) << "\n"
-      << "nextgen::engine::rendering::vulkan::VulkanContext"
+      << "nextgen::engine::rendering::vulkan::VulkanContext: "
       << sizeof(nextgen::engine::rendering::vulkan::VulkanContext) << "\n"
-      << "nextgen::engine::rendering::vulkan::VulkanDevice"
+      << "nextgen::engine::rendering::vulkan::VulkanDevice: "
       << sizeof(nextgen::engine::rendering::vulkan::VulkanDevice) << "\n"
-      << "nextgen::engine::rendering::vulkan::VulkanSwapChain"
+      << "nextgen::engine::rendering::vulkan::VulkanSwapChain: "
       << sizeof(nextgen::engine::rendering::vulkan::VulkanSwapChain) << "\n"
-      << "nextgen::engine::rendering::vulkan::VulkanRenderingApi"
+      << "nextgen::engine::rendering::vulkan::VulkanRenderingApi: "
       << sizeof(nextgen::engine::rendering::vulkan::VulkanRenderingApi) << "\n"
 
       << "nextgen::engine::rendering::RenderingEngineData: "
       << sizeof(nextgen::engine::rendering::RenderingEngineData) << "\n"
       << "nextgen::engine::rendering::RenderingEngine: "
-      << sizeof(nextgen::engine::rendering::RenderingEngine) << "\n";
+      << sizeof(nextgen::engine::rendering::RenderingEngine) << "\n"
+
+      << "nextgen::engine::NextGenEngine: "
+      << sizeof(nextgen::engine::NextGenEngine) << "\n";
 }

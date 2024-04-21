@@ -13,6 +13,7 @@ using configuration::ComponentConfig;
 using templates::FallbackConfigurationStrategyTemplate;
 
 struct RenderingConfigurationStrategyData {
+  ComponentConfig component_config_;
   RenderingConfigurationStrategySelector api_strategy_selector_;
 };
 struct RenderingConfigurationStrategy
@@ -20,7 +21,7 @@ struct RenderingConfigurationStrategy
       FallbackConfigurationStrategyTemplate<
           RenderingConfigurationPrimaryStrategy,
           RenderingConfigurationDefaultStrategy> {
-  void Initialize(ComponentConfig component_config,
+  void Initialize(ComponentConfig& component_config,
                   RenderingEngine& rendering_engine);
 };
 
