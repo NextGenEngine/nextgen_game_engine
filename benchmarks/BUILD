@@ -25,3 +25,15 @@ cc_binary(
         "singleton_direct_access.cc",
     ],
 )
+
+cc_binary(
+    name = "engine_classes_sizes",
+    srcs = [
+        "engine_classes_sizes.cc",
+    ],
+    deps = [
+        "//components/configuration:config_manager",
+        "//components/rendering:rendering_engine",
+        "@google_benchmark//:benchmark_main",
+    ],
+)
