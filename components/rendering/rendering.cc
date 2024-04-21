@@ -59,6 +59,10 @@ void RenderingEngine::Initialize() {
 }
 
 void RenderingEngine::render() {
+  if (api_ == nullptr) {
+    return;
+  }
+
   std::this_thread::sleep_for(
       std::chrono::milliseconds(16));  // Simulate rendering time
 }
