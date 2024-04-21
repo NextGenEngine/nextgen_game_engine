@@ -4,6 +4,7 @@
 
 #include <cstddef>
 #include <cstdlib>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -91,11 +92,17 @@ int main() {
 
   try {
     nextgen::engine::ENGINE.Initialize(*component_config);
-  } catch (...) {
+  } catch (std::exception& e) {
+    std::cout << "FATAL ERROR: Engine base initialization failed: " << e.what();
     return SuccessfulExit(EXIT_FAILURE);
   }
 
-  nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
+  try {
+    nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
+  } catch (std::exception& e) {
+    std::cout << "FATAL ERROR: Engine configuration failed: " << e.what();
+    return SuccessfulExit(EXIT_FAILURE);
+  }
 
   // nextgen::engine::ENGINE.Loop();
 
