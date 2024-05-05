@@ -20,10 +20,8 @@ void NextGenEngine::Loop() {
   double timeSinceLastUpdate = 0.0;
   double const deltaTime = 1.0 / 60.0;  // Targeting 60 updates per second
 
-  auto isExiting = false;
-
   // NOLINTNEXTLINE(bugprone-infinite-loop)
-  while (!isExiting) {
+  while (!rendering_engine_.Exiting()) {
     auto currentTime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> const elapsed = currentTime - lastTime;
     lastTime = currentTime;
@@ -39,7 +37,7 @@ void NextGenEngine::Loop() {
       taskGroup.wait();
 
       // Mark as ready for rendering and run rendering task
-      taskGroup.run([this] { rendering_engine_.render(); });
+      taskGroup.run([this] { rendering_engine_.Render(); });
 
       // After starting the render task, main loop can proceed to the next
       // update or perform other tasks

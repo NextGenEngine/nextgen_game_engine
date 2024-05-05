@@ -16,7 +16,9 @@ void VulkanRenderingApi::ApplyConfiguration(const void* config) {
   std::cout << vulkan_config->device_id << "\n";
 }
 
-void VulkanRenderingApi::Render() {}
+bool VulkanRenderingApi::Exiting() {
+  return glfwWindowShouldClose(vulkan_context_.window) != 0;
+}
 
 VulkanRenderingApi::~VulkanRenderingApi() = default;
 

@@ -40,6 +40,7 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
   void Shutdown() override;
 
   void Render() override;
+  bool Exiting() override;
 
   void ApplyConfiguration(const void* config) override;
 

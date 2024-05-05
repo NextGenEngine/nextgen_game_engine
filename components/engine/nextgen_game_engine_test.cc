@@ -104,7 +104,7 @@ int main() {
     return SuccessfulExit(EXIT_FAILURE);
   }
 
-  // nextgen::engine::ENGINE.Loop();
+  nextgen::engine::ENGINE.Loop();
 
   return SuccessfulExit(EXIT_SUCCESS);
 }

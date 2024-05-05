@@ -56,6 +56,8 @@ cc_library(
         "api/vulkan/vulkan_swapchain.cc",
         "api/vulkan/vulkan_swapchain.h",
         "api/vulkan/window_surface.h",
+        "api/vulkan/vulkan_validation_layers.cc",
+        "api/vulkan/vulkan_validation_layers.h",
 
         # DIRECTX API
         "api/directx/directx_config_strategy.h",

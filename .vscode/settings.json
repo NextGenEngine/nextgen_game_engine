@@ -18,6 +18,7 @@
     "directx",
     "DIRECTX",
     "embeddable",
+    "Framebuffer",
     "gamepad",
     "gameplay",
     "glfw",

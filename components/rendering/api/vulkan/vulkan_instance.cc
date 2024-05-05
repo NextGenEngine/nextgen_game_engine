@@ -3,8 +3,10 @@
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 #include "components/rendering/api/vulkan/vulkan_config.h"
+#include "components/rendering/api/vulkan/vulkan_validation_layers.h"
 #include "vulkan_context.h"
 #include "vulkan_device_priority.h"
 
@@ -31,6 +33,23 @@ VkApplicationInfo appInfo = {
     .engineVersion = VK_MAKE_VERSION(1, 0, 0),
     .apiVersion = VK_API_VERSION_1_0,
 };
+
+std::vector<const char*> getRequiredExtensions() {
+  uint32_t glfwExtensionCount = 0;
+  const char** glfwExtensions = nullptr;
+  glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+  std::vector<const char*> extensions(
+      glfwExtensions,
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+      glfwExtensions + glfwExtensionCount);
+
+  if (VulkanValidationLayers::Enabled()) {
+    extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+  }
+
+  return extensions;
+}
 
 void VulkanInstance::Initialize(VulkanContext& vulkan_context) {
   vulkan_context_ = &vulkan_context;
@@ -61,16 +80,32 @@ void VulkanInstance::Initialize(VulkanContext& vulkan_context) {
         "Failed to create GLFW window: glfwCreateWindow()");
   }
 
-  uint32_t glfwExtensionCount = 0;
-  const char** glfwExtensions = nullptr;
-  glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+  auto glfwExtensions = getRequiredExtensions();
 
-  const VkInstanceCreateInfo createInfo = {
+  VkInstanceCreateInfo createInfo = {
       .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
       .pApplicationInfo = &appInfo,
-      .enabledExtensionCount = glfwExtensionCount,
-      .ppEnabledExtensionNames = glfwExtensions,
+      .enabledExtensionCount = static_cast<uint32_t>(glfwExtensions.size()),
+      .ppEnabledExtensionNames = glfwExtensions.data(),
   };
+
+  if (VulkanValidationLayers::Enabled() &&
+      !VulkanValidationLayers::CheckValidationLayerSupport()) {
+    throw std::runtime_error("validation layers requested, but not available!");
+  }
+
+  VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+  if (VulkanValidationLayers::Enabled()) {
+    auto validationLayers = VulkanValidationLayers::GetValidationLayers();
+    createInfo.enabledLayerCount =
+        static_cast<uint32_t>(validationLayers.size());
+    createInfo.ppEnabledLayerNames = validationLayers.data();
+
+    VulkanValidationLayers::PopulateDebugMessengerCreateInfo(debugCreateInfo);
+    createInfo.pNext = &debugCreateInfo;
+  } else {
+    createInfo.enabledLayerCount = 0;
+  }
 
   if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
     throw std::runtime_error("Failed to create Vulkan instance");
@@ -212,7 +247,7 @@ const char* GetDeviceTypeName(VkPhysicalDeviceType deviceType) {
   }
 }
 
-VulkanInstance::~VulkanInstance() {
+void VulkanInstance::Shutdown() const {
   if (vulkan_context_ == nullptr) {
     return;
   }

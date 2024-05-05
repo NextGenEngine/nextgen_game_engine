@@ -58,13 +58,22 @@ void RenderingEngine::Initialize() {
   vulkan_api.get_vulkan_config_ref() = {};
 }
 
-void RenderingEngine::render() {
+void RenderingEngine::Render() {
   if (api_ == nullptr) {
     return;
   }
 
-  std::this_thread::sleep_for(
-      std::chrono::milliseconds(16));  // Simulate rendering time
+  api_->Render();
+
+  // std::this_thread::sleep_for(
+  //     std::chrono::milliseconds(1000));  // Simulate rendering time
+}
+
+bool RenderingEngine::Exiting() {
+  if (api_ == nullptr) {
+    return true;
+  }
+  return api_->Exiting();
 }
 
 }  // namespace nextgen::engine::rendering
