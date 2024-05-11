@@ -15,10 +15,11 @@ struct VulkanDevice {
   VulkanConfig* m_vulkan_config{};
   VulkanContext* m_vulkan_context{};
 
- public:
-  explicit VulkanDevice() { std::cout << "VulkanDevice object created\n"; }
+  VulkanDevice() { std::cout << "VulkanDevice object created\n"; }
+  void Initialize(VulkanContext& vulkan_context, VulkanConfig& vulkan_config);
 
-  explicit VulkanDevice(VulkanContext* vulkan_context);
+  void CreateDevice();
+
   ~VulkanDevice();
 
   // copy

@@ -56,6 +56,11 @@ cc_library(
         "api/vulkan/vulkan_swapchain.cc",
         "api/vulkan/vulkan_swapchain.h",
         "api/vulkan/window_surface.h",
+        "api/vulkan/vulkan_buffer.cc",
+        "api/vulkan/vulkan_command_pool.cc",
+        "api/vulkan/vulkan_frame_buffers.cc",
+        "api/vulkan/vulkan_pipeline.cc",
+        "api/vulkan/vulkan_render_pass.cc",
         "api/vulkan/vulkan_validation_layers.cc",
         "api/vulkan/vulkan_validation_layers.h",
 

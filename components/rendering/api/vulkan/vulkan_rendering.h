@@ -5,10 +5,16 @@
 
 #include "components/configuration/config_manager.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
+#include "components/rendering/api/vulkan/vulkan_buffer.h"
+#include "components/rendering/api/vulkan/vulkan_command_pool.h"
 #include "components/rendering/api/vulkan/vulkan_context.h"
 #include "components/rendering/api/vulkan/vulkan_device.hh"
+#include "components/rendering/api/vulkan/vulkan_frame_buffers.h"
 #include "components/rendering/api/vulkan/vulkan_instance.h"
+#include "components/rendering/api/vulkan/vulkan_pipeline.h"
+#include "components/rendering/api/vulkan/vulkan_render_pass.h"
 #include "components/rendering/api/vulkan/vulkan_swapchain.h"
+#include "components/rendering/api/vulkan/vulkan_validation_layers.h"
 #include "components/rendering/rendering_api.h"
 #include "vulkan_config.h"
 
@@ -28,15 +34,23 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
    * resolution)*/
   VulkanContext vulkan_context_;
   VulkanInstance vulkan_instance_;
-  VulkanConfig config_{};
+  VulkanValidationLayers vulkan_validation_layers_{};
+  VulkanConfig vulkan_config_{};
   VulkanDevice m_vulkan_device;
   VulkanSwapChain m_vulkan_swap_chain;
+  VulkanBuffer vulkan_buffer_{};
+  VulkanCommandPool vulkan_command_pool_{};
+  FrameBuffers vulkan_frame_buffers_{};
+  GraphicsPipeline graphics_pipeline_{};
+  VulkanRenderPass vulkan_render_pass_{};
 
   explicit VulkanRenderingApi() {
     std::cout << "VulkanRenderingApi object created\n";
   }
 
-  void Initialize() override;
+  void Initialize();
+
+  void StartUp() override;
   void Shutdown() override;
 
   void Render() override;
@@ -45,7 +59,7 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
   void ApplyConfiguration(const void* config) override;
 
   VulkanRenderingApi& set_config(const VulkanConfig& vulkan_config) {
-    config_ = vulkan_config;
+    vulkan_config_ = vulkan_config;
     return *this;
   }
   VulkanRenderingApi& set_context(const VulkanContext& vulkan_context) {
@@ -59,8 +73,8 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
     return vulkan_context_;
   }
   // Getter for VulkanConfig
-  VulkanConfig& get_vulkan_config_ref() { return config_; }
-  const VulkanConfig& get_vulkan_config_ref() const { return config_; }
+  VulkanConfig& get_vulkan_config_ref() { return vulkan_config_; }
+  const VulkanConfig& get_vulkan_config_ref() const { return vulkan_config_; }
 
   // delete
   ~VulkanRenderingApi() override;
@@ -70,6 +84,14 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
   // move
   VulkanRenderingApi(VulkanRenderingApi&&) noexcept = default;
   VulkanRenderingApi& operator=(VulkanRenderingApi&&) noexcept = default;
+
+ private:
+  void drawFrame(VkDevice device, VkQueue graphicsQueue,
+                 VkSwapchainKHR swapChain, VkSemaphore imageAvailableSemaphore,
+                 VkSemaphore renderFinishedSemaphore, VkFence inFlightFence,
+                 std::vector<VkCommandBuffer> commandBuffers);
+
+  void createSyncObjects();
 };
 // NOLINTEND(misc-non-private-member-variables-in-classes)
 

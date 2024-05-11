@@ -7,14 +7,13 @@
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanSwapChain {
-  VulkanContext* m_vulkanContext;
+  VulkanContext* vulkan_context_{};
 
- public:
-  explicit VulkanSwapChain() {
-    std::cout << "VulkanSwapChain object created\n";
-  }
+  VulkanSwapChain() { std::cout << "VulkanSwapChain object created\n"; }
 
-  explicit VulkanSwapChain(VulkanContext* vulkan_context);
+  void Initialize(VulkanContext& vulkan_context);
+
+  void CreateSwapChain() const;
   ~VulkanSwapChain();
 
   // copy

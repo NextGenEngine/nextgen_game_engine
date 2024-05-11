@@ -8,11 +8,20 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-VulkanSwapChain::VulkanSwapChain(VulkanContext* vulkan_context)
-    : m_vulkanContext(vulkan_context) {
-  auto& surface = m_vulkanContext->surface;
-  auto& device = m_vulkanContext->device;
-  auto& swapchain = m_vulkanContext->swapchain;
+void VulkanSwapChain::Initialize(VulkanContext& vulkan_context) {
+  vulkan_context_ = &vulkan_context;
+}
+
+void VulkanSwapChain::CreateSwapChain() const {
+  auto& surface = vulkan_context_->surface;
+  auto& device = vulkan_context_->device;
+  auto& swapchain = vulkan_context_->swapchain;
+  auto& swapChainExtent = vulkan_context_->swapChainExtent;
+
+  swapChainExtent = {
+      .width = 800,  // Simplification: Fixed size
+      .height = 600,
+  };
 
   // Create a swap chain for image presentation
   // This pseudo-code assumes surface has already been created
@@ -22,11 +31,7 @@ VulkanSwapChain::VulkanSwapChain(VulkanContext* vulkan_context)
       .minImageCount = 2,                       // Double buffering
       .imageFormat = VK_FORMAT_B8G8R8A8_UNORM,  // Simplification
       .imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR,
-      .imageExtent =
-          {
-              .width = 800,  // Simplification: Fixed size
-              .height = 600,
-          },
+      .imageExtent = swapChainExtent,
       .imageArrayLayers = 1,
       .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
       .presentMode = VK_PRESENT_MODE_FIFO_KHR,  // V-Sync enable
@@ -41,11 +46,11 @@ VulkanSwapChain::VulkanSwapChain(VulkanContext* vulkan_context)
 }
 
 VulkanSwapChain::~VulkanSwapChain() {
-  if (m_vulkanContext == nullptr || m_vulkanContext->swapchain == nullptr ||
-      m_vulkanContext->device == nullptr) {
+  if (vulkan_context_ == nullptr || vulkan_context_->swapchain == nullptr ||
+      vulkan_context_->device == nullptr) {
     return;
   }
-  vkDestroySwapchainKHR(m_vulkanContext->device, m_vulkanContext->swapchain,
+  vkDestroySwapchainKHR(vulkan_context_->device, vulkan_context_->swapchain,
                         nullptr);
 }
 

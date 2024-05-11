@@ -41,21 +41,12 @@ void RenderingEngine::SwitchApi(RenderingAPIEnum newApi) {
       throw std::runtime_error("Unsupported API");
   }
 
-  api_->Initialize();
+  api_->StartUp();
 }
 
 void RenderingEngine::Initialize() {
   auto& vulkan_api = apis_.vulkan_rendering_api;
-  vulkan_api.vulkan_instance_.vulkan_context_ =
-      &vulkan_api.get_vulkan_context_ref();
-  vulkan_api.m_vulkan_device.m_vulkan_context =
-      &vulkan_api.get_vulkan_context_ref();
-  vulkan_api.m_vulkan_device.m_vulkan_config =
-      &vulkan_api.get_vulkan_config_ref();
-  vulkan_api.m_vulkan_swap_chain.m_vulkanContext =
-      &vulkan_api.get_vulkan_context_ref();
-  vulkan_api.get_vulkan_context_ref() = {};
-  vulkan_api.get_vulkan_config_ref() = {};
+  vulkan_api.Initialize();
 }
 
 void RenderingEngine::Render() {

@@ -37,8 +37,8 @@ struct NextGenEngine {
     rendering_config_strategy_.Initialize(component_config, rendering_engine_);
 
     std::cout << "NextGenGame engine factory done.\n";
-    rendering_engine_.apis_.vulkan_rendering_api.config_.device_id = 5;
-    rendering_engine_.apis_.vulkan_rendering_api.config_.height = 3;
+    rendering_engine_.apis_.vulkan_rendering_api.vulkan_config_.device_id = 5;
+    rendering_engine_.apis_.vulkan_rendering_api.vulkan_config_.height = 3;
     std::cout << "Device id="
               << rendering_engine_.apis_.vulkan_rendering_api.m_vulkan_device
                      .m_vulkan_config->device_id

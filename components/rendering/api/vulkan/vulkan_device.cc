@@ -6,14 +6,20 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "components/rendering/api/vulkan/vulkan_config.h"
 #include "components/rendering/api/vulkan/vulkan_context.h"
 
 namespace nextgen::engine::rendering::vulkan {
 
 using nextgen::engine::rendering::vulkan::VulkanContext;
 
-VulkanDevice::VulkanDevice(VulkanContext* vulkan_context)
-    : m_vulkan_context(vulkan_context) {
+void VulkanDevice::Initialize(VulkanContext& vulkan_context,
+                              VulkanConfig& vulkan_config) {
+  m_vulkan_context = &vulkan_context;
+  m_vulkan_config = &vulkan_config;
+}
+
+void VulkanDevice::CreateDevice() {
   auto& instance = m_vulkan_context->instance;
   auto& physicalDevice = m_vulkan_context->physical_device;
   auto& device = m_vulkan_context->device;

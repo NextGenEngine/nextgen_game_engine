@@ -28,7 +28,8 @@ struct RenderingEngine : RenderingEngineData, IConfigurable {
   void ApplyConfiguration(const void* config) override;
   void SwitchApi(RenderingAPIEnum newApi);
   void Initialize();
-  void render();
+  void Render();
+  bool Exiting();
 };
 
 }  // namespace nextgen::engine::rendering
