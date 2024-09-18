@@ -9,9 +9,12 @@ plugins:
     - id: trunk
       ref: v1.4.5
       uri: https://github.com/trunk-io/plugins
-    - id: clang-tidy-latest
-      uri: https://github.com/NextGenEngine/trunk-io-linter-clang-tidy-latest
-      ref: v1.0
+    # TODO: check if repo have something else custom defined there,
+    # but generally all of this can be redefined in lint/definitions section
+    # right in this config. No need to create custom plugin
+    # - id: clang-tidy-latest
+    #   uri: https://github.com/NextGenEngine/trunk-io-linter-clang-tidy-latest
+    #   ref: v1.0
 # Many linters and tools depend on runtimes - configure them here. (https://docs.trunk.io/runtimes)
 runtimes:
   enabled:
@@ -33,6 +36,21 @@ lint:
     - trivy@0.50.1
     - trufflehog@3.71.0
     - yamllint@1.35.1
+  definitions:
+    - name: clang-tidy
+      commands:
+        - run: /usr/bin/clang-tidy-20 --export-fixes=${tmpfile} ${target} -p ${compile_commands_dir}
+    - name: clang-format
+      commands:
+        - name: format
+          output: rewrite
+          run: /usr/bin/clang-format-20 -i ${target}
+          success_codes: [0, 1]
+          batch: true
+          in_place: true
+          cache_results: true
+          formatter: true
+
 actions:
   enabled:
     - trunk-announce
