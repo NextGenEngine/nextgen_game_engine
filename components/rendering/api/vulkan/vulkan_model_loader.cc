@@ -15,7 +15,7 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-const std::string MODEL_PATH = "models/viking_room.obj";
+const std::string MODEL_PATH = "data/models/viking_room.obj";
 
 VulkanModelLoader::VulkanModelLoader() {
   std::cout << "VulkanModelLoader object instantiated\n";
@@ -64,7 +64,7 @@ void VulkanModelLoader::LoadModel() const {
 
       vertex.color = {1.0F, 1.0F, 1.0F};
 
-      if (uniqueVertices.count(vertex) == 0) {
+      if (!uniqueVertices.contains(vertex)) {
         uniqueVertices[vertex] =
             static_cast<uint32_t>(vulkan_context_->vertices.size());
         vulkan_context_->vertices.push_back(vertex);

@@ -1,11 +1,11 @@
 #include "vulkan_validation_layers.h"
 
+#include <vulkan/vk_platform.h>
 #include <vulkan/vulkan_core.h>
 
 #include <cstdint>
 #include <cstring>
 #include <iostream>
-#include <ostream>
 #include <stdexcept>
 #include <vector>
 

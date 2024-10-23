@@ -3,9 +3,11 @@
 #include <vulkan/vulkan_core.h>
 
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 
 #include "components/rendering/api/vulkan/vulkan_constants.h"
 #include "components/rendering/api/vulkan/vulkan_context.h"

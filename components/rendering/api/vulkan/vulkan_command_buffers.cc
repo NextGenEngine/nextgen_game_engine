@@ -21,7 +21,7 @@ VulkanCommandBuffers::~VulkanCommandBuffers() {
 
 void VulkanCommandBuffers::Initialize(VulkanContext& vulkan_context) {
   vulkan_context_ = &vulkan_context;
-  // TODO: try to do it here
+  // TODO(artem): try to do it here
   // CreateCommandBuffers();
 }
 

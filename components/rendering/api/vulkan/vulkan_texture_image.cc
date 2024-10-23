@@ -19,7 +19,7 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-const std::string TEXTURE_PATH = "textures/viking_room.png";
+const std::string TEXTURE_PATH = "data/textures/viking_room.png";
 
 VulkanTextureImage::VulkanTextureImage() {
   std::cout << "VulkanTextureImage object instantiated\n";

@@ -79,8 +79,8 @@ void VulkanGraphicsPipeline::Shutdown() const noexcept {
 }
 
 void VulkanGraphicsPipeline::CreateGraphicsPipeline() {
-  auto vertShaderCode = readFile("shaders/vert.spv");
-  auto fragShaderCode = readFile("shaders/frag.spv");
+  auto vertShaderCode = readFile("data/shaders/vert.spv");
+  auto fragShaderCode = readFile("data/shaders/frag.spv");
 
   VkShaderModule vertShaderModule = CreateShaderModule(vertShaderCode);
   VkShaderModule fragShaderModule = CreateShaderModule(fragShaderCode);

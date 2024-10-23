@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <vector>
 
 #include "components/rendering/api/vulkan/vulkan_context.h"
 #include "components/rendering/api/vulkan/vulkan_device.hh"

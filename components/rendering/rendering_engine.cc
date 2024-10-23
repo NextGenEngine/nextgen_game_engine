@@ -1,10 +1,8 @@
 #include "rendering_engine.h"
 
 #include <cctype>
-#include <chrono>
 #include <iostream>
 #include <stdexcept>
-#include <thread>
 
 #include "components/rendering/rendering_config.h"
 

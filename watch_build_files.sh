@@ -10,9 +10,9 @@ watchman watch-project .
 watchman trigger-del . "${trigger_name}"
 
 # Set up a new trigger
-watchman --logfile="${PWD}/compile_commands_watchman.log" -- trigger "$PWD" "${trigger_name}" \
+watchman --logfile="${PWD}/compile_commands_watchman.log" -- trigger "${PWD}" "${trigger_name}" \
 	"${trigger_patterns[@]}" -- \
-	"$PWD/refresh_compile_commands.sh"
+	"${PWD}/refresh_compile_commands.sh"
 
 # #!/usr/bin/env bash
 

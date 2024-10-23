@@ -9,15 +9,15 @@ PID_FILE="./.refresh_compile_commands.pid"
 # Function to check if a PID corresponds to our command
 is_process_running() {
 	local pid=$1
-	if [ -z "$pid" ]; then
+	if [[ -z ${pid} ]]; then
 		return 1 # PID is empty
 	fi
 
 	# Check if the process is running
-	if ps -p "$pid" >/dev/null 2>&1; then
+	if ps -p "${pid}" >/dev/null 2>&1; then
 		# Get the command line of the process
-		cmdline=$(ps -p "$pid" -o command=)
-		if [[ $cmdline == *"$COMMAND"* ]]; then
+		cmdline=$(ps -p "${pid}" -o command=)
+		if [[ ${cmdline} == *"${COMMAND}"* ]]; then
 			return 0 # Process is running and matches our command
 		fi
 	fi
@@ -25,26 +25,26 @@ is_process_running() {
 }
 
 # Check if the PID file exists
-if [ -f "$PID_FILE" ]; then
+if [[ -f ${PID_FILE} ]]; then
 	# Read the PID from the file
-	OLD_PID=$(cat "$PID_FILE")
-	if is_process_running "$OLD_PID"; then
-		echo "Terminating existing process: $OLD_PID"
-		kill -TERM "$OLD_PID"
+	OLD_PID=$(cat "${PID_FILE}")
+	if is_process_running "${OLD_PID}"; then
+		echo "Terminating existing process: ${OLD_PID}"
+		kill -TERM "${OLD_PID}"
 		# Wait for the process to terminate
-		while is_process_running "$OLD_PID"; do
+		while is_process_running "${OLD_PID}"; do
 			sleep 0.1
 		done
-		echo "Process $OLD_PID terminated."
+		echo "Process ${OLD_PID} terminated."
 	else
-		echo "No running process found with PID $OLD_PID."
+		echo "No running process found with PID ${OLD_PID}."
 	fi
 fi
 
 echo "Starting new process..."
 # Start the command in the background
-$COMMAND &
+${COMMAND} &
 # Save its PID
 NEW_PID=$!
-echo "$NEW_PID" >"$PID_FILE"
-echo "New process started with PID $NEW_PID."
+echo "${NEW_PID}" >"${PID_FILE}"
+echo "New process started with PID ${NEW_PID}."
