@@ -5,3 +5,4 @@
 /compile_commands.json
 VERBOSE
 /config.yaml
+.refresh_compile_commands.pid

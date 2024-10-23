@@ -11,6 +11,33 @@
       }
     },
     {
+      "label": "Watch and Generate compile_commands.json",
+      "type": "shell",
+      "command": "./watch_build_files.sh",
+      "isBackground": true,
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [] /*{
+        "owner": "custom",
+        "fileLocation": [
+          "relative",
+          "${workspaceFolder}"
+        ],
+        "pattern": [],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "."
+        }
+      }*/,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      }
+    },
+    {
       "label": "bazel: test config_manager_test",
       "type": "shell",
       "command": "bazel test //components/configuration:config_manager_test",
