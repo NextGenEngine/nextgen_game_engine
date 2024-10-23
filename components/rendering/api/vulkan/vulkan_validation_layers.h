@@ -10,7 +10,6 @@ namespace nextgen::engine::rendering::vulkan {
 struct VulkanValidationLayers {
   void Initialize(VulkanContext& vulkan_context);
 
-  void StartUp();
   void Shutdown() const;
 
   static void PopulateDebugMessengerCreateInfo(

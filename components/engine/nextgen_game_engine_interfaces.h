@@ -5,7 +5,7 @@ namespace nextgen::engine::interfaces {
 
 // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 struct IComponent {
-  virtual void StartUp() = 0;
+  virtual void Initialize() = 0;
   virtual void Shutdown() = 0;
   virtual ~IComponent() = default;
 };

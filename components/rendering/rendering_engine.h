@@ -28,7 +28,9 @@ struct RenderingEngine : RenderingEngineData, IConfigurable {
   void ApplyConfiguration(const void* config) override;
   void SwitchApi(RenderingAPIEnum newApi);
   void Initialize();
+  void Shutdown();
   void Render();
+  void MainLoop();
   bool Exiting();
 };
 

@@ -14,8 +14,6 @@ struct VulkanInstance {
   explicit VulkanInstance();
 
   void Initialize(VulkanContext& vulkan_context);
-
-  void StartUp();
   void Shutdown() const;
 
   ~VulkanInstance() = default;

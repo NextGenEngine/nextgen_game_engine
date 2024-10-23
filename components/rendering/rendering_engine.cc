@@ -1,4 +1,4 @@
-#include "rendering.h"
+#include "rendering_engine.h"
 
 #include <cctype>
 #include <chrono>
@@ -33,6 +33,7 @@ void RenderingEngine::SwitchApi(RenderingAPIEnum newApi) {
 
   switch (newApi) {
     case RenderingAPIEnum::Vulkan:
+      apis_.vulkan_rendering_api.Initialize();
       api_ = &apis_.vulkan_rendering_api;
       break;
     case RenderingAPIEnum::DirectX:
@@ -41,13 +42,14 @@ void RenderingEngine::SwitchApi(RenderingAPIEnum newApi) {
       throw std::runtime_error("Unsupported API");
   }
 
-  api_->StartUp();
+  api_->Initialize();
 }
 
-void RenderingEngine::Initialize() {
-  auto& vulkan_api = apis_.vulkan_rendering_api;
-  vulkan_api.Initialize();
-}
+void RenderingEngine::Initialize() { apis_.vulkan_rendering_api.Initialize(); }
+
+void RenderingEngine::Shutdown() { apis_.vulkan_rendering_api.Shutdown(); }
+
+void RenderingEngine::MainLoop() { apis_.vulkan_rendering_api.MainLoop(); }
 
 void RenderingEngine::Render() {
   if (api_ == nullptr) {

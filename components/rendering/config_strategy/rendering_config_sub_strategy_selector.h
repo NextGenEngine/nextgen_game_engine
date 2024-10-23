@@ -3,8 +3,8 @@
 
 #include "components/rendering/api/directx/directx_config_strategy.h"
 #include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy.h"
-#include "components/rendering/rendering.h"
 #include "components/rendering/rendering_config.h"
+#include "components/rendering/rendering_engine.h"
 
 namespace nextgen::engine::rendering {
 

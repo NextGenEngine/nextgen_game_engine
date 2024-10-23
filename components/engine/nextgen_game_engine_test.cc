@@ -71,8 +71,8 @@ auto InitConfigManager() -> std::optional<ComponentConfig> {
 
 void GameLoop(std::unique_ptr<NextGenEngine>& engine) { engine->Loop(); }
 
-int SuccessfulExit(int code) {
-  std::cout << "Successful exit"
+int ExitProgram(int code) {
+  std::cout << "Program exit"
             << "\n";
   return code;
 }
@@ -80,7 +80,7 @@ int SuccessfulExit(int code) {
 int main() {
   auto component_config = InitConfigManager();
   if (!component_config) {
-    return SuccessfulExit(EXIT_FAILURE);
+    return ExitProgram(EXIT_FAILURE);
   }
 
   // GameLoop(engine.value());
@@ -93,18 +93,28 @@ int main() {
   try {
     nextgen::engine::ENGINE.Initialize(*component_config);
   } catch (std::exception& e) {
-    std::cout << "FATAL ERROR: Engine base initialization failed: " << e.what();
-    return SuccessfulExit(EXIT_FAILURE);
+    std::cout << "FATAL ERROR: Engine base initialization failed: " << e.what()
+              << "\n";
+    try {
+      nextgen::engine::ENGINE.Shutdown();
+    } catch (std::exception& ee) {
+      std::cout << "FATAL ERROR: Engine shutdown failed: " << ee.what() << "\n";
+    }
+    return ExitProgram(EXIT_FAILURE);
   }
 
   try {
-    nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
+    // nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
   } catch (std::exception& e) {
     std::cout << "FATAL ERROR: Engine configuration failed: " << e.what();
-    return SuccessfulExit(EXIT_FAILURE);
+    return ExitProgram(EXIT_FAILURE);
+  }
+  try {
+    nextgen::engine::ENGINE.Loop();
+  } catch (std::exception& e) {
   }
 
-  nextgen::engine::ENGINE.Loop();
+  nextgen::engine::ENGINE.Shutdown();
 
-  return SuccessfulExit(EXIT_SUCCESS);
+  return ExitProgram(EXIT_SUCCESS);
 }

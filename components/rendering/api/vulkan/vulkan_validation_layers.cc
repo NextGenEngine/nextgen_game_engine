@@ -34,15 +34,6 @@ const bool enableValidationLayers = false;
 #else
 const bool enableValidationLayers = false;
 
-void VulkanValidationLayers::Initialize(VulkanContext& vulkan_context) {
-  if (!Enabled()) {
-    return;
-  }
-
-  // set pointer to vulkan shared context
-  vulkan_context_ = &vulkan_context;
-}
-
 bool VulkanValidationLayers::CheckValidationLayerSupport() {
   uint32_t layerCount = 0;
   vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
@@ -101,10 +92,13 @@ void VulkanValidationLayers::PopulateDebugMessengerCreateInfo(
   createInfo.pUserData = nullptr;  // Optional
 }
 
-void VulkanValidationLayers::StartUp() {
+void VulkanValidationLayers::Initialize(VulkanContext& vulkan_context) {
   if (!Enabled()) {
     return;
   }
+
+  // set pointer to vulkan shared context
+  vulkan_context_ = &vulkan_context;
 
   VkDebugUtilsMessengerCreateInfoEXT createInfo{};
   PopulateDebugMessengerCreateInfo(createInfo);

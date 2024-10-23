@@ -2,8 +2,8 @@
 
 #include <stdexcept>
 
-#include "components/rendering/rendering.h"
 #include "components/rendering/rendering_config.h"
+#include "components/rendering/rendering_engine.h"
 
 namespace nextgen::engine::rendering {
 

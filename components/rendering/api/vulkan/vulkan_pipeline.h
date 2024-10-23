@@ -5,16 +5,32 @@
 
 #include "components/rendering/api/vulkan/vulkan_context.h"
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 namespace nextgen::engine::rendering::vulkan {
 
-struct GraphicsPipeline {
-  VulkanContext* vulkan_context_;
+struct VulkanGraphicsPipeline {
+  VulkanContext* vulkan_context_{};
+
+  VulkanGraphicsPipeline();
 
   void Initialize(VulkanContext& vulkan_context);
+  void Shutdown() const noexcept;
 
-  void createGraphicsPipeline(VkDevice device);
+  ~VulkanGraphicsPipeline();
+
+  // copy
+  VulkanGraphicsPipeline& operator=(const VulkanGraphicsPipeline&) = delete;
+  VulkanGraphicsPipeline(const VulkanGraphicsPipeline&) = delete;
+  // move
+  VulkanGraphicsPipeline& operator=(VulkanGraphicsPipeline&&) = default;
+  VulkanGraphicsPipeline(VulkanGraphicsPipeline&&) = default;
+
+ private:
+  void CreateGraphicsPipeline();
+  VkShaderModule CreateShaderModule(const std::vector<char>& code) const;
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 
 #endif

@@ -16,8 +16,8 @@
 #include "components/rendering/config_strategy/rendering_config_strategy_primary.h"
 #include "components/rendering/config_strategy/rendering_config_sub_strategy_selector.h"
 #include "components/rendering/config_strategy/rendering_config_validator.h"
-#include "components/rendering/rendering.h"
 #include "components/rendering/rendering_config.h"
+#include "components/rendering/rendering_engine.h"
 
 int main() {
   std::cout

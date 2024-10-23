@@ -24,10 +24,6 @@ VulkanInstance::VulkanInstance() {
   std::cout << "VulkanInstance object created\n";
 }
 
-void VulkanInstance::Initialize(VulkanContext& vulkan_context) {
-  vulkan_context_ = &vulkan_context;
-}
-
 void enumerateAvailableDevices(VkInstance& instance);
 void getRecommendedResolutionForDevice();
 const char* GetDeviceTypeName(VkPhysicalDeviceType deviceType);
@@ -59,7 +55,8 @@ std::vector<const char*> getRequiredExtensions() {
   return extensions;
 }
 
-void VulkanInstance::StartUp() {
+void VulkanInstance::Initialize(VulkanContext& vulkan_context) {
+  vulkan_context_ = &vulkan_context;
   // Initialize the Vulkan library
   // Initialize GLFW
   auto& window = vulkan_context_->window;

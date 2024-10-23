@@ -5,16 +5,26 @@
 
 #include "components/rendering/api/vulkan/vulkan_context.h"
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanRenderPass {
-  VulkanContext* vulkan_context_;
+  VulkanContext* vulkan_context_{};
 
   void Initialize(VulkanContext& vulkan_context);
+  void Shutdown() const noexcept;
 
-  void createRenderPass(VkDevice device, VkFormat swapChainImageFormat);
+  ~VulkanRenderPass();
+
+ private:
+  void CreateRenderPass();
+  VkFormat findDepthFormat();
+  VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates,
+                               VkImageTiling tiling,
+                               VkFormatFeatureFlags features) const;
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 
 #endif

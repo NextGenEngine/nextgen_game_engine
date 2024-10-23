@@ -3,21 +3,34 @@
 
 #include <vulkan/vulkan_core.h>
 
+#include "components/rendering/api/vulkan/vulkan_device.hh"
 #include "vulkan_context.h"
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanCommandPool {
-  VulkanContext* vulkan_context_;
+  VulkanContext* vulkan_context_{};
+  VulkanDevice* vulkan_device_{};
 
-  void Initialize(VulkanContext& vulkan_context);
+  VulkanCommandPool();
 
-  VkCommandPool createCommandPool(VkDevice device, uint32_t queueFamilyIndex);
-  uint32_t findGraphicsQueueFamilyIndex(VkPhysicalDevice physicalDevice);
+  void Initialize(VulkanContext& vulkan_context, VulkanDevice& vulkan_device);
+  void Shutdown() const noexcept;
 
-  void createCommandBuffers(VkDevice device, VkCommandPool commandPool,
-                            VkExtent2D swapChainExtent);
+  ~VulkanCommandPool();
+
+  // copy
+  VulkanCommandPool& operator=(const VulkanCommandPool&) = delete;
+  VulkanCommandPool(const VulkanCommandPool&) = delete;
+  // move
+  VulkanCommandPool& operator=(VulkanCommandPool&&) = default;
+  VulkanCommandPool(VulkanCommandPool&&) = default;
+
+ private:
+  void CreateCommandPool() const;
 };
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 
 }  // namespace nextgen::engine::rendering::vulkan
 

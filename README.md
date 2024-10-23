@@ -30,7 +30,7 @@ do not have Bazel package yet, you need to install libc++-dev package
 (standard C++ library development files) in order for Clangd to work properly.
 
 ```bash
-sudo apt install libc++-19-dev
+sudo apt install libc++-20-dev
 ```
 
 ## Install Bazel
@@ -119,7 +119,7 @@ sudo apt install clang-format clang-tidy clang-tools clang clangd libc++-dev lib
 
 Bug:
 
-sudo apt-get install lldb-19 <use latest version here>
+sudo apt-get install lldb-20 <use latest version here>
 ```
 
 I had problem installing lldb-19, so in my case I solved it installing

@@ -3,27 +3,33 @@
 
 #include <vulkan/vulkan_core.h>
 
-#include <vector>
-
 #include "components/rendering/api/vulkan/vulkan_context.h"
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 namespace nextgen::engine::rendering::vulkan {
 
-struct FrameBuffers {
-  VulkanContext* vulkan_context_;
+struct VulkanFrameBuffers {
+  VulkanContext* vulkan_context_{};
+
+  VulkanFrameBuffers();
 
   void Initialize(VulkanContext& vulkan_context);
+  void Shutdown() const noexcept;
 
-  void createFramebuffers(VkDevice device, VkExtent2D swapChainExtent,
-                          VkSwapchainKHR swapChain,
-                          VkFormat swapChainImageFormat,
-                          VkRenderPass renderPass);
+  ~VulkanFrameBuffers();
 
-  std::vector<VkImageView> createSwapChainImageViews(VkDevice device,
-                                                     VkSwapchainKHR swapchain,
-                                                     VkFormat imageFormat);
+  // copy
+  VulkanFrameBuffers& operator=(const VulkanFrameBuffers&) = delete;
+  VulkanFrameBuffers(const VulkanFrameBuffers&) = delete;
+  // move
+  VulkanFrameBuffers& operator=(VulkanFrameBuffers&&) = default;
+  VulkanFrameBuffers(VulkanFrameBuffers&&) = default;
+
+ private:
+  void CreateFramebuffers() const;
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 
 #endif

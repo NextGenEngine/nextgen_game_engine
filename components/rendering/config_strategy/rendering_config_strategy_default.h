@@ -1,7 +1,7 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_CONFIG_STRATEGY_DEFAULT_H
 #define NEXTGEN_ENGINE_RENDERING_CONFIG_STRATEGY_DEFAULT_H
 
-#include "components/rendering/rendering.h"
+#include "components/rendering/rendering_engine.h"
 #include "rendering_config_sub_strategy_selector.h"
 
 namespace nextgen::engine::rendering {
