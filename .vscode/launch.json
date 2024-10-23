@@ -53,6 +53,16 @@
       "args": [],
       "cwd": "${workspaceFolder}",
       "preLaunchTask": "bazel-build-release-with-debug: singleton_direct_access"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug: raw_ref_versus_smart_pointers",
+      "program": "${workspaceFolder}/bazel-bin/benchmarks/raw_ref_versus_smart_pointers",
+      "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "bazel-build-debug: raw_ref_versus_smart_pointers"
     }
   ]
 }

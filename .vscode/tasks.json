@@ -99,6 +99,15 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "bazel-build-debug: raw_ref_versus_smart_pointers",
+      "type": "shell",
+      "command": "bazel build --config=debug //benchmarks:raw_ref_versus_smart_pointers",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }

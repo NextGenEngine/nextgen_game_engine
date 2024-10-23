@@ -38,3 +38,13 @@ cc_binary(
         "@google_benchmark//:benchmark_main",
     ],
 )
+
+cc_binary(
+    name = "raw_ref_versus_smart_pointers",
+    srcs = [
+        "raw_ref_versus_smart_pointers.cc",
+    ],
+    deps = [
+        "@google_benchmark//:benchmark_main",
+    ],
+)
