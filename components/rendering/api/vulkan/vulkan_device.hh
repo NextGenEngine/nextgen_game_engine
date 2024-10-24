@@ -1,13 +1,11 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_VULKAN_DEVICE_H
 #define NEXTGEN_ENGINE_RENDERING_VULKAN_DEVICE_H
 
-#include <iostream>
-
 #include "components/rendering/api/vulkan/vulkan_config.h"
 #include "components/rendering/api/vulkan/vulkan_swapchain_types.h"
 #include "vulkan_context.h"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 using nextgen::engine::rendering::vulkan::VulkanContext;
@@ -22,11 +20,12 @@ struct QueueFamilyIndices {
 };
 
 struct VulkanDevice {
-  VulkanConfig* m_vulkan_config{};
-  VulkanContext* m_vulkan_context{};
+  VulkanConfig& m_vulkan_config;
+  VulkanContext& m_vulkan_context;
 
-  VulkanDevice() { std::cout << "VulkanDevice object created\n"; }
-  void Initialize(VulkanContext& vulkan_context, VulkanConfig& vulkan_config);
+  explicit VulkanDevice(VulkanConfig& vulkan_config,
+                        VulkanContext& vulkan_context);
+  void Initialize();
   void Shutdown() const noexcept;
 
   QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) const;
@@ -45,7 +44,7 @@ struct VulkanDevice {
   VulkanDevice& operator=(const VulkanDevice&) = delete;
   VulkanDevice(const VulkanDevice&) = delete;
   // move
-  VulkanDevice& operator=(VulkanDevice&&) = default;
+  VulkanDevice& operator=(VulkanDevice&&) = delete;
   VulkanDevice(VulkanDevice&&) = default;
 
  private:
@@ -62,6 +61,6 @@ struct VulkanDevice {
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

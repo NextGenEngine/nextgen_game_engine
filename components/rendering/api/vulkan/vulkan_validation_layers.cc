@@ -33,6 +33,12 @@ const std::vector<const char*> validationLayers = {
 const bool enableValidationLayers = false;
 #else
 const bool enableValidationLayers = false;
+#endif
+
+VulkanValidationLayers::VulkanValidationLayers(VulkanContext& vulkan_context)
+    : vulkan_context_(vulkan_context), debugMessenger(VK_NULL_HANDLE) {
+  std::cout << "VulkanValidationLayers object instantiated\n";
+}
 
 bool VulkanValidationLayers::CheckValidationLayerSupport() {
   uint32_t layerCount = 0;
@@ -92,18 +98,15 @@ void VulkanValidationLayers::PopulateDebugMessengerCreateInfo(
   createInfo.pUserData = nullptr;  // Optional
 }
 
-void VulkanValidationLayers::Initialize(VulkanContext& vulkan_context) {
+void VulkanValidationLayers::Initialize() {
   if (!Enabled()) {
     return;
   }
 
-  // set pointer to vulkan shared context
-  vulkan_context_ = &vulkan_context;
-
   VkDebugUtilsMessengerCreateInfoEXT createInfo{};
   PopulateDebugMessengerCreateInfo(createInfo);
 
-  if (CreateDebugUtilsMessengerEXT(vulkan_context_->instance, &createInfo,
+  if (CreateDebugUtilsMessengerEXT(vulkan_context_.instance, &createInfo,
                                    nullptr, &debugMessenger) != VK_SUCCESS) {
     throw std::runtime_error("failed to set up debug messenger!");
   }
@@ -124,10 +127,8 @@ void VulkanValidationLayers::Shutdown() const {
   if (!Enabled()) {
     return;
   }
-  DestroyDebugUtilsMessengerEXT(vulkan_context_->instance, debugMessenger,
+  DestroyDebugUtilsMessengerEXT(vulkan_context_.instance, debugMessenger,
                                 nullptr);
 }
 
 }  // namespace nextgen::engine::rendering::vulkan
-
-#endif

@@ -12,17 +12,18 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-void VulkanRenderPass::Initialize(VulkanContext& vulkan_context) {
-  vulkan_context_ = &vulkan_context;
-  CreateRenderPass();
+VulkanRenderPass::VulkanRenderPass(VulkanContext& vulkan_context)
+    : vulkan_context_(vulkan_context) {
+  std::cout << "VulkanRenderPass object instantiated\n";
 }
 
+void VulkanRenderPass::Initialize() { CreateRenderPass(); }
+
 void VulkanRenderPass::Shutdown() const noexcept {
-  if (vulkan_context_ != nullptr &&
-      vulkan_context_->render_pass != VK_NULL_HANDLE) {
-    vkDestroyRenderPass(vulkan_context_->device, vulkan_context_->render_pass,
+  if (vulkan_context_.render_pass != VK_NULL_HANDLE) {
+    vkDestroyRenderPass(vulkan_context_.device, vulkan_context_.render_pass,
                         nullptr);
-    vulkan_context_->render_pass = VK_NULL_HANDLE;
+    vulkan_context_.render_pass = VK_NULL_HANDLE;
     std::cout << "VulkanRenderPass: render_pass destroyed\n";
   } else {
     std::cout << "VulkanRenderPass: Vulkan context or render does not exist. "
@@ -33,7 +34,7 @@ void VulkanRenderPass::Shutdown() const noexcept {
 
 void VulkanRenderPass::CreateRenderPass() {
   VkAttachmentDescription colorAttachment{};
-  colorAttachment.format = vulkan_context_->swap_chain_image_format;
+  colorAttachment.format = vulkan_context_.swap_chain_image_format;
   colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
   colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
   colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -89,8 +90,8 @@ void VulkanRenderPass::CreateRenderPass() {
   renderPassInfo.dependencyCount = 1;
   renderPassInfo.pDependencies = &dependency;
 
-  if (vkCreateRenderPass(vulkan_context_->device, &renderPassInfo, nullptr,
-                         &vulkan_context_->render_pass) != VK_SUCCESS) {
+  if (vkCreateRenderPass(vulkan_context_.device, &renderPassInfo, nullptr,
+                         &vulkan_context_.render_pass) != VK_SUCCESS) {
     throw std::runtime_error("failed to create render pass!");
   }
 }
@@ -107,8 +108,8 @@ VkFormat VulkanRenderPass::findSupportedFormat(
     VkFormatFeatureFlags features) const {
   for (VkFormat const format : candidates) {
     VkFormatProperties props;
-    vkGetPhysicalDeviceFormatProperties(vulkan_context_->physical_device,
-                                        format, &props);
+    vkGetPhysicalDeviceFormatProperties(vulkan_context_.physical_device, format,
+                                        &props);
 
     if (tiling == VK_IMAGE_TILING_LINEAR &&
         (props.linearTilingFeatures & features) == features) {

@@ -19,11 +19,13 @@ namespace nextgen::engine::rendering::vulkan {
 
 using nextgen::engine::rendering::vulkan::VulkanContext;
 
-void VulkanDevice::Initialize(VulkanContext& vulkan_context,
-                              VulkanConfig& vulkan_config) {
-  m_vulkan_context = &vulkan_context;
-  m_vulkan_config = &vulkan_config;
+VulkanDevice::VulkanDevice(VulkanConfig& vulkan_config,
+                           VulkanContext& vulkan_context)
+    : m_vulkan_config(vulkan_config), m_vulkan_context(vulkan_context) {
+  std::cout << "VulkanDevice object created\n";
+}
 
+void VulkanDevice::Initialize() {
   pickPhysicalDevice();
   createLogicalDevice();
 }
@@ -31,8 +33,7 @@ void VulkanDevice::Initialize(VulkanContext& vulkan_context,
 void VulkanDevice::Shutdown() const noexcept {
   // TODO(artem): Check if destroying debug messenger must be here.
   //  Most probably it must be in validation layers class
-  if (m_vulkan_context != nullptr &&
-      m_vulkan_context->enable_validation_layers) {
+  if (m_vulkan_context.enable_validation_layers) {
     DestroyDebugUtilsMessengerEXT(nullptr);
     std::cout << "VulkanDevice: DebugUtilsMessengerEXT destroyed\n";
   } else {
@@ -40,10 +41,9 @@ void VulkanDevice::Shutdown() const noexcept {
         << "VulkanDevice: Validation layers are disabled. No need to destroy "
            "DebugUtilsMessengerEXT\n";
   }
-  if (m_vulkan_context != nullptr &&
-      m_vulkan_context->device != VK_NULL_HANDLE) {
-    vkDestroyDevice(m_vulkan_context->device, nullptr);
-    m_vulkan_context->device = VK_NULL_HANDLE;
+  if (m_vulkan_context.device != VK_NULL_HANDLE) {
+    vkDestroyDevice(m_vulkan_context.device, nullptr);
+    m_vulkan_context.device = VK_NULL_HANDLE;
     std::cout << "VulkanDevice: vkDevice destroyed\n";
   } else {
     std::cout << "VulkanDevice: vkDevice does not exist. Cannot destroy it\n";
@@ -53,24 +53,24 @@ void VulkanDevice::Shutdown() const noexcept {
 
 void VulkanDevice::pickPhysicalDevice() {
   uint32_t deviceCount = 0;
-  vkEnumeratePhysicalDevices(m_vulkan_context->instance, &deviceCount, nullptr);
+  vkEnumeratePhysicalDevices(m_vulkan_context.instance, &deviceCount, nullptr);
 
   if (deviceCount == 0) {
     throw std::runtime_error("failed to find GPUs with Vulkan support!");
   }
 
   std::vector<VkPhysicalDevice> devices(deviceCount);
-  vkEnumeratePhysicalDevices(m_vulkan_context->instance, &deviceCount,
+  vkEnumeratePhysicalDevices(m_vulkan_context.instance, &deviceCount,
                              devices.data());
 
   for (const auto& device : devices) {
     if (isDeviceSuitable(device)) {
-      m_vulkan_context->physical_device = device;
+      m_vulkan_context.physical_device = device;
       break;
     }
   }
 
-  if (m_vulkan_context->physical_device == VK_NULL_HANDLE) {
+  if (m_vulkan_context.physical_device == VK_NULL_HANDLE) {
     throw std::runtime_error("failed to find a suitable GPU!");
   }
 }
@@ -114,7 +114,7 @@ QueueFamilyIndices VulkanDevice::findQueueFamilies(
 
     VkBool32 presentSupport = 0U;  // false
     vkGetPhysicalDeviceSurfaceSupportKHR(
-        device, index, m_vulkan_context->surface, &presentSupport);
+        device, index, m_vulkan_context.surface, &presentSupport);
 
     if (presentSupport != 0U) {
       indices.presentFamily = index;
@@ -153,26 +153,26 @@ SwapChainSupportDetails VulkanDevice::querySwapChainSupport(
     VkPhysicalDevice device) const {
   SwapChainSupportDetails details;
 
-  vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_vulkan_context->surface,
+  vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_vulkan_context.surface,
                                             &details.capabilities);
 
   uint32_t formatCount = 0;
-  vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_vulkan_context->surface,
+  vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_vulkan_context.surface,
                                        &formatCount, nullptr);
 
   if (formatCount != 0) {
     details.formats.resize(formatCount);
-    vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_vulkan_context->surface,
+    vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_vulkan_context.surface,
                                          &formatCount, details.formats.data());
   }
 
   uint32_t presentModeCount = 0;
-  vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_vulkan_context->surface,
+  vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_vulkan_context.surface,
                                             &presentModeCount, nullptr);
 
   if (presentModeCount != 0) {
     details.presentModes.resize(presentModeCount);
-    vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_vulkan_context->surface,
+    vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_vulkan_context.surface,
                                               &presentModeCount,
                                               details.presentModes.data());
   }
@@ -182,7 +182,7 @@ SwapChainSupportDetails VulkanDevice::querySwapChainSupport(
 
 void VulkanDevice::createLogicalDevice() {
   QueueFamilyIndices indices =
-      findQueueFamilies(m_vulkan_context->physical_device);
+      findQueueFamilies(m_vulkan_context.physical_device);
 
   if (!indices.graphicsFamily.has_value() ||
       !indices.presentFamily.has_value()) {
@@ -219,32 +219,32 @@ void VulkanDevice::createLogicalDevice() {
       static_cast<uint32_t>(deviceExtensions.size());
   createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
-  if (m_vulkan_context->enable_validation_layers) {
+  if (m_vulkan_context.enable_validation_layers) {
     createInfo.enabledLayerCount =
-        static_cast<uint32_t>(m_vulkan_context->validation_layers.size());
-    createInfo.ppEnabledLayerNames = m_vulkan_context->validation_layers.data();
+        static_cast<uint32_t>(m_vulkan_context.validation_layers.size());
+    createInfo.ppEnabledLayerNames = m_vulkan_context.validation_layers.data();
   } else {
     createInfo.enabledLayerCount = 0;
   }
 
-  if (vkCreateDevice(m_vulkan_context->physical_device, &createInfo, nullptr,
-                     &m_vulkan_context->device) != VK_SUCCESS) {
+  if (vkCreateDevice(m_vulkan_context.physical_device, &createInfo, nullptr,
+                     &m_vulkan_context.device) != VK_SUCCESS) {
     throw std::runtime_error("failed to create logical device!");
   }
 
-  vkGetDeviceQueue(m_vulkan_context->device, indices.graphicsFamily.value(), 0,
-                   &m_vulkan_context->graphics_queue);
-  vkGetDeviceQueue(m_vulkan_context->device, indices.presentFamily.value(), 0,
-                   &m_vulkan_context->present_queue);
+  vkGetDeviceQueue(m_vulkan_context.device, indices.graphicsFamily.value(), 0,
+                   &m_vulkan_context.graphics_queue);
+  vkGetDeviceQueue(m_vulkan_context.device, indices.presentFamily.value(), 0,
+                   &m_vulkan_context.present_queue);
 }
 
 void VulkanDevice::DestroyDebugUtilsMessengerEXT(
     const VkAllocationCallbacks* pAllocator) const {
   // NOLINTNEXTLINE(google-readability-casting,cppcoreguidelines-pro-type-cstyle-cast)
   auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
-      m_vulkan_context->instance, "vkDestroyDebugUtilsMessengerEXT");
+      m_vulkan_context.instance, "vkDestroyDebugUtilsMessengerEXT");
   if (func != nullptr) {
-    func(m_vulkan_context->instance, m_vulkan_context->debug_messenger,
+    func(m_vulkan_context.instance, m_vulkan_context.debug_messenger,
          pAllocator);
   }
 }
@@ -254,7 +254,7 @@ VkFormat VulkanDevice::findSupportedFormat(
     VkFormatFeatureFlags features) const {
   for (VkFormat const format : candidates) {
     VkFormatProperties props;
-    vkGetPhysicalDeviceFormatProperties(m_vulkan_context->physical_device,
+    vkGetPhysicalDeviceFormatProperties(m_vulkan_context.physical_device,
                                         format, &props);
 
     if (tiling == VK_IMAGE_TILING_LINEAR &&
@@ -281,7 +281,7 @@ VkFormat VulkanDevice::findDepthFormat() const {
 uint32_t VulkanDevice::FindMemoryType(uint32_t typeFilter,
                                       VkMemoryPropertyFlags properties) const {
   VkPhysicalDeviceMemoryProperties memProperties;
-  vkGetPhysicalDeviceMemoryProperties(m_vulkan_context->physical_device,
+  vkGetPhysicalDeviceMemoryProperties(m_vulkan_context.physical_device,
                                       &memProperties);
 
   for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
@@ -310,7 +310,7 @@ VkImageView VulkanDevice::CreateImageView(
   viewInfo.subresourceRange.layerCount = 1;
 
   VkImageView imageView = nullptr;
-  if (vkCreateImageView(m_vulkan_context->device, &viewInfo, nullptr,
+  if (vkCreateImageView(m_vulkan_context.device, &viewInfo, nullptr,
                         &imageView) != VK_SUCCESS) {
     throw std::runtime_error("failed to create image view!");
   }

@@ -3,15 +3,15 @@
 
 #include "components/rendering/api/vulkan/vulkan_context.h"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanDescriptorSet {
-  VulkanContext* vulkan_context_{};
+  VulkanContext& vulkan_context_;
 
-  VulkanDescriptorSet();
+  explicit VulkanDescriptorSet(VulkanContext& vulkan_context);
 
-  void Initialize(VulkanContext& vulkan_context);
+  void Initialize();
   void Shutdown() const noexcept;
 
   ~VulkanDescriptorSet();
@@ -20,7 +20,7 @@ struct VulkanDescriptorSet {
   VulkanDescriptorSet& operator=(const VulkanDescriptorSet&) = delete;
   VulkanDescriptorSet(const VulkanDescriptorSet&) = delete;
   // move
-  VulkanDescriptorSet& operator=(VulkanDescriptorSet&&) = default;
+  VulkanDescriptorSet& operator=(VulkanDescriptorSet&&) = delete;
   VulkanDescriptorSet(VulkanDescriptorSet&&) = default;
 
  private:
@@ -28,6 +28,6 @@ struct VulkanDescriptorSet {
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

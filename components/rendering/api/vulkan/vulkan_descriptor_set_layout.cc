@@ -11,7 +11,9 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-VulkanDescriptorSetLayout::VulkanDescriptorSetLayout() {
+VulkanDescriptorSetLayout::VulkanDescriptorSetLayout(
+    VulkanContext& vulkan_context)
+    : vulkan_context_(vulkan_context) {
   std::cout << "VulkanDescriptorSetLayout object instantiated\n";
 }
 
@@ -19,13 +21,10 @@ VulkanDescriptorSetLayout::~VulkanDescriptorSetLayout() {
   std::cout << "VulkanDescriptorSetLayout instance destroyed\n";
 }
 
-void VulkanDescriptorSetLayout::Initialize(VulkanContext& vulkan_context) {
-  vulkan_context_ = &vulkan_context;
-  CreateDescriptorSetLayout();
-}
+void VulkanDescriptorSetLayout::Initialize() { CreateDescriptorSetLayout(); }
 
 void VulkanDescriptorSetLayout::Shutdown() const noexcept {
-  if (vulkan_context_ == nullptr || vulkan_context_->device == nullptr) {
+  if (vulkan_context_.device == nullptr) {
     std::cout << "VulkanDescriptorSetLayout: Vulkan context or device is null; "
                  "no need "
                  "to cleanup command pool\n";
@@ -33,11 +32,10 @@ void VulkanDescriptorSetLayout::Shutdown() const noexcept {
     return;
   }
 
-  if (vulkan_context_->descriptor_set_layout != VK_NULL_HANDLE) {
-    vkDestroyDescriptorSetLayout(vulkan_context_->device,
-                                 vulkan_context_->descriptor_set_layout,
-                                 nullptr);
-    vulkan_context_->descriptor_set_layout = VK_NULL_HANDLE;
+  if (vulkan_context_.descriptor_set_layout != VK_NULL_HANDLE) {
+    vkDestroyDescriptorSetLayout(
+        vulkan_context_.device, vulkan_context_.descriptor_set_layout, nullptr);
+    vulkan_context_.descriptor_set_layout = VK_NULL_HANDLE;
     std::cout << "VulkanDescriptorSetLayout: descriptor_set_layout destroyed\n";
   } else {
     std::cout << "VulkanDescriptorSetLayout: descriptor_set_layout is null; no "
@@ -70,8 +68,8 @@ void VulkanDescriptorSetLayout::CreateDescriptorSetLayout() const {
   layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
   layoutInfo.pBindings = bindings.data();
 
-  if (vkCreateDescriptorSetLayout(vulkan_context_->device, &layoutInfo, nullptr,
-                                  &vulkan_context_->descriptor_set_layout) !=
+  if (vkCreateDescriptorSetLayout(vulkan_context_.device, &layoutInfo, nullptr,
+                                  &vulkan_context_.descriptor_set_layout) !=
       VK_SUCCESS) {
     throw std::runtime_error("failed to create descriptor set layout!");
   }

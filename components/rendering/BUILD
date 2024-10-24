@@ -72,7 +72,6 @@ cc_library(
         "api/vulkan/vulkan_render_pass.h",
         "api/vulkan/vulkan_rendering.cc",
         "api/vulkan/vulkan_rendering.h",
-        "api/vulkan/vulkan_shader.h",
         "api/vulkan/vulkan_swapchain.cc",
         "api/vulkan/vulkan_swapchain.h",
         "api/vulkan/vulkan_swapchain_types.h",

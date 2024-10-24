@@ -21,7 +21,13 @@ namespace nextgen::engine::rendering::vulkan {
 
 const std::string TEXTURE_PATH = "data/textures/viking_room.png";
 
-VulkanTextureImage::VulkanTextureImage() {
+VulkanTextureImage::VulkanTextureImage(
+    VulkanContext& vulkan_context, VulkanDevice& vulkan_device,
+    VulkanCommandBuffers& vulkan_command_buffers, VulkanBuffer& vulkan_buffer)
+    : vulkan_context_(vulkan_context),
+      vulkan_device_(vulkan_device),
+      vulkan_command_buffers_(vulkan_command_buffers),
+      vulkan_buffer_(vulkan_buffer) {
   std::cout << "VulkanTextureImage object instantiated\n";
 }
 
@@ -29,20 +35,14 @@ VulkanTextureImage::~VulkanTextureImage() {
   std::cout << "VulkanTextureImage instance destroyed\n";
 }
 
-void VulkanTextureImage::Initialize(
-    VulkanContext& vulkan_context, VulkanDevice& vulkan_device,
-    VulkanCommandBuffers& vulkan_command_buffers, VulkanBuffer& vulkan_buffer) {
-  vulkan_context_ = &vulkan_context;
-  vulkan_device_ = &vulkan_device;
-  vulkan_command_buffers_ = &vulkan_command_buffers;
-  vulkan_buffer_ = &vulkan_buffer;
+void VulkanTextureImage::Initialize() {
   CreateTextureImage();
   CreateTextureImageView();
   CreateTextureSampler();
 }
 
 void VulkanTextureImage::Shutdown() const noexcept {
-  if (vulkan_context_ == nullptr || vulkan_context_->device == nullptr) {
+  if (vulkan_context_.device == nullptr) {
     std::cout
         << "VulkanTextureImage: Vulkan context or device is null; no need "
            "to cleanup swapchain\n";
@@ -50,40 +50,40 @@ void VulkanTextureImage::Shutdown() const noexcept {
     return;
   }
 
-  if (vulkan_context_->texture_sampler != VK_NULL_HANDLE) {
-    vkDestroySampler(vulkan_context_->device, vulkan_context_->texture_sampler,
+  if (vulkan_context_.texture_sampler != VK_NULL_HANDLE) {
+    vkDestroySampler(vulkan_context_.device, vulkan_context_.texture_sampler,
                      nullptr);
-    vulkan_context_->texture_sampler = VK_NULL_HANDLE;
+    vulkan_context_.texture_sampler = VK_NULL_HANDLE;
     std::cout << "VulkanTextureImage: texture_sampler destroyed\n";
   } else {
     std::cout << "VulkanTextureImage: texture_sampler does not exist. No "
                  "reason to destroy it\n";
   }
 
-  if (vulkan_context_->texture_image_view != VK_NULL_HANDLE) {
-    vkDestroyImageView(vulkan_context_->device,
-                       vulkan_context_->texture_image_view, nullptr);
-    vulkan_context_->texture_image_view = VK_NULL_HANDLE;
+  if (vulkan_context_.texture_image_view != VK_NULL_HANDLE) {
+    vkDestroyImageView(vulkan_context_.device,
+                       vulkan_context_.texture_image_view, nullptr);
+    vulkan_context_.texture_image_view = VK_NULL_HANDLE;
     std::cout << "VulkanTextureImage: texture_image_view destroyed\n";
   } else {
     std::cout << "VulkanTextureImage: texture_image_view does not exist. No "
                  "reason to destroy it\n";
   }
 
-  if (vulkan_context_->texture_image != VK_NULL_HANDLE) {
-    vkDestroyImage(vulkan_context_->device, vulkan_context_->texture_image,
+  if (vulkan_context_.texture_image != VK_NULL_HANDLE) {
+    vkDestroyImage(vulkan_context_.device, vulkan_context_.texture_image,
                    nullptr);
-    vulkan_context_->texture_image = VK_NULL_HANDLE;
+    vulkan_context_.texture_image = VK_NULL_HANDLE;
     std::cout << "VulkanTextureImage: texture_image destroyed\n";
   } else {
     std::cout << "VulkanTextureImage: texture_image does not exist. No reason "
                  "to destroy it\n";
   }
 
-  if (vulkan_context_->texture_image_memory != VK_NULL_HANDLE) {
-    vkFreeMemory(vulkan_context_->device, vulkan_context_->texture_image_memory,
+  if (vulkan_context_.texture_image_memory != VK_NULL_HANDLE) {
+    vkFreeMemory(vulkan_context_.device, vulkan_context_.texture_image_memory,
                  nullptr);
-    vulkan_context_->texture_image_memory = VK_NULL_HANDLE;
+    vulkan_context_.texture_image_memory = VK_NULL_HANDLE;
     std::cout << "VulkanTextureImage: texture_image_memory destroyed\n";
   } else {
     std::cout << "VulkanTextureImage: texture_image_memory does not exist. No "
@@ -109,17 +109,17 @@ void VulkanTextureImage::CreateTextureImage() {
 
   VkBuffer stagingBuffer{};
   VkDeviceMemory stagingBufferMemory{};
-  vulkan_buffer_->CreateBuffer(
+  vulkan_buffer_.CreateBuffer(
       imageSize, VulkanBuffer::BufferUsage{VK_BUFFER_USAGE_TRANSFER_SRC_BIT},
       VulkanBuffer::MemoryProperty{VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
                                    VK_MEMORY_PROPERTY_HOST_COHERENT_BIT},
       stagingBuffer, stagingBufferMemory);
 
   void* data{};
-  vkMapMemory(vulkan_context_->device, stagingBufferMemory, 0, imageSize, 0,
+  vkMapMemory(vulkan_context_.device, stagingBufferMemory, 0, imageSize, 0,
               &data);
   memcpy(data, pixels, static_cast<size_t>(imageSize));
-  vkUnmapMemory(vulkan_context_->device, stagingBufferMemory);
+  vkUnmapMemory(vulkan_context_.device, stagingBufferMemory);
 
   stbi_image_free(pixels);
 
@@ -129,20 +129,20 @@ void VulkanTextureImage::CreateTextureImage() {
       VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL,
       ImageUsage{VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT},
       VulkanBuffer::MemoryProperty{VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT},
-      vulkan_context_->texture_image, vulkan_context_->texture_image_memory);
+      vulkan_context_.texture_image, vulkan_context_.texture_image_memory);
 
-  TransitionImageLayout(vulkan_context_->texture_image,
+  TransitionImageLayout(vulkan_context_.texture_image,
                         VK_IMAGE_LAYOUT_UNDEFINED,
                         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-  CopyBufferToImage(stagingBuffer, vulkan_context_->texture_image,
+  CopyBufferToImage(stagingBuffer, vulkan_context_.texture_image,
                     static_cast<uint32_t>(texWidth),
                     static_cast<uint32_t>(texHeight));
-  TransitionImageLayout(vulkan_context_->texture_image,
+  TransitionImageLayout(vulkan_context_.texture_image,
                         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-  vkDestroyBuffer(vulkan_context_->device, stagingBuffer, nullptr);
-  vkFreeMemory(vulkan_context_->device, stagingBufferMemory, nullptr);
+  vkDestroyBuffer(vulkan_context_.device, stagingBuffer, nullptr);
+  vkFreeMemory(vulkan_context_.device, stagingBufferMemory, nullptr);
 }
 
 void VulkanTextureImage::CreateImage(
@@ -164,34 +164,33 @@ void VulkanTextureImage::CreateImage(
   imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
   imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-  if (vkCreateImage(vulkan_context_->device, &imageInfo, nullptr, &image) !=
+  if (vkCreateImage(vulkan_context_.device, &imageInfo, nullptr, &image) !=
       VK_SUCCESS) {
     throw std::runtime_error("failed to create image!");
   }
 
   VkMemoryRequirements memRequirements;
-  vkGetImageMemoryRequirements(vulkan_context_->device, image,
-                               &memRequirements);
+  vkGetImageMemoryRequirements(vulkan_context_.device, image, &memRequirements);
 
   VkMemoryAllocateInfo allocInfo{};
   allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
   allocInfo.allocationSize = memRequirements.size;
-  allocInfo.memoryTypeIndex = vulkan_device_->FindMemoryType(
+  allocInfo.memoryTypeIndex = vulkan_device_.FindMemoryType(
       memRequirements.memoryTypeBits, memory_property.flags);
 
-  if (vkAllocateMemory(vulkan_context_->device, &allocInfo, nullptr,
+  if (vkAllocateMemory(vulkan_context_.device, &allocInfo, nullptr,
                        &imageMemory) != VK_SUCCESS) {
     throw std::runtime_error("failed to allocate image memory!");
   }
 
-  vkBindImageMemory(vulkan_context_->device, image, imageMemory, 0);
+  vkBindImageMemory(vulkan_context_.device, image, imageMemory, 0);
 }
 
 void VulkanTextureImage::TransitionImageLayout(VkImage image,
                                                VkImageLayout oldLayout,
                                                VkImageLayout newLayout) const {
   VkCommandBuffer commandBuffer =
-      vulkan_command_buffers_->BeginSingleTimeCommands();
+      vulkan_command_buffers_.BeginSingleTimeCommands();
 
   VkImageMemoryBarrier barrier{};
   barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -230,14 +229,14 @@ void VulkanTextureImage::TransitionImageLayout(VkImage image,
   vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage, 0, 0,
                        nullptr, 0, nullptr, 1, &barrier);
 
-  vulkan_command_buffers_->EndSingleTimeCommands(commandBuffer);
+  vulkan_command_buffers_.EndSingleTimeCommands(commandBuffer);
 }
 
 void VulkanTextureImage::CopyBufferToImage(VkBuffer buffer, VkImage image,
                                            uint32_t width,
                                            uint32_t height) const {
   VkCommandBuffer commandBuffer =
-      vulkan_command_buffers_->BeginSingleTimeCommands();
+      vulkan_command_buffers_.BeginSingleTimeCommands();
 
   VkBufferImageCopy region{};
   region.bufferOffset = 0;
@@ -253,18 +252,18 @@ void VulkanTextureImage::CopyBufferToImage(VkBuffer buffer, VkImage image,
   vkCmdCopyBufferToImage(commandBuffer, buffer, image,
                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-  vulkan_command_buffers_->EndSingleTimeCommands(commandBuffer);
+  vulkan_command_buffers_.EndSingleTimeCommands(commandBuffer);
 }
 
 void VulkanTextureImage::CreateTextureImageView() const {
-  vulkan_context_->texture_image_view = vulkan_device_->CreateImageView(
-      vulkan_context_->texture_image, VK_FORMAT_R8G8B8A8_SRGB,
+  vulkan_context_.texture_image_view = vulkan_device_.CreateImageView(
+      vulkan_context_.texture_image, VK_FORMAT_R8G8B8A8_SRGB,
       VK_IMAGE_ASPECT_COLOR_BIT);
 }
 
 void VulkanTextureImage::CreateTextureSampler() const {
   VkPhysicalDeviceProperties properties{};
-  vkGetPhysicalDeviceProperties(vulkan_context_->physical_device, &properties);
+  vkGetPhysicalDeviceProperties(vulkan_context_.physical_device, &properties);
 
   VkSamplerCreateInfo samplerInfo{};
   samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -281,8 +280,8 @@ void VulkanTextureImage::CreateTextureSampler() const {
   samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
   samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 
-  if (vkCreateSampler(vulkan_context_->device, &samplerInfo, nullptr,
-                      &vulkan_context_->texture_sampler) != VK_SUCCESS) {
+  if (vkCreateSampler(vulkan_context_.device, &samplerInfo, nullptr,
+                      &vulkan_context_.texture_sampler) != VK_SUCCESS) {
     throw std::runtime_error("failed to create texture sampler!");
   }
 }

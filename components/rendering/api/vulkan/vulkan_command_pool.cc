@@ -10,7 +10,9 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-VulkanCommandPool::VulkanCommandPool() {
+VulkanCommandPool::VulkanCommandPool(VulkanContext& vulkan_context,
+                                     VulkanDevice& vulkan_device)
+    : vulkan_context_(vulkan_context), vulkan_device_(vulkan_device) {
   std::cout << "VulkanCommandPool object instantiated\n";
 }
 
@@ -18,26 +20,20 @@ VulkanCommandPool::~VulkanCommandPool() {
   std::cout << "VulkanCommandPool instance destroyed\n";
 }
 
-void VulkanCommandPool::Initialize(VulkanContext& vulkan_context,
-                                   VulkanDevice& vulkan_device) {
-  vulkan_context_ = &vulkan_context;
-  vulkan_device_ = &vulkan_device;
-
-  CreateCommandPool();
-}
+void VulkanCommandPool::Initialize() { CreateCommandPool(); }
 
 void VulkanCommandPool::Shutdown() const noexcept {
-  if (vulkan_context_ == nullptr || vulkan_context_->device == nullptr) {
-    std::cout << "VulkanCommandPool: Vulkan context or device is null; no need "
+  if (vulkan_context_.device == nullptr) {
+    std::cout << "VulkanCommandPool: Vulkan device is null; no need "
                  "to cleanup command pool\n";
     std::cout << "VulkanCommandPool: shutdown complete\n";
     return;
   }
 
-  if (vulkan_context_->command_pool != VK_NULL_HANDLE) {
-    vkDestroyCommandPool(vulkan_context_->device, vulkan_context_->command_pool,
+  if (vulkan_context_.command_pool != VK_NULL_HANDLE) {
+    vkDestroyCommandPool(vulkan_context_.device, vulkan_context_.command_pool,
                          nullptr);
-    vulkan_context_->command_pool = VK_NULL_HANDLE;
+    vulkan_context_.command_pool = VK_NULL_HANDLE;
     std::cout << "VulkanCommandPool: command_pool destroyed\n";
   } else {
     std::cout << "VulkanCommandPool: command_pool is null; no "
@@ -49,7 +45,7 @@ void VulkanCommandPool::Shutdown() const noexcept {
 
 void VulkanCommandPool::CreateCommandPool() const {
   QueueFamilyIndices queueFamilyIndices =
-      vulkan_device_->findQueueFamilies(vulkan_context_->physical_device);
+      vulkan_device_.findQueueFamilies(vulkan_context_.physical_device);
 
   if (!queueFamilyIndices.graphicsFamily.has_value()) {
     throw std::runtime_error(
@@ -61,8 +57,8 @@ void VulkanCommandPool::CreateCommandPool() const {
   poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
   poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
 
-  if (vkCreateCommandPool(vulkan_context_->device, &poolInfo, nullptr,
-                          &vulkan_context_->command_pool) != VK_SUCCESS) {
+  if (vkCreateCommandPool(vulkan_context_.device, &poolInfo, nullptr,
+                          &vulkan_context_.command_pool) != VK_SUCCESS) {
     throw std::runtime_error("failed to create graphics command pool!");
   }
 }

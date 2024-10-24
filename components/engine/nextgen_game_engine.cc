@@ -1,10 +1,10 @@
 #include "nextgen_game_engine.h"
 
-#include <chrono>
+// #include <chrono>
 #include <cstdlib>
 #include <iostream>
 
-#include "oneapi/tbb/task_group.h"
+// #include "oneapi/tbb/task_group.h"
 
 namespace nextgen::engine {
 
@@ -75,8 +75,8 @@ void NextGenEngine::Initialize(ComponentConfig component_config) {
   // rendering_engine_.apis_.vulkan_rendering_api.vulkan_config_.device_id = 5;
   // rendering_engine_.apis_.vulkan_rendering_api.vulkan_config_.height = 3;
   std::cout << "Device id="
-            << rendering_engine_.apis_.vulkan_rendering_api.m_vulkan_device
-                   .m_vulkan_config->device_id
+            << rendering_engine_.apis_.vulkan_rendering_api.vulkan_device_
+                   .m_vulkan_config.device_id
             << "\n";
   initialized = true;  // Set flag to indicate successful initialization
   std::cout << "Initialization complete.\n";

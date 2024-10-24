@@ -11,7 +11,8 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-VulkanCommandBuffers::VulkanCommandBuffers() {
+VulkanCommandBuffers::VulkanCommandBuffers(VulkanContext& vulkan_context)
+    : vulkan_context_(vulkan_context) {
   std::cout << "VulkanCommandBuffers object instantiated\n";
 }
 
@@ -19,11 +20,7 @@ VulkanCommandBuffers::~VulkanCommandBuffers() {
   std::cout << "VulkanCommandBuffers instance destroyed\n";
 }
 
-void VulkanCommandBuffers::Initialize(VulkanContext& vulkan_context) {
-  vulkan_context_ = &vulkan_context;
-  // TODO(artem): try to do it here
-  // CreateCommandBuffers();
-}
+void VulkanCommandBuffers::Initialize() const { CreateCommandBuffers(); }
 
 void VulkanCommandBuffers::Shutdown() noexcept {
   std::cout << "VulkanCommandBuffers: shutdown complete\n";
@@ -33,11 +30,11 @@ VkCommandBuffer VulkanCommandBuffers::BeginSingleTimeCommands() const {
   VkCommandBufferAllocateInfo allocInfo{};
   allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
   allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  allocInfo.commandPool = vulkan_context_->command_pool;
+  allocInfo.commandPool = vulkan_context_.command_pool;
   allocInfo.commandBufferCount = 1;
 
   VkCommandBuffer commandBuffer{};
-  vkAllocateCommandBuffers(vulkan_context_->device, &allocInfo, &commandBuffer);
+  vkAllocateCommandBuffers(vulkan_context_.device, &allocInfo, &commandBuffer);
 
   VkCommandBufferBeginInfo beginInfo{};
   beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -57,26 +54,25 @@ void VulkanCommandBuffers::EndSingleTimeCommands(
   submitInfo.commandBufferCount = 1;
   submitInfo.pCommandBuffers = &commandBuffer;
 
-  vkQueueSubmit(vulkan_context_->graphics_queue, 1, &submitInfo,
-                VK_NULL_HANDLE);
-  vkQueueWaitIdle(vulkan_context_->graphics_queue);
+  vkQueueSubmit(vulkan_context_.graphics_queue, 1, &submitInfo, VK_NULL_HANDLE);
+  vkQueueWaitIdle(vulkan_context_.graphics_queue);
 
-  vkFreeCommandBuffers(vulkan_context_->device, vulkan_context_->command_pool,
-                       1, &commandBuffer);
+  vkFreeCommandBuffers(vulkan_context_.device, vulkan_context_.command_pool, 1,
+                       &commandBuffer);
 }
 
 void VulkanCommandBuffers::CreateCommandBuffers() const {
-  vulkan_context_->command_buffers.resize(MAX_FRAMES_IN_FLIGHT);
+  vulkan_context_.command_buffers.resize(MAX_FRAMES_IN_FLIGHT);
 
   VkCommandBufferAllocateInfo allocInfo{};
   allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-  allocInfo.commandPool = vulkan_context_->command_pool;
+  allocInfo.commandPool = vulkan_context_.command_pool;
   allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
   allocInfo.commandBufferCount =
-      static_cast<uint32_t>(vulkan_context_->command_buffers.size());
+      static_cast<uint32_t>(vulkan_context_.command_buffers.size());
 
-  if (vkAllocateCommandBuffers(vulkan_context_->device, &allocInfo,
-                               vulkan_context_->command_buffers.data()) !=
+  if (vkAllocateCommandBuffers(vulkan_context_.device, &allocInfo,
+                               vulkan_context_.command_buffers.data()) !=
       VK_SUCCESS) {
     throw std::runtime_error("failed to allocate command buffers!");
   }

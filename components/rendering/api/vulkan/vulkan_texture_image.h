@@ -6,20 +6,21 @@
 #include "components/rendering/api/vulkan/vulkan_context.h"
 #include "components/rendering/api/vulkan/vulkan_device.hh"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanTextureImage {
-  VulkanContext* vulkan_context_{};
-  VulkanDevice* vulkan_device_{};
-  VulkanCommandBuffers* vulkan_command_buffers_{};
-  VulkanBuffer* vulkan_buffer_{};
+  VulkanContext& vulkan_context_;
+  VulkanDevice& vulkan_device_;
+  VulkanCommandBuffers& vulkan_command_buffers_;
+  VulkanBuffer& vulkan_buffer_;
 
-  VulkanTextureImage();
+  explicit VulkanTextureImage(VulkanContext& vulkan_context,
+                              VulkanDevice& vulkan_device,
+                              VulkanCommandBuffers& vulkan_command_buffers,
+                              VulkanBuffer& vulkan_buffer);
 
-  void Initialize(VulkanContext& vulkan_context, VulkanDevice& vulkan_device,
-                  VulkanCommandBuffers& vulkan_command_buffers,
-                  VulkanBuffer& vulkan_buffer);
+  void Initialize();
   void Shutdown() const noexcept;
 
   ~VulkanTextureImage();
@@ -28,7 +29,7 @@ struct VulkanTextureImage {
   VulkanTextureImage& operator=(const VulkanTextureImage&) = delete;
   VulkanTextureImage(const VulkanTextureImage&) = delete;
   // move
-  VulkanTextureImage& operator=(VulkanTextureImage&&) = default;
+  VulkanTextureImage& operator=(VulkanTextureImage&&) = delete;
   VulkanTextureImage(VulkanTextureImage&&) = default;
 
   struct ImageUsage {
@@ -55,6 +56,6 @@ struct VulkanTextureImage {
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

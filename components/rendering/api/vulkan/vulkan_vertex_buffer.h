@@ -4,16 +4,17 @@
 #include "components/rendering/api/vulkan/vulkan_buffer.h"
 #include "components/rendering/api/vulkan/vulkan_context.h"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanVertexBuffer {
-  VulkanContext* vulkan_context_{};
-  VulkanBuffer* vulkan_buffer_{};
+  VulkanContext& vulkan_context_;
+  VulkanBuffer& vulkan_buffer_;
 
-  VulkanVertexBuffer();
+  explicit VulkanVertexBuffer(VulkanContext& vulkan_context,
+                              VulkanBuffer& vulkan_buffer);
 
-  void Initialize(VulkanContext& vulkan_context, VulkanBuffer& vulkan_buffer);
+  void Initialize();
   void Shutdown() const noexcept;
 
   ~VulkanVertexBuffer();
@@ -22,7 +23,7 @@ struct VulkanVertexBuffer {
   VulkanVertexBuffer& operator=(const VulkanVertexBuffer&) = delete;
   VulkanVertexBuffer(const VulkanVertexBuffer&) = delete;
   // move
-  VulkanVertexBuffer& operator=(VulkanVertexBuffer&&) = default;
+  VulkanVertexBuffer& operator=(VulkanVertexBuffer&&) = delete;
   VulkanVertexBuffer(VulkanVertexBuffer&&) = default;
 
  private:
@@ -30,6 +31,6 @@ struct VulkanVertexBuffer {
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

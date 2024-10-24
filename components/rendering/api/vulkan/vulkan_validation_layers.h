@@ -7,8 +7,13 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 struct VulkanValidationLayers {
-  void Initialize(VulkanContext& vulkan_context);
+  VulkanContext& vulkan_context_;
+  VkDebugUtilsMessengerEXT debugMessenger;
+
+  explicit VulkanValidationLayers(VulkanContext& vulkan_context);
+  void Initialize();
 
   void Shutdown() const;
 
@@ -17,11 +22,9 @@ struct VulkanValidationLayers {
   static bool CheckValidationLayerSupport();
   static bool Enabled();
   static const std::vector<const char*>& GetValidationLayers();
-
-  VulkanContext* vulkan_context_;
-  VkDebugUtilsMessengerEXT debugMessenger;
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

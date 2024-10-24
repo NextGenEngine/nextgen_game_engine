@@ -5,16 +5,25 @@
 
 #include "components/rendering/api/vulkan/vulkan_context.h"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanRenderPass {
-  VulkanContext* vulkan_context_{};
+  VulkanContext& vulkan_context_;
 
-  void Initialize(VulkanContext& vulkan_context);
+  explicit VulkanRenderPass(VulkanContext& vulkan_context);
+
+  void Initialize();
   void Shutdown() const noexcept;
 
   ~VulkanRenderPass();
+
+  // copy
+  VulkanRenderPass& operator=(const VulkanRenderPass&) = delete;
+  VulkanRenderPass(const VulkanRenderPass&) = delete;
+  // move
+  VulkanRenderPass& operator=(VulkanRenderPass&&) = delete;
+  VulkanRenderPass(VulkanRenderPass&&) = default;
 
  private:
   void CreateRenderPass();
@@ -25,6 +34,6 @@ struct VulkanRenderPass {
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

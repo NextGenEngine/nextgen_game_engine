@@ -12,7 +12,12 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-VulkanBuffer::VulkanBuffer() {
+VulkanBuffer::VulkanBuffer(VulkanContext& vulkan_context,
+                           VulkanDevice& vulkan_device,
+                           VulkanCommandBuffers& vulkan_command_buffers)
+    : vulkan_context_(vulkan_context),
+      vulkan_device_(vulkan_device),
+      vulkan_command_buffers_(vulkan_command_buffers) {
   std::cout << "VulkanBuffer object instantiated\n";
 }
 
@@ -20,13 +25,7 @@ VulkanBuffer::~VulkanBuffer() {
   std::cout << "VulkanBuffer instance destroyed\n";
 }
 
-void VulkanBuffer::Initialize(VulkanContext& vulkan_context,
-                              VulkanDevice& vulkan_device,
-                              VulkanCommandBuffers& vulkan_command_buffers) {
-  vulkan_context_ = &vulkan_context;
-  vulkan_device_ = &vulkan_device;
-  vulkan_command_buffers_ = &vulkan_command_buffers;
-}
+void VulkanBuffer::Initialize() {}
 
 void VulkanBuffer::Shutdown() noexcept {
   std::cout << "VulkanBuffer: shutdown complete\n";
@@ -42,39 +41,39 @@ void VulkanBuffer::CreateBuffer(VkDeviceSize size, BufferUsage buffer_usage,
   bufferInfo.usage = buffer_usage.flags;
   bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-  if (vkCreateBuffer(vulkan_context_->device, &bufferInfo, nullptr, &buffer) !=
+  if (vkCreateBuffer(vulkan_context_.device, &bufferInfo, nullptr, &buffer) !=
       VK_SUCCESS) {
     throw std::runtime_error("failed to create buffer!");
   }
 
   VkMemoryRequirements memRequirements;
-  vkGetBufferMemoryRequirements(vulkan_context_->device, buffer,
+  vkGetBufferMemoryRequirements(vulkan_context_.device, buffer,
                                 &memRequirements);
 
   VkMemoryAllocateInfo allocInfo{};
   allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
   allocInfo.allocationSize = memRequirements.size;
-  allocInfo.memoryTypeIndex = vulkan_device_->FindMemoryType(
+  allocInfo.memoryTypeIndex = vulkan_device_.FindMemoryType(
       memRequirements.memoryTypeBits, memory_properties.flags);
 
-  if (vkAllocateMemory(vulkan_context_->device, &allocInfo, nullptr,
+  if (vkAllocateMemory(vulkan_context_.device, &allocInfo, nullptr,
                        &bufferMemory) != VK_SUCCESS) {
     throw std::runtime_error("failed to allocate buffer memory!");
   }
 
-  vkBindBufferMemory(vulkan_context_->device, buffer, bufferMemory, 0);
+  vkBindBufferMemory(vulkan_context_.device, buffer, bufferMemory, 0);
 }
 
 void VulkanBuffer::CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer,
                               VkDeviceSize size) const {
   VkCommandBuffer commandBuffer =
-      vulkan_command_buffers_->BeginSingleTimeCommands();
+      vulkan_command_buffers_.BeginSingleTimeCommands();
 
   VkBufferCopy copyRegion{};
   copyRegion.size = size;
   vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
 
-  vulkan_command_buffers_->EndSingleTimeCommands(commandBuffer);
+  vulkan_command_buffers_.EndSingleTimeCommands(commandBuffer);
 }
 
 }  // namespace nextgen::engine::rendering::vulkan

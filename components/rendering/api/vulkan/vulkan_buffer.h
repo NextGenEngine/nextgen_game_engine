@@ -5,13 +5,13 @@
 #include "components/rendering/api/vulkan/vulkan_context.h"
 #include "components/rendering/api/vulkan/vulkan_device.hh"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanBuffer {
-  VulkanContext* vulkan_context_{};
-  VulkanDevice* vulkan_device_{};
-  VulkanCommandBuffers* vulkan_command_buffers_{};
+  VulkanContext& vulkan_context_;
+  VulkanDevice& vulkan_device_;
+  VulkanCommandBuffers& vulkan_command_buffers_;
 
   struct BufferUsage {
     VkBufferUsageFlags flags;
@@ -20,10 +20,10 @@ struct VulkanBuffer {
     VkMemoryPropertyFlags flags;
   };
 
-  VulkanBuffer();
+  VulkanBuffer(VulkanContext& vulkan_context, VulkanDevice& vulkan_device,
+               VulkanCommandBuffers& vulkan_command_buffers);
 
-  void Initialize(VulkanContext& vulkan_context, VulkanDevice& vulkan_device,
-                  VulkanCommandBuffers& vulkan_command_buffers);
+  void Initialize();
   static void Shutdown() noexcept;
 
   void CreateBuffer(VkDeviceSize size, BufferUsage buffer_usage,
@@ -38,13 +38,13 @@ struct VulkanBuffer {
   VulkanBuffer& operator=(const VulkanBuffer&) = delete;
   VulkanBuffer(const VulkanBuffer&) = delete;
   // move
-  VulkanBuffer& operator=(VulkanBuffer&&) = default;
+  VulkanBuffer& operator=(VulkanBuffer&&) = delete;
   VulkanBuffer(VulkanBuffer&&) = default;
 
  private:
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

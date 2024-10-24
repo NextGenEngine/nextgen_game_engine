@@ -1,19 +1,19 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_VULKAN_DEPTH_RESOURCES_H
 #define NEXTGEN_ENGINE_RENDERING_VULKAN_DEPTH_RESOURCES_H
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 #include "components/rendering/api/vulkan/vulkan_context.h"
 #include "components/rendering/api/vulkan/vulkan_device.hh"
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanDepthResources {
-  VulkanContext* vulkan_context_{};
-  VulkanDevice* vulkan_device_{};
+  VulkanContext& vulkan_context_;
+  VulkanDevice& vulkan_device_;
 
-  VulkanDepthResources();
-
-  void Initialize(VulkanContext& vulkan_context, VulkanDevice& vulkan_device);
+  explicit VulkanDepthResources(VulkanContext& vulkan_context,
+                                VulkanDevice& vulkan_device);
+  void Initialize();
   void Shutdown() const noexcept;
 
   ~VulkanDepthResources();
@@ -22,7 +22,7 @@ struct VulkanDepthResources {
   VulkanDepthResources& operator=(const VulkanDepthResources&) = delete;
   VulkanDepthResources(const VulkanDepthResources&) = delete;
   // move
-  VulkanDepthResources& operator=(VulkanDepthResources&&) = default;
+  VulkanDepthResources& operator=(VulkanDepthResources&&) = delete;
   VulkanDepthResources(VulkanDepthResources&&) = default;
 
  private:
@@ -34,6 +34,6 @@ struct VulkanDepthResources {
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

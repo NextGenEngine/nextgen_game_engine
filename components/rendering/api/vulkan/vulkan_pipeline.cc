@@ -37,7 +37,8 @@ std::vector<char> readFile(const std::string& filename) {
 
 namespace nextgen::engine::rendering::vulkan {
 
-VulkanGraphicsPipeline::VulkanGraphicsPipeline() {
+VulkanGraphicsPipeline::VulkanGraphicsPipeline(VulkanContext& vulkan_context)
+    : vulkan_context_(vulkan_context) {
   std::cout << "VulkanGraphicsPipeline object instantiated\n";
 }
 
@@ -45,30 +46,27 @@ VulkanGraphicsPipeline::~VulkanGraphicsPipeline() {
   std::cout << "VulkanGraphicsPipeline instance destroyed\n";
 }
 
-void VulkanGraphicsPipeline::Initialize(VulkanContext& vulkan_context) {
-  vulkan_context_ = &vulkan_context;
-  CreateGraphicsPipeline();
-}
+void VulkanGraphicsPipeline::Initialize() { CreateGraphicsPipeline(); }
 
 void VulkanGraphicsPipeline::Shutdown() const noexcept {
-  if (vulkan_context_ == nullptr || vulkan_context_->device == VK_NULL_HANDLE) {
+  if (vulkan_context_.device == VK_NULL_HANDLE) {
     std::cout << "VulkanGraphicsPipeline: Vulkan device does not exist. Cannot "
                  "destroy graphics pipeline and layout\n";
   }
 
-  if (vulkan_context_->graphics_pipeline != VK_NULL_HANDLE) {
-    vkDestroyPipeline(vulkan_context_->device,
-                      vulkan_context_->graphics_pipeline, nullptr);
-    vulkan_context_->graphics_pipeline = VK_NULL_HANDLE;
+  if (vulkan_context_.graphics_pipeline != VK_NULL_HANDLE) {
+    vkDestroyPipeline(vulkan_context_.device, vulkan_context_.graphics_pipeline,
+                      nullptr);
+    vulkan_context_.graphics_pipeline = VK_NULL_HANDLE;
     std::cout << "VulkanGraphicsPipeline: graphics_pipeline destroyed\n";
   } else {
     std::cout << "VulkanGraphicsPipeline: graphics_pipeline does not exist. "
                  "Cannot destroy it\n";
   }
-  if (vulkan_context_->pipeline_layout != VK_NULL_HANDLE) {
-    vkDestroyPipelineLayout(vulkan_context_->device,
-                            vulkan_context_->pipeline_layout, nullptr);
-    vulkan_context_->pipeline_layout = VK_NULL_HANDLE;
+  if (vulkan_context_.pipeline_layout != VK_NULL_HANDLE) {
+    vkDestroyPipelineLayout(vulkan_context_.device,
+                            vulkan_context_.pipeline_layout, nullptr);
+    vulkan_context_.pipeline_layout = VK_NULL_HANDLE;
     std::cout << "VulkanGraphicsPipeline: pipeline_layout destroyed\n";
   } else {
     std::cout << "VulkanGraphicsPipeline: pipeline_layout does not exist. "
@@ -179,11 +177,11 @@ void VulkanGraphicsPipeline::CreateGraphicsPipeline() {
   VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
   pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
   pipelineLayoutInfo.setLayoutCount = 1;
-  pipelineLayoutInfo.pSetLayouts = &vulkan_context_->descriptor_set_layout;
+  pipelineLayoutInfo.pSetLayouts = &vulkan_context_.descriptor_set_layout;
 
-  if (vkCreatePipelineLayout(vulkan_context_->device, &pipelineLayoutInfo,
+  if (vkCreatePipelineLayout(vulkan_context_.device, &pipelineLayoutInfo,
                              nullptr,
-                             &vulkan_context_->pipeline_layout) != VK_SUCCESS) {
+                             &vulkan_context_.pipeline_layout) != VK_SUCCESS) {
     throw std::runtime_error("failed to create pipeline layout!");
   }
 
@@ -199,19 +197,19 @@ void VulkanGraphicsPipeline::CreateGraphicsPipeline() {
   pipelineInfo.pDepthStencilState = &depthStencil;
   pipelineInfo.pColorBlendState = &colorBlending;
   pipelineInfo.pDynamicState = &dynamicState;
-  pipelineInfo.layout = vulkan_context_->pipeline_layout;
-  pipelineInfo.renderPass = vulkan_context_->render_pass;
+  pipelineInfo.layout = vulkan_context_.pipeline_layout;
+  pipelineInfo.renderPass = vulkan_context_.render_pass;
   pipelineInfo.subpass = 0;
   pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
   if (vkCreateGraphicsPipelines(
-          vulkan_context_->device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
-          &vulkan_context_->graphics_pipeline) != VK_SUCCESS) {
+          vulkan_context_.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr,
+          &vulkan_context_.graphics_pipeline) != VK_SUCCESS) {
     throw std::runtime_error("failed to create graphics pipeline!");
   }
 
-  vkDestroyShaderModule(vulkan_context_->device, fragShaderModule, nullptr);
-  vkDestroyShaderModule(vulkan_context_->device, vertShaderModule, nullptr);
+  vkDestroyShaderModule(vulkan_context_.device, fragShaderModule, nullptr);
+  vkDestroyShaderModule(vulkan_context_.device, vertShaderModule, nullptr);
 }
 
 VkShaderModule VulkanGraphicsPipeline::CreateShaderModule(
@@ -223,7 +221,7 @@ VkShaderModule VulkanGraphicsPipeline::CreateShaderModule(
   createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
   VkShaderModule shaderModule = VK_NULL_HANDLE;
-  if (vkCreateShaderModule(vulkan_context_->device, &createInfo, nullptr,
+  if (vkCreateShaderModule(vulkan_context_.device, &createInfo, nullptr,
                            &shaderModule) != VK_SUCCESS) {
     throw std::runtime_error("failed to create shader module!");
   }

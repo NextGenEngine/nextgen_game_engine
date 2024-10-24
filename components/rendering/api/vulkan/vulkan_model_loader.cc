@@ -17,7 +17,8 @@ namespace nextgen::engine::rendering::vulkan {
 
 const std::string MODEL_PATH = "data/models/viking_room.obj";
 
-VulkanModelLoader::VulkanModelLoader() {
+VulkanModelLoader::VulkanModelLoader(VulkanContext& vulkan_context)
+    : vulkan_context_(vulkan_context) {
   std::cout << "VulkanModelLoader object instantiated\n";
 }
 
@@ -25,14 +26,11 @@ VulkanModelLoader::~VulkanModelLoader() {
   std::cout << "VulkanModelLoader instance destroyed\n";
 }
 
-void VulkanModelLoader::Initialize(VulkanContext& vulkan_context) {
-  vulkan_context_ = &vulkan_context;
-  LoadModel();
-}
+void VulkanModelLoader::Initialize() { LoadModel(); }
 
 void VulkanModelLoader::Shutdown() const noexcept {
-  vulkan_context_->vertices.clear();
-  vulkan_context_->indices.clear();
+  vulkan_context_.vertices.clear();
+  vulkan_context_.indices.clear();
   std::cout << "VulkanModelLoader: shutdown complete\n";
 }
 
@@ -66,11 +64,11 @@ void VulkanModelLoader::LoadModel() const {
 
       if (!uniqueVertices.contains(vertex)) {
         uniqueVertices[vertex] =
-            static_cast<uint32_t>(vulkan_context_->vertices.size());
-        vulkan_context_->vertices.push_back(vertex);
+            static_cast<uint32_t>(vulkan_context_.vertices.size());
+        vulkan_context_.vertices.push_back(vertex);
       }
 
-      vulkan_context_->indices.push_back(uniqueVertices[vertex]);
+      vulkan_context_.indices.push_back(uniqueVertices[vertex]);
     }
   }
 }

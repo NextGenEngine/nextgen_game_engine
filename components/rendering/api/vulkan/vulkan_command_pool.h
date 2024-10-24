@@ -6,16 +6,17 @@
 #include "components/rendering/api/vulkan/vulkan_device.hh"
 #include "vulkan_context.h"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanCommandPool {
-  VulkanContext* vulkan_context_{};
-  VulkanDevice* vulkan_device_{};
+  VulkanContext& vulkan_context_;
+  VulkanDevice& vulkan_device_;
 
-  VulkanCommandPool();
+  explicit VulkanCommandPool(VulkanContext& vulkan_context,
+                             VulkanDevice& vulkan_device);
 
-  void Initialize(VulkanContext& vulkan_context, VulkanDevice& vulkan_device);
+  void Initialize();
   void Shutdown() const noexcept;
 
   ~VulkanCommandPool();
@@ -24,13 +25,13 @@ struct VulkanCommandPool {
   VulkanCommandPool& operator=(const VulkanCommandPool&) = delete;
   VulkanCommandPool(const VulkanCommandPool&) = delete;
   // move
-  VulkanCommandPool& operator=(VulkanCommandPool&&) = default;
+  VulkanCommandPool& operator=(VulkanCommandPool&&) = delete;
   VulkanCommandPool(VulkanCommandPool&&) = default;
 
  private:
   void CreateCommandPool() const;
 };
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 }  // namespace nextgen::engine::rendering::vulkan
 

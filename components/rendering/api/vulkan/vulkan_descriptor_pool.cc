@@ -12,7 +12,8 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-VulkanDescriptorPool::VulkanDescriptorPool() {
+VulkanDescriptorPool::VulkanDescriptorPool(VulkanContext& vulkan_context)
+    : vulkan_context_(vulkan_context) {
   std::cout << "VulkanDescriptorPool object instantiated\n";
 }
 
@@ -20,14 +21,10 @@ VulkanDescriptorPool::~VulkanDescriptorPool() {
   std::cout << "VulkanDescriptorPool instance destroyed\n";
 }
 
-void VulkanDescriptorPool::Initialize(VulkanContext& vulkan_context) {
-  vulkan_context_ = &vulkan_context;
-
-  CreateDescriptorPool();
-}
+void VulkanDescriptorPool::Initialize() { CreateDescriptorPool(); }
 
 void VulkanDescriptorPool::Shutdown() const noexcept {
-  if (vulkan_context_ == nullptr || vulkan_context_->device == nullptr) {
+  if (vulkan_context_.device == nullptr) {
     std::cout
         << "VulkanDescriptorPool: Vulkan context or device is null; no need "
            "to cleanup descriptor pool\n";
@@ -35,10 +32,10 @@ void VulkanDescriptorPool::Shutdown() const noexcept {
     return;
   }
 
-  if (vulkan_context_->descriptor_pool != VK_NULL_HANDLE) {
-    vkDestroyDescriptorPool(vulkan_context_->device,
-                            vulkan_context_->descriptor_pool, nullptr);
-    vulkan_context_->descriptor_pool = VK_NULL_HANDLE;
+  if (vulkan_context_.descriptor_pool != VK_NULL_HANDLE) {
+    vkDestroyDescriptorPool(vulkan_context_.device,
+                            vulkan_context_.descriptor_pool, nullptr);
+    vulkan_context_.descriptor_pool = VK_NULL_HANDLE;
     std::cout << "VulkanDescriptorPool: descriptor_pool destroyed\n";
   } else {
     std::cout << "VulkanDescriptorPool: descriptor_pool is null; no "
@@ -61,8 +58,8 @@ void VulkanDescriptorPool::CreateDescriptorPool() const {
   poolInfo.pPoolSizes = poolSizes.data();
   poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
 
-  if (vkCreateDescriptorPool(vulkan_context_->device, &poolInfo, nullptr,
-                             &vulkan_context_->descriptor_pool) != VK_SUCCESS) {
+  if (vkCreateDescriptorPool(vulkan_context_.device, &poolInfo, nullptr,
+                             &vulkan_context_.descriptor_pool) != VK_SUCCESS) {
     throw std::runtime_error("failed to create descriptor pool!");
   }
 }

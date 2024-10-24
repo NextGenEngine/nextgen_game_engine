@@ -1,6 +1,13 @@
 #include "vulkan_rendering.h"
 
+#include <array>
+#include <cstdint>
 #include <cstring>
+#include <ext/matrix_clip_space.hpp>
+#include <ext/matrix_transform.hpp>
+#include <iostream>
+#include <stdexcept>
+#include <trigonometric.hpp>
 
 #include "components/rendering/api/vulkan/vulkan_buffer.h"
 #include "components/rendering/api/vulkan/vulkan_constants.h"
@@ -10,67 +17,107 @@
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan_core.h>
 
+#include <chrono>
 #include <vector>
 
 namespace nextgen::engine::rendering::vulkan {
 
+VulkanRenderingApi::VulkanRenderingApi()
+    : vulkan_context_(),
+      vulkan_instance_(vulkan_context_),
+      vulkan_validation_layers_(vulkan_context_),
+      vulkan_device_(vulkan_config_, vulkan_context_),
+      vulkan_swap_chain_(vulkan_context_, vulkan_device_),
+      vulkan_descriptor_set_layout_(vulkan_context_),
+      vulkan_buffer_(vulkan_context_, vulkan_device_, vulkan_command_buffers_),
+      vulkan_command_pool_(vulkan_context_, vulkan_device_),
+      vulkan_frame_buffers_(vulkan_context_),
+      vulkan_texture_image_(vulkan_context_, vulkan_device_,
+                            vulkan_command_buffers_, vulkan_buffer_),
+      graphics_pipeline_(vulkan_context_),
+      vulkan_render_pass_(vulkan_context_),
+      vulkan_depth_resources_(vulkan_context_, vulkan_device_),
+      vulkan_command_buffers_(vulkan_context_),
+      vulkan_model_loader_(vulkan_context_),
+      vulkan_vertex_buffer_(vulkan_context_, vulkan_buffer_),
+      vulkan_index_buffer_(vulkan_context_, vulkan_buffer_),
+      vulkan_uniform_buffer_(vulkan_context_, vulkan_buffer_),
+      vulkan_descriptor_pool_(vulkan_context_),
+      vulkan_descriptor_set_(vulkan_context_),
+      vulkan_sync_object_(vulkan_context_) {
+  std::cout << "VulkanRenderingApi object created\n";
+}
+
 void VulkanRenderingApi::Initialize() {
-  vulkan_instance_.Initialize(vulkan_context_);
-  vulkan_validation_layers_.Initialize(vulkan_context_);
-  m_vulkan_device.Initialize(vulkan_context_, vulkan_config_);
-  m_vulkan_swap_chain.Initialize(vulkan_context_, m_vulkan_device);
-  vulkan_command_buffers_.Initialize(vulkan_context_);
-  vulkan_buffer_.Initialize(vulkan_context_, m_vulkan_device,
-                            vulkan_command_buffers_);
-  vulkan_render_pass_.Initialize(vulkan_context_);
-  vulkan_descriptor_set_layout_.Initialize(vulkan_context_);
-  graphics_pipeline_.Initialize(vulkan_context_);
-  vulkan_command_pool_.Initialize(vulkan_context_, m_vulkan_device);
-  // vulkan_depth_resources_.Initialize(vulkan_context_, m_vulkan_device);
-  // vulkan_frame_buffers_.Initialize(vulkan_context_);
-  vulkan_texture_image_.Initialize(vulkan_context_, m_vulkan_device,
-                                   vulkan_command_buffers_, vulkan_buffer_);
-  vulkan_model_loader_.Initialize(vulkan_context_);
-  vulkan_vertex_buffer_.Initialize(vulkan_context_, vulkan_buffer_);
-  vulkan_index_buffer_.Initialize(vulkan_context_, vulkan_buffer_);
-  vulkan_uniform_buffer_.Initialize(vulkan_context_, vulkan_buffer_);
-  vulkan_descriptor_pool_.Initialize(vulkan_context_);
-  vulkan_descriptor_set_.Initialize(vulkan_context_);
-  vulkan_command_buffers_.CreateCommandBuffers();
-  vulkan_sync_object_.Initialize(vulkan_context_);
+  // 1. Vulkan Instance and Validation Layers
+  vulkan_instance_.Initialize();
+  vulkan_validation_layers_.Initialize();
+  // 2. Logical Device
+  vulkan_device_.Initialize();
+  // 3. Swap Chain
+  vulkan_swap_chain_.Initialize();
+  // 4. Render Pass (Before Depth Resources)
+  vulkan_render_pass_.Initialize();
+  // 5. Depth Resources
+  vulkan_depth_resources_.Initialize();
+  // 6. Framebuffers
+  vulkan_frame_buffers_.Initialize();
+  // 7. Buffers
+  vulkan_buffer_.Initialize();
+  // 8. Descriptor Set Layout
+  vulkan_descriptor_set_layout_.Initialize();
+  // 9. Graphics Pipeline
+  graphics_pipeline_.Initialize();
+  // 10. Command Pool
+  vulkan_command_pool_.Initialize();
+  // 11. Texture Image and Model Loader
+  vulkan_texture_image_.Initialize();
+  vulkan_model_loader_.Initialize();
+  // 12. Vertex, Index, and Uniform Buffers
+  vulkan_vertex_buffer_.Initialize();
+  vulkan_index_buffer_.Initialize();
+  vulkan_uniform_buffer_.Initialize();
+  // 13. Descriptor Pool and Descriptor Sets
+  vulkan_descriptor_pool_.Initialize();
+  vulkan_descriptor_set_.Initialize();
+  // 14. Command Buffers
+  vulkan_command_buffers_.Initialize();
+  // 15. Synchronization Objects
+  vulkan_sync_object_.Initialize();
 }
 
 void VulkanRenderingApi::Shutdown() {
-  // vulkan_render_pass_.Shutdown();
+  // 1. Synchronization Objects
   vulkan_sync_object_.Shutdown();
+  // 2. Command Buffers
   nextgen::engine::rendering::vulkan::VulkanCommandBuffers::Shutdown();
+  // 3. Descriptor Sets and Pool
   vulkan_descriptor_set_.Shutdown();
   vulkan_descriptor_pool_.Shutdown();
+  // 4. Buffers
   vulkan_uniform_buffer_.Shutdown();
   vulkan_index_buffer_.Shutdown();
   vulkan_vertex_buffer_.Shutdown();
+  // 5. Texture and Model Loading
   vulkan_model_loader_.Shutdown();
   vulkan_texture_image_.Shutdown();
-  // vulkan_frame_buffers_.Shutdown();
-  // vulkan_depth_resources_.Shutdown();
+  // 6. Command Pool
   vulkan_command_pool_.Shutdown();
+  // 7. Graphics Pipeline and Descriptor Set Layout
   graphics_pipeline_.Shutdown();
   vulkan_descriptor_set_layout_.Shutdown();
-  vulkan_render_pass_.Shutdown();
+  // 8. Framebuffers and Depth Resources
   nextgen::engine::rendering::vulkan::VulkanBuffer::Shutdown();
-  nextgen::engine::rendering::vulkan::VulkanCommandBuffers::Shutdown();
-  m_vulkan_swap_chain.Shutdown();
-  m_vulkan_device.Shutdown();
+  vulkan_frame_buffers_.Shutdown();
+  vulkan_depth_resources_.Shutdown();
+  // 9. Render Pass and Swap Chain
+  vulkan_render_pass_.Shutdown();
+  vulkan_swap_chain_.Shutdown();
+  // 10. Logical Device
+  vulkan_device_.Shutdown();
+  // 11. Validation Layers and Instance
   vulkan_validation_layers_.Shutdown();
   vulkan_instance_.Shutdown();
-  // graphics_pipeline_.Shutdown();
-  // vulkan_frame_buffers_.Shutdown();
-  // vulkan_command_pool_.Shutdown();
-  // nextgen::engine::rendering::vulkan::VulkanBuffer::Shutdown();
-  // m_vulkan_swap_chain.Shutdown();
-  // m_vulkan_device.Shutdown();
-  // vulkan_validation_layers_.Shutdown();
-  // vulkan_instance_.Shutdown();
 }
 
 void VulkanRenderingApi::ApplyConfiguration(const void* config) {
@@ -136,9 +183,10 @@ void VulkanRenderingApi::drawFrame() {
       VK_NULL_HANDLE, &imageIndex);
 
   if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-    recreateSwapChain();
+    RecreateSwapChain();
     return;
-  } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+  }
+  if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
     throw std::runtime_error("failed to acquire swap chain image!");
   }
 
@@ -158,24 +206,24 @@ void VulkanRenderingApi::drawFrame() {
   VkSubmitInfo submitInfo{};
   submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-  VkSemaphore waitSemaphores[] = {
+  std::array<VkSemaphore, 1> waitSemaphores = {
       vulkan_context_
           .image_available_semaphores[vulkan_context_.current_frame]};
-  VkPipelineStageFlags waitStages[] = {
+  std::array<VkPipelineStageFlags, 1> waitStages = {
       VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
   submitInfo.waitSemaphoreCount = 1;
-  submitInfo.pWaitSemaphores = waitSemaphores;
-  submitInfo.pWaitDstStageMask = waitStages;
+  submitInfo.pWaitSemaphores = waitSemaphores.data();
+  submitInfo.pWaitDstStageMask = waitStages.data();
 
   submitInfo.commandBufferCount = 1;
   submitInfo.pCommandBuffers =
       &vulkan_context_.command_buffers[vulkan_context_.current_frame];
 
-  VkSemaphore signalSemaphores[] = {
+  std::array<VkSemaphore, 1> signalSemaphores = {
       vulkan_context_
           .render_finished_semaphores[vulkan_context_.current_frame]};
   submitInfo.signalSemaphoreCount = 1;
-  submitInfo.pSignalSemaphores = signalSemaphores;
+  submitInfo.pSignalSemaphores = signalSemaphores.data();
 
   if (vkQueueSubmit(
           vulkan_context_.graphics_queue, 1, &submitInfo,
@@ -188,11 +236,11 @@ void VulkanRenderingApi::drawFrame() {
   presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
   presentInfo.waitSemaphoreCount = 1;
-  presentInfo.pWaitSemaphores = signalSemaphores;
+  presentInfo.pWaitSemaphores = signalSemaphores.data();
 
-  VkSwapchainKHR swapChains[] = {vulkan_context_.swapchain};
+  std::array<VkSwapchainKHR, 1> swapChains = {vulkan_context_.swapchain};
   presentInfo.swapchainCount = 1;
-  presentInfo.pSwapchains = swapChains;
+  presentInfo.pSwapchains = swapChains.data();
 
   presentInfo.pImageIndices = &imageIndex;
 
@@ -201,7 +249,7 @@ void VulkanRenderingApi::drawFrame() {
   if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ||
       vulkan_context_.framebuffer_resized) {
     vulkan_context_.framebuffer_resized = false;
-    recreateSwapChain();
+    RecreateSwapChain();
   } else if (result != VK_SUCCESS) {
     throw std::runtime_error("failed to present swap chain image!");
   }
@@ -214,9 +262,9 @@ void VulkanRenderingApi::updateUniformBuffer(uint32_t currentImage) {
   static auto startTime = std::chrono::high_resolution_clock::now();
 
   auto currentTime = std::chrono::high_resolution_clock::now();
-  float time = std::chrono::duration<float, std::chrono::seconds::period>(
-                   currentTime - startTime)
-                   .count();
+  float const time = std::chrono::duration<float, std::chrono::seconds::period>(
+                         currentTime - startTime)
+                         .count();
 
   VulkanUniformBuffer::UniformBufferObject ubo{};
   ubo.model = glm::rotate(glm::mat4(1.0F), time * glm::radians(90.0F),
@@ -235,8 +283,9 @@ void VulkanRenderingApi::updateUniformBuffer(uint32_t currentImage) {
          sizeof(ubo));
 }
 
-void VulkanRenderingApi::recreateSwapChain() {
-  int width = 0, height = 0;
+void VulkanRenderingApi::RecreateSwapChain() {
+  int width = 0;
+  int height = 0;
   glfwGetFramebufferSize(vulkan_context_.window, &width, &height);
   while (width == 0 || height == 0) {
     glfwGetFramebufferSize(vulkan_context_.window, &width, &height);
@@ -245,30 +294,17 @@ void VulkanRenderingApi::recreateSwapChain() {
 
   vkDeviceWaitIdle(vulkan_context_.device);
 
-  cleanupSwapChain();
+  CleanupSwapChain();
 
-  m_vulkan_swap_chain.Initialize(vulkan_context_, m_vulkan_device);
-  // vulkan_depth_resources_.Initialize(vulkan_context_, m_vulkan_device);
-  // vulkan_frame_buffers_.Initialize(vulkan_context_);
+  vulkan_swap_chain_.Initialize();
+  vulkan_depth_resources_.Initialize();
+  vulkan_frame_buffers_.Initialize();
 }
 
-void VulkanRenderingApi::cleanupSwapChain() {
-  vkDestroyImageView(vulkan_context_.device, vulkan_context_.depth_image_view,
-                     nullptr);
-  vkDestroyImage(vulkan_context_.device, vulkan_context_.depth_image, nullptr);
-  vkFreeMemory(vulkan_context_.device, vulkan_context_.depth_image_memory,
-               nullptr);
-
-  for (auto framebuffer : vulkan_context_.swap_chain_framebuffers) {
-    vkDestroyFramebuffer(vulkan_context_.device, framebuffer, nullptr);
-  }
-
-  for (auto imageView : vulkan_context_.swap_chain_image_views) {
-    vkDestroyImageView(vulkan_context_.device, imageView, nullptr);
-  }
-
-  vkDestroySwapchainKHR(vulkan_context_.device, vulkan_context_.swapchain,
-                        nullptr);
+void VulkanRenderingApi::CleanupSwapChain() const {
+  vulkan_frame_buffers_.Shutdown();
+  vulkan_depth_resources_.Shutdown();
+  vulkan_swap_chain_.Shutdown();
 }
 
 void VulkanRenderingApi::recordCommandBuffer(VkCommandBuffer commandBuffer,
@@ -285,12 +321,12 @@ void VulkanRenderingApi::recordCommandBuffer(VkCommandBuffer commandBuffer,
   renderPassInfo.renderPass = vulkan_context_.render_pass;
   renderPassInfo.framebuffer =
       vulkan_context_.swap_chain_framebuffers[imageIndex];
-  renderPassInfo.renderArea.offset = {0, 0};
+  renderPassInfo.renderArea.offset = {.x = 0, .y = 0};
   renderPassInfo.renderArea.extent = vulkan_context_.swap_chain_extent;
 
   std::array<VkClearValue, 2> clearValues{};
-  clearValues[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
-  clearValues[1].depthStencil = {1.0f, 0};
+  clearValues[0].color = {{0.0F, 0.0F, 0.0F, 1.0F}};
+  clearValues[1].depthStencil = {.depth = 1.0F, .stencil = 0};
 
   renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
   renderPassInfo.pClearValues = clearValues.data();
@@ -302,22 +338,24 @@ void VulkanRenderingApi::recordCommandBuffer(VkCommandBuffer commandBuffer,
                     vulkan_context_.graphics_pipeline);
 
   VkViewport viewport{};
-  viewport.x = 0.0f;
-  viewport.y = 0.0f;
-  viewport.width = (float)vulkan_context_.swap_chain_extent.width;
-  viewport.height = (float)vulkan_context_.swap_chain_extent.height;
-  viewport.minDepth = 0.0f;
-  viewport.maxDepth = 1.0f;
+  viewport.x = 0.0F;
+  viewport.y = 0.0F;
+  viewport.width = static_cast<float>(vulkan_context_.swap_chain_extent.width);
+  viewport.height =
+      static_cast<float>(vulkan_context_.swap_chain_extent.height);
+  viewport.minDepth = 0.0F;
+  viewport.maxDepth = 1.0F;
   vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
 
   VkRect2D scissor{};
-  scissor.offset = {0, 0};
+  scissor.offset = {.x = 0, .y = 0};
   scissor.extent = vulkan_context_.swap_chain_extent;
   vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-  VkBuffer vertexBuffers[] = {vulkan_context_.vertex_buffer};
-  VkDeviceSize offsets[] = {0};
-  vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+  std::array<VkBuffer, 1> vertexBuffers = {vulkan_context_.vertex_buffer};
+  std::array<VkDeviceSize, 1> offsets = {0};
+  vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers.data(),
+                         offsets.data());
 
   vkCmdBindIndexBuffer(commandBuffer, vulkan_context_.index_buffer, 0,
                        VK_INDEX_TYPE_UINT32);

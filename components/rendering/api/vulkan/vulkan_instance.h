@@ -6,14 +6,13 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 struct VulkanInstance {
-  VulkanContext* vulkan_context_{};
+  VulkanContext& vulkan_context_;
 
- public:
-  explicit VulkanInstance();
+  explicit VulkanInstance(VulkanContext& vulkan_context);
 
-  void Initialize(VulkanContext& vulkan_context);
+  void Initialize();
   void Shutdown() const;
 
   ~VulkanInstance() = default;
@@ -24,10 +23,15 @@ struct VulkanInstance {
   VulkanInstance& operator=(const VulkanInstance&) = delete;
   VulkanInstance(const VulkanInstance&) = delete;
   // move
-  VulkanInstance& operator=(VulkanInstance&&) = default;
+  VulkanInstance& operator=(VulkanInstance&&) = delete;
   VulkanInstance(VulkanInstance&&) = default;
+
+ private:
+  void EnumerateAvailableDevices() const;
+  static void GetRecommendedResolutionForDevice();
+  static const char* GetDeviceTypeName(VkPhysicalDeviceType deviceType);
 };
-// NOLINTEND(misc-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 }  // namespace nextgen::engine::rendering::vulkan
 

@@ -1,16 +1,17 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_VULKAN_MODEL_LOADER_H
 #define NEXTGEN_ENGINE_RENDERING_VULKAN_MODEL_LOADER_H
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 #include "components/rendering/api/vulkan/vulkan_context.h"
+
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 
 struct VulkanModelLoader {
-  VulkanContext* vulkan_context_{};
+  VulkanContext& vulkan_context_;
 
-  VulkanModelLoader();
+  explicit VulkanModelLoader(VulkanContext& vulkan_context);
 
-  void Initialize(VulkanContext& vulkan_context);
+  void Initialize();
   void Shutdown() const noexcept;
 
   ~VulkanModelLoader();
@@ -19,7 +20,7 @@ struct VulkanModelLoader {
   VulkanModelLoader& operator=(const VulkanModelLoader&) = delete;
   VulkanModelLoader(const VulkanModelLoader&) = delete;
   // move
-  VulkanModelLoader& operator=(VulkanModelLoader&&) = default;
+  VulkanModelLoader& operator=(VulkanModelLoader&&) = delete;
   VulkanModelLoader(VulkanModelLoader&&) = default;
 
  private:
@@ -27,6 +28,6 @@ struct VulkanModelLoader {
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef NEXTGEN_ENGINE_VULKAN_RENDERING_H
 #define NEXTGEN_ENGINE_VULKAN_RENDERING_H
 
-#include <iostream>
-
 #include "components/configuration/config_manager.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
 #include "components/rendering/api/vulkan/vulkan_buffer.h"
@@ -45,10 +43,10 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
    * resolution)*/
   VulkanContext vulkan_context_;
   VulkanInstance vulkan_instance_;
-  VulkanValidationLayers vulkan_validation_layers_{};
+  VulkanValidationLayers vulkan_validation_layers_;
   VulkanConfig vulkan_config_{};
-  VulkanDevice m_vulkan_device;
-  VulkanSwapChain m_vulkan_swap_chain;
+  VulkanDevice vulkan_device_;
+  VulkanSwapChain vulkan_swap_chain_;
   VulkanDescriptorSetLayout vulkan_descriptor_set_layout_;
   VulkanBuffer vulkan_buffer_;
   VulkanCommandPool vulkan_command_pool_;
@@ -66,9 +64,7 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
   VulkanDescriptorSet vulkan_descriptor_set_;
   VulkanSyncObject vulkan_sync_object_;
 
-  explicit VulkanRenderingApi() {
-    std::cout << "VulkanRenderingApi object created\n";
-  }
+  explicit VulkanRenderingApi();
 
   void Initialize() override;
   void Shutdown() override;
@@ -105,12 +101,12 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
   VulkanRenderingApi& operator=(const VulkanRenderingApi&) = delete;
   // move
   VulkanRenderingApi(VulkanRenderingApi&&) noexcept = default;
-  VulkanRenderingApi& operator=(VulkanRenderingApi&&) noexcept = default;
+  VulkanRenderingApi& operator=(VulkanRenderingApi&&) noexcept = delete;
 
  private:
   void drawFrame();
-  void recreateSwapChain();
-  void cleanupSwapChain();
+  void RecreateSwapChain();
+  void CleanupSwapChain() const;
   void updateUniformBuffer(uint32_t currentImage);
   void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 };
