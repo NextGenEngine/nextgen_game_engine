@@ -1,5 +1,7 @@
 #include <benchmark/benchmark.h>
 
+#include <iostream>
+
 #include "raw_ref_versus_smart_pointers.h"
 
 namespace {
@@ -31,4 +33,31 @@ BENCHMARK(BM_SmartPointersCalculation);
 }  // namespace
 
 // Main function to run the benchmarks
-BENCHMARK_MAIN();
+// BENCHMARK_MAIN();
+
+// Main function to print class sizes and run benchmarks
+int main(int argc, char** argv) {
+  // Print sizes of reference-based classes
+  std::cout << "Sizes of reference-based classes:\n";
+  std::cout << "ServiceD: " << sizeof(references::ServiceD) << " bytes\n";
+  std::cout << "ServiceE: " << sizeof(references::ServiceE) << " bytes\n";
+  std::cout << "ServiceB: " << sizeof(references::ServiceB) << " bytes\n";
+  std::cout << "ServiceC: " << sizeof(references::ServiceC) << " bytes\n";
+  std::cout << "ServiceA: " << sizeof(references::ServiceA) << " bytes\n";
+  std::cout << "TopLevelClass: " << sizeof(references::TopLevelClass)
+            << " bytes\n\n";
+
+  // Print sizes of smart pointer-based classes
+  std::cout << "Sizes of smart pointer-based classes:\n";
+  std::cout << "ServiceD: " << sizeof(smart_pointers::ServiceD) << " bytes\n";
+  std::cout << "ServiceE: " << sizeof(smart_pointers::ServiceE) << " bytes\n";
+  std::cout << "ServiceB: " << sizeof(smart_pointers::ServiceB) << " bytes\n";
+  std::cout << "ServiceC: " << sizeof(smart_pointers::ServiceC) << " bytes\n";
+  std::cout << "ServiceA: " << sizeof(smart_pointers::ServiceA) << " bytes\n";
+  std::cout << "TopLevelClass: " << sizeof(smart_pointers::TopLevelClass)
+            << " bytes\n\n";
+
+  // Run the benchmarks
+  ::benchmark::Initialize(&argc, argv);
+  ::benchmark::RunSpecifiedBenchmarks();
+}
