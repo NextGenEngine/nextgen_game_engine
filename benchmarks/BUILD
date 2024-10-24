@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_test")
 
 cc_binary(
     name = "benchmarks_move_semantic",
@@ -39,12 +39,25 @@ cc_binary(
     ],
 )
 
-cc_binary(
-    name = "raw_ref_versus_smart_pointers",
+cc_test(
+    name = "raw_ref_versus_smart_pointers_test",
     srcs = [
-        "raw_ref_versus_smart_pointers.cc",
+        "raw_ref_versus_smart_pointers/raw_ref_versus_smart_pointers.h",
+        "raw_ref_versus_smart_pointers/raw_ref_versus_smart_pointers_test.cc",
     ],
     deps = [
-        "@google_benchmark//:benchmark_main",
+        "@googletest//:gtest_main",  # GoogleTest main entry point
+    ],
+)
+
+# Target for the benchmarks
+cc_binary(
+    name = "raw_ref_versus_smart_pointers_benchmark",
+    srcs = [
+        "raw_ref_versus_smart_pointers/raw_ref_versus_smart_pointers.h",
+        "raw_ref_versus_smart_pointers/raw_ref_versus_smart_pointers_benchmark.cc",
+    ],
+    deps = [
+        "@google_benchmark//:benchmark_main",  # Google Benchmark main entry point
     ],
 )
