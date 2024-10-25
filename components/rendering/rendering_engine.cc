@@ -26,7 +26,12 @@ void RenderingEngine::ApplyConfiguration(const void* config) {
   rendering_engine_config_ = new_config;
 }
 
-void RenderingEngine::Shutdown() { api_->Shutdown(); }
+void RenderingEngine::Shutdown() {
+  if (api_ == nullptr) {
+    return;
+  }
+  api_->Shutdown();
+}
 
 void RenderingEngine::MainLoop() { apis_.vulkan_rendering_api.MainLoop(); }
 

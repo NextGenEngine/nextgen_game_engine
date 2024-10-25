@@ -117,7 +117,8 @@ int main() {
   try {
     nextgen::engine::ENGINE.Loop();
   } catch (std::exception& e) {
-    std::cout << "MAIN: FATAL ERROR. Engine configuration failed: " << e.what();
+    std::cout << "MAIN: FATAL ERROR. Engine Main loop throws exception: "
+              << e.what();
     return FailureExit();
   }
 
