@@ -68,8 +68,7 @@ void NextGenEngine::Initialize(ComponentConfig component_config) {
                "it can be configured and started\n";
 
   component_config_ = component_config;
-  rendering_engine_.Initialize();
-  // rendering_config_strategy_.Initialize(component_config, rendering_engine_);
+  rendering_config_strategy_.Initialize(component_config, rendering_engine_);
 
   std::cout << "NextGenGame engine factory done.\n";
   // rendering_engine_.apis_.vulkan_rendering_api.vulkan_config_.device_id = 5;

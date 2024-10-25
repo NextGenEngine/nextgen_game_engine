@@ -25,12 +25,14 @@ struct RenderingEngineData {
 
 struct RenderingEngine : RenderingEngineData, IConfigurable {
   explicit RenderingEngine();
-  void ApplyConfiguration(const void* config) override;
-  void SwitchApi(RenderingAPIEnum newApi);
-  void Initialize();
   void Shutdown();
-  void Render();
+  void ApplyConfiguration(const void* config) override;
   void MainLoop();
+
+ private:
+  IRenderingApi* GetRenderingApiInstance(RenderingAPIEnum newApi);
+  void SwitchRenderingApi(RenderingAPIEnum newApi);
+  void Render();
   bool Exiting();
 };
 

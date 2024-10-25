@@ -25,6 +25,7 @@ cc_library(
         "config_strategy/rendering_config_sub_strategy_selector.cc",
         "config_strategy/rendering_config_validator.h",
         "config_strategy/rendering_config_validator.cc",
+        "rendering_engine_switch_api.cc",
         "rendering_engine.cc",
         "rendering_config.h",
 

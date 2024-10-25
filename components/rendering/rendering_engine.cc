@@ -1,59 +1,36 @@
 #include "rendering_engine.h"
 
+#include <cassert>
 #include <cctype>
 #include <iostream>
-#include <stdexcept>
 
 #include "components/rendering/rendering_config.h"
 
 namespace nextgen::engine::rendering {
 
-void RenderingEngine::ApplyConfiguration(const void* config) {
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-cstyle-cast,google-readability-casting)
-  const auto* new_config = (RenderingEngineConfig*)config;
-  SwitchApi(new_config->api);
-  rendering_engine_config_ = *new_config;
-}
-
 RenderingEngine::RenderingEngine() {
   std::cout << "Rendering engine object created\n";
 }
 
-void RenderingEngine::SwitchApi(RenderingAPIEnum newApi) {
-  if (rendering_engine_config_.api == newApi && api_ != nullptr) {
-    // NO CHANGE - NO ACTION
-    return;
-  }
+void RenderingEngine::ApplyConfiguration(const void* config) {
+  // Ensure that config is not null to prevent undefined behavior
+  assert(config != nullptr && "config pointer is null");
 
-  if (api_ != nullptr) {
-    api_->Shutdown();
-  }
+  // Use a C++-style cast for better type safety and readability
+  const RenderingEngineConfig& new_config =
+      *static_cast<const RenderingEngineConfig*>(config);
 
-  switch (newApi) {
-    case RenderingAPIEnum::Vulkan:
-      apis_.vulkan_rendering_api.Initialize();
-      api_ = &apis_.vulkan_rendering_api;
-      break;
-    case RenderingAPIEnum::DirectX:
-      throw std::runtime_error("Haha. DirectX is unsupported API");
-    default:
-      throw std::runtime_error("Unsupported API");
+  if (rendering_engine_config_.api != new_config.api || api_ == nullptr) {
+    SwitchRenderingApi(new_config.api);
   }
-
-  api_->Initialize();
+  rendering_engine_config_ = new_config;
 }
 
-void RenderingEngine::Initialize() { apis_.vulkan_rendering_api.Initialize(); }
-
-void RenderingEngine::Shutdown() { apis_.vulkan_rendering_api.Shutdown(); }
+void RenderingEngine::Shutdown() { api_->Shutdown(); }
 
 void RenderingEngine::MainLoop() { apis_.vulkan_rendering_api.MainLoop(); }
 
 void RenderingEngine::Render() {
-  if (api_ == nullptr) {
-    return;
-  }
-
   api_->Render();
 
   // std::this_thread::sleep_for(

@@ -7,7 +7,7 @@
 
 namespace nextgen::engine::rendering {
 
-enum class RenderingAPIEnum {
+enum class RenderingAPIEnum : std::uint8_t {
   Vulkan,
   DirectX,
   OpenGL,

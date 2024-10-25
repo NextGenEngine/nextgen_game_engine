@@ -22,6 +22,7 @@ using nextgen::engine::NextGenEngine;
 using nextgen::engine::configuration::ComponentConfig;
 using nextgen::engine::configuration::ConfigManager;
 
+namespace {
 auto GetDefaultConfig() -> std::string_view {
   // NOTE: there is no need to implement this function at the moment.
   // Each component have its own configuration. And I do not want to
@@ -69,18 +70,21 @@ auto InitConfigManager() -> std::optional<ComponentConfig> {
   }
 }
 
-void GameLoop(std::unique_ptr<NextGenEngine>& engine) { engine->Loop(); }
-
 int ExitProgram(int code) {
   std::cout << "Program exit"
             << "\n";
   return code;
 }
 
+int FailureExit() { return ExitProgram(EXIT_FAILURE); }
+int SuccessExit() { return ExitProgram(EXIT_SUCCESS); }
+
+}  // namespace
+
 int main() {
   auto component_config = InitConfigManager();
   if (!component_config) {
-    return ExitProgram(EXIT_FAILURE);
+    return FailureExit();
   }
 
   // GameLoop(engine.value());
@@ -93,28 +97,31 @@ int main() {
   try {
     nextgen::engine::ENGINE.Initialize(*component_config);
   } catch (std::exception& e) {
-    std::cout << "FATAL ERROR: Engine base initialization failed: " << e.what()
-              << "\n";
+    std::cout << "MAIN: FATAL ERROR. Engine base initialization failed: "
+              << e.what() << "\n";
     try {
       nextgen::engine::ENGINE.Shutdown();
-    } catch (std::exception& ee) {
-      std::cout << "FATAL ERROR: Engine shutdown failed: " << ee.what() << "\n";
+    } catch (std::exception& e) {
+      std::cout << "MAIN: FATAL ERROR. Engine shutdown failed: " << e.what()
+                << "\n";
     }
-    return ExitProgram(EXIT_FAILURE);
+    return FailureExit();
   }
 
   try {
-    // nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
+    nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
   } catch (std::exception& e) {
-    std::cout << "FATAL ERROR: Engine configuration failed: " << e.what();
-    return ExitProgram(EXIT_FAILURE);
+    std::cout << "MAIN: FATAL ERROR. Engine configuration failed: " << e.what();
+    return FailureExit();
   }
   try {
     nextgen::engine::ENGINE.Loop();
   } catch (std::exception& e) {
+    std::cout << "MAIN: FATAL ERROR. Engine configuration failed: " << e.what();
+    return FailureExit();
   }
 
   nextgen::engine::ENGINE.Shutdown();
 
-  return ExitProgram(EXIT_SUCCESS);
+  return SuccessExit();
 }
