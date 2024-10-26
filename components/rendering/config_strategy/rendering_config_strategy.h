@@ -8,6 +8,7 @@
 #include "rendering_config_strategy_default.h"
 #include "rendering_config_strategy_primary.h"
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 namespace nextgen::engine::rendering {
 
 using configuration::ComponentConfig;
@@ -53,5 +54,6 @@ struct RenderingConfigurationStrategy : interfaces::IConfigurationStrategy {
 };
 
 }  // namespace nextgen::engine::rendering
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 
 #endif

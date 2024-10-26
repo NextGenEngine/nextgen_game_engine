@@ -13,7 +13,8 @@ struct DirectXDefaultConfigStrategy
     : public interfaces::IConfigurationStrategy {
   bool Configure() override { return false; }
 
-  DirectXDefaultConfigStrategy(configuration::ComponentConfig component_config)
+  explicit DirectXDefaultConfigStrategy(
+      configuration::ComponentConfig component_config)
       : component_config_(component_config) {}
 
   configuration::ComponentConfig component_config_;
