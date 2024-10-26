@@ -2,7 +2,10 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 
 cc_library(
     name = "config_manager",
-    srcs = ["config_manager.cc"],
+    srcs = [
+        "config_loader.cc",
+        "config_manager.cc",
+    ],
     hdrs = [
         "config_loader.h",
         "config_manager.h",

@@ -12,6 +12,7 @@
 namespace nextgen::engine {
 
 using configuration::ComponentConfig;
+using configuration::ConfigManager;
 using configuration::IConfigLoader;
 using rendering::RenderingConfigurationPrimaryStrategy;
 using rendering::RenderingConfigurationStrategy;
@@ -19,15 +20,16 @@ using rendering::RenderingEngine;
 using templates::FallbackConfigurationStrategyTemplate;
 
 constexpr std::string_view CONFIG_FILE_PATH = "config.yaml";
+nextgen::engine::configuration::FileLoader file_loader(CONFIG_FILE_PATH);
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
 struct NextGenEngine {
   explicit NextGenEngine() { std::cout << "NextGenEngine object created\n"; }
   void Loop();
-  void Initialize(ComponentConfig component_config);
+  void Initialize(ComponentConfig& component_config);
   void Shutdown();
 
-  ComponentConfig component_config_;
+  ConfigManager component_config_{file_loader};
   RenderingEngine rendering_engine_;
 
   RenderingConfigurationStrategy rendering_config_strategy_;

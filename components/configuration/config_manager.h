@@ -1,126 +1,102 @@
-#ifndef NEXTGEN_ENGINE_CONFIG_MANAGER_H
-#define NEXTGEN_ENGINE_CONFIG_MANAGER_H
+// config_manager.h
+#ifndef CONFIG_MANAGER_H
+#define CONFIG_MANAGER_H
 
 #include <yaml-cpp/yaml.h>
 
-#include <memory>
-#include <optional>
-#include <string>
-
 #include "components/configuration/config_loader.h"
 
+// NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::configuration {
 
-class ComponentConfig;
+struct ComponentConfig;
 
-/*= == == == == == == == == == == == == == == == == == == ==
-                    CONFIG MANAGER
-= = == == == == == == == == == == == == == == == == == == ==*/
+struct ConfigManager {
+  explicit ConfigManager(IConfigLoader& loader) : loader_(loader) {
+    rootNode_ = loader_.Load();
+  }
 
-class ConfigManager : public std::enable_shared_from_this<ConfigManager> {
+  YAML::Node GetRootNode() { return rootNode_; }
+  ComponentConfig GetRootComponentConfig();
+  ComponentConfig GetComponentConfig(const std::string& sectionName);
+  void Save() { loader_.Save(&rootNode_); }
+
  private:
-  YAML::Node m_config;
-  std::unique_ptr<IConfigLoader> m_loader;
-
- public:
-  explicit ConfigManager() = default;
-  explicit ConfigManager(YAML::Node config,
-                         std::unique_ptr<IConfigLoader> loader);
-
-  void Save();
-  YAML::Node operator[](const std::string& key);
-  YAML::Node GetConfigRootNode();
-  ComponentConfig getComponentConfig();
+  IConfigLoader& loader_;
+  YAML::Node rootNode_;
 };
 
-/*= == == == == == == == == == == == == == == == == == == ==
-                      COMPONENT CONFIG
-= = == == == == == == == == == == == == == == == == == == ==*/
+struct ComponentConfig {
+  ComponentConfig(ConfigManager& config_manager, YAML::Node component_root_node)
+      : config_manager_(config_manager), component_node_(component_root_node) {}
 
-class ComponentConfig {
- public:
-  explicit ComponentConfig() = default;
-  explicit ComponentConfig(std::shared_ptr<ConfigManager> config_manager,
-                           const YAML::Node& component_root_node);
+  // Returns a const reference to the component's configuration node
+  const YAML::Node& GetNode() const { return component_node_; }
 
-  YAML::Node operator[](const std::string& key) const;
-  YAML::Node operator()() const;
-  ComponentConfig getSubConfig(const std::string& path);
+  // Returns a mutable reference to the component's configuration node
+  YAML::Node& GetMutableNode() { return component_node_; }
 
+  // Template method to load configuration into a struct
   template <typename ConfigType>
   std::optional<ConfigType> LoadConfig() const {
     try {
-      return m_config.as<ConfigType>();
-    } catch (const YAML::Exception& e) {
+      return std::make_optional(component_node_.as<ConfigType>());
+    } catch (...) {
+      // Handle parsing exceptions, return std::nullopt if parsing fails
       return std::nullopt;
-    } catch (...) {
-      throw;
     }
   }
 
-  /**
-   * Updates the existing configuration by merging the provided configuration
-   * data into it. This operation attempts to intelligently merge the new
-   * configuration data with the existing configuration state, ensuring that
-   * updates are applied while preserving the overall structure and existing
-   * data where possible. In case of incompatible data types or structures
-   * between the existing and new configuration, the method tries to replace the
-   * problematic segments with the new configuration data.
-   *
-   * The merging strategy is primarily designed to handle complex configuration
-   * structures gracefully, including nested maps and lists. However, specific
-   * merge behavior, especially for deeply nested structures or custom types,
-   * might depend on the implementation details of the YAML library and the
-   * provided configuration data types.
-   *
-   * @tparam ConfigType The type of the new configuration data to be merged.
-   * This type must be compatible with the YAML representation used by the
-   * class, as the method internally converts the provided configuration data to
-   * a YAML::Node.
-   * @param newConfig The new configuration data to merge into the current
-   * configuration. This data should ideally be a compatible subset or extension
-   * of the existing configuration structure to ensure a smooth merge process.
-   *
-   * @throws YAML::Exception Thrown if the merging process encounters
-   * YAML-specific errors, such as incompatible node types or invalid YAML
-   * structures. When this exception is caught, the method falls back to
-   * replacing the entire existing configuration with the newConfig. This
-   * behavior is a safeguard against partial configuration updates that could
-   * leave the configuration in an inconsistent state.
-   * @throws std::runtime_error Thrown if any non-YAML related error occurs
-   * during the update process. This includes errors related to internal
-   * processing or other exceptional conditions not directly related to the
-   * structure or content of the configuration data.
-   *
-   * Note: This method modifies the current configuration state and may result
-   * in significant changes to the configuration structure. It is recommended to
-   * perform validation checks on the new configuration data before invoking
-   * this method to ensure compatibility and correctness of the resulting
-   * configuration state.
-   */
+  // Template method to update the configuration from a struct
   template <typename ConfigType>
-  void UpdateConfig(ConfigType new_config) {
-    try {
-      // Implementation details here...
-      MergeYAMLNodes(m_config, YAML::Node(new_config));
-    } catch (const YAML::Exception& e) {
-      m_config = new_config;
-    } catch (...) {
-      // Handle or rethrow all other exceptions
-      throw std::runtime_error(
-          "An error occurred while updating the configuration.");
-    }
+  void UpdateConfig(const ConfigType& new_config) {
+    MergeYAMLNodes(component_node_, YAML::Node(new_config));
+    // component_node_ = YAML::convert<ConfigType>::encode(new_config);
   }
 
-  void SaveConfig() const { m_config_manager->Save(); }
+  // Saves the updated configuration back to the ConfigManager
+  void Save() {
+    // Update the root node in ConfigManager and invoke save
+    config_manager_.Save();
+  }
+
+  // Get a sub-component configuration
+  ComponentConfig GetComponentConfig(const std::string& sectionName);
+  ConfigManager& GetConfigManager();
+
+  void MergeYAMLNodes(YAML::Node target, const YAML::Node& source);
+
+  // Copy assignment operator
+  ComponentConfig& operator=(const ComponentConfig& other) {
+    if (this != &other) {  // Check for self-assignment
+      // Assign the component_node_ as in the copy constructor
+      component_node_ = other.component_node_;
+      // Note: config_manager_ is a reference and remains bound to the original
+      // ConfigManager, so we do not attempt to reassign it.
+    }
+    return *this;
+  }
 
  private:
-  std::shared_ptr<ConfigManager> m_config_manager;
-  YAML::Node m_config;
-
-  void MergeYAMLNodes(YAML::Node current_config, const YAML::Node& new_config);
+  ConfigManager& config_manager_;
+  YAML::Node component_node_;
 };
 
-}  // namespace nextgen::engine::configuration
+// TODO(artem): try to use this function to replace duplication of code in
+// ConfigManager::GetComponentConfig and ComponentConfig::GetComponentConfig
+// methods. But I do not like additional call (in fact ComponentConfig will be
+// only used most of the time in real applications), so check first compiled
+// binary, if inlining will work here
+inline ComponentConfig GetComponentConfigHelper(
+    ConfigManager& parent, YAML::Node& startNode,
+    const std::string& sectionName) {
+  if (!startNode[sectionName]) {
+    startNode[sectionName] = YAML::Node(YAML::NodeType::Map);
+  }
+  return ComponentConfig(parent, startNode[sectionName]);
+}
 
-#endif
+}  // namespace nextgen::engine::configuration
+// NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
+
+#endif  // CONFIG_MANAGER_H

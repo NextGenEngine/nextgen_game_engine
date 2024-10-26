@@ -52,7 +52,7 @@ void NextGenEngine::Loop() {
   // }
 }
 
-void NextGenEngine::Initialize(ComponentConfig component_config) {
+void NextGenEngine::Initialize(ComponentConfig& component_config) {
   static bool initialized = false;
   if (initialized) {
     std::cerr << "Engine is already initialized! You cannot instantiate two "
@@ -67,8 +67,7 @@ void NextGenEngine::Initialize(ComponentConfig component_config) {
                "main. Here we just need to initialize its properties, before "
                "it can be configured and started\n";
 
-  component_config_ = component_config;
-  rendering_config_strategy_.Initialize(component_config, rendering_engine_);
+  rendering_config_strategy_.Initialize(&component_config, rendering_engine_);
 
   std::cout << "NextGenGame engine factory done.\n";
   // rendering_engine_.apis_.vulkan_rendering_api.vulkan_config_.device_id = 5;
