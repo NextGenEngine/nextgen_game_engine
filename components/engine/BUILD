@@ -32,6 +32,7 @@ cc_binary(
     srcs = [
         "nextgen_game_engine_test.cc",
     ],
+    data = glob(["data/**"]),  # Include all files in the data directory
     visibility = ["//visibility:public"],
     deps = [
         ":nextgen_game_engine",

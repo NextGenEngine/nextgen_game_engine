@@ -16,9 +16,6 @@ using nextgen::engine::configuration::ConfigManager;
 
 namespace {
 
-nextgen::engine::configuration::FileLoader file_loader(CONFIG_FILE_PATH);
-ConfigManager config_manager(file_loader);
-
 int ExitProgram(int code) {
   std::cout << "Program exit"
             << "\n";
@@ -31,7 +28,7 @@ int SuccessExit() { return ExitProgram(EXIT_SUCCESS); }
 }  // namespace
 
 int main() {
-  auto component_config = config_manager.GetRootComponentConfig();
+  // auto component_config = config_manager.GetRootComponentConfig();
 
   // GameLoop(engine.value());
 
@@ -41,7 +38,7 @@ int main() {
             << " bytes\n";
 
   try {
-    nextgen::engine::ENGINE.Initialize(component_config);
+    nextgen::engine::ENGINE.Initialize();
   } catch (std::exception& e) {
     std::cout << "MAIN: FATAL ERROR. Engine base initialization failed: "
               << e.what() << "\n";

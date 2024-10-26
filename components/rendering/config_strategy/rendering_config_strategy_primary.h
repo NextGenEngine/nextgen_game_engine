@@ -4,12 +4,13 @@
 #include "components/rendering/rendering_engine.h"
 #include "rendering_config_sub_strategy_selector.h"
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering {
 
 struct RenderingConfigurationPrimaryStrategyData {
-  ComponentConfig* component_config_;
-  RenderingConfigurationStrategySelector* api_strategy_selector_;
-  RenderingEngine* rendering_engine_;
+  ComponentConfig& component_config_;
+  RenderingConfigurationStrategySelector& api_strategy_selector_;
+  RenderingEngine& rendering_engine_;
 };
 struct RenderingConfigurationPrimaryStrategy
     : RenderingConfigurationPrimaryStrategyData,
@@ -18,8 +19,16 @@ struct RenderingConfigurationPrimaryStrategy
   void Initialize(
       ComponentConfig& component_config, RenderingEngine& rendering_engine,
       RenderingConfigurationStrategySelector& api_strategy_selector);
+
+  RenderingConfigurationPrimaryStrategy(
+      ComponentConfig& component_config,
+      RenderingConfigurationStrategySelector& api_strategy_selector,
+      RenderingEngine& rendering_engine)
+      : RenderingConfigurationPrimaryStrategyData(
+            component_config, api_strategy_selector, rendering_engine) {}
 };
 
 }  // namespace nextgen::engine::rendering
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

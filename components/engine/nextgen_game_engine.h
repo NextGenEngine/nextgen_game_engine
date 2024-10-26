@@ -20,20 +20,24 @@ using rendering::RenderingEngine;
 using templates::FallbackConfigurationStrategyTemplate;
 
 constexpr std::string_view CONFIG_FILE_PATH = "config.yaml";
-nextgen::engine::configuration::FileLoader file_loader(CONFIG_FILE_PATH);
+extern nextgen::engine::configuration::FileLoader file_loader;
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
 struct NextGenEngine {
-  explicit NextGenEngine() { std::cout << "NextGenEngine object created\n"; }
+  explicit NextGenEngine()
+      : component_config_(file_loader),
+        rendering_config_strategy_(
+            component_config_.GetComponentConfig("rendering"),
+            rendering_engine_) {
+    std::cout << "NextGenEngine object created\n";
+  }
   void Loop();
-  void Initialize(ComponentConfig& component_config);
+  void Initialize();
   void Shutdown();
 
   ConfigManager component_config_{file_loader};
   RenderingEngine rendering_engine_;
-
   RenderingConfigurationStrategy rendering_config_strategy_;
-  // RenderingConfigurationStrategy rendering_config_strategy_;
 };
 // NOLINTEND(misc-non-private-member-variables-in-classes)
 

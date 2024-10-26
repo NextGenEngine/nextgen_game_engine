@@ -3,22 +3,23 @@
 
 #include "components/rendering/api/vulkan/vulkan_rendering.h"
 
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering::vulkan {
 using interfaces::IConfigurationStrategy;
 
 struct VulkanConfigurationDefaultStrategyData {
-  ComponentConfig* component_config_;
-  vulkan::VulkanRenderingApi* vulkan_rendering_api_;
+  ComponentConfig& component_config_;
+  vulkan::VulkanRenderingApi& vulkan_rendering_api_;
 };
 struct VulkanConfigurationDefaultStrategy
     : VulkanConfigurationDefaultStrategyData,
       IConfigurationStrategy {
+  VulkanConfigurationDefaultStrategy(ComponentConfig& component_config,
+                                     VulkanRenderingApi& vulkan_rendering_api);
   bool Configure() override;
-
-  void Initialize(ComponentConfig& component_config,
-                  VulkanRenderingApi& vulkan_rendering_api);
 };
 
 }  // namespace nextgen::engine::rendering::vulkan
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 
 #endif

@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <trigonometric.hpp>
 
+#include "components/configuration/config_manager.h"
 #include "components/rendering/api/vulkan/vulkan_buffer.h"
 #include "components/rendering/api/vulkan/vulkan_constants.h"
 #include "components/rendering/api/vulkan/vulkan_uniform_buffer.h"

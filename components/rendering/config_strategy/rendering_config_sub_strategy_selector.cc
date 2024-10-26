@@ -7,14 +7,6 @@
 
 namespace nextgen::engine::rendering {
 
-void InitializeSubStrategies(ComponentConfig& component_config,
-                             RenderingConfigurationStrategySelector& selector,
-                             RenderingEngine& rendering_engine) {
-  auto vulkan_component_config = component_config.getSubConfig("vulkan");
-  selector.vulkan_strategy_.Initialize(
-      vulkan_component_config, rendering_engine.apis_.vulkan_rendering_api);
-}
-
 IConfigurationStrategy* RenderingConfigurationStrategySelector::SelectStrategy(
     RenderingAPIEnum api) {
   switch (api) {

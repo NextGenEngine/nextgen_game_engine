@@ -35,8 +35,6 @@ using nextgen::engine::rendering::api::IRenderingApi;
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
 struct VulkanRenderingApi : public IRenderingApi, IConfigurable {
-  ComponentConfig m_componentConfig;
-
   /* SUB COMPONENTS - order here is crucial. For example, m_config can be
    * initialized only when Vulkan instance is already in place for default
    * configuration to load if needed (detecting recommended graphics device and

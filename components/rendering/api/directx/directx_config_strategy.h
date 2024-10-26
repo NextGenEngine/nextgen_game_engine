@@ -13,6 +13,9 @@ struct DirectXDefaultConfigStrategy
     : public interfaces::IConfigurationStrategy {
   bool Configure() override { return false; }
 
+  DirectXDefaultConfigStrategy(configuration::ComponentConfig component_config)
+      : component_config_(component_config) {}
+
   configuration::ComponentConfig component_config_;
 };
 // NOLINTEND(misc-non-private-member-variables-in-classes)
