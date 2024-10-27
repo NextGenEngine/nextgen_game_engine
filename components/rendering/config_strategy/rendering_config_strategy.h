@@ -15,21 +15,15 @@ using configuration::ComponentConfig;
 using templates::FallbackConfigurationStrategyTemplate;
 
 struct RenderingConfigurationStrategy : interfaces::IConfigurationStrategy {
+  explicit RenderingConfigurationStrategy(ComponentConfig component_config,
+                                          RenderingEngine& rendering_engine);
+
+  bool Configure();
+
   ComponentConfig component_config_;
   RenderingConfigurationStrategySelector api_strategy_selector_;
   RenderingConfigurationPrimaryStrategy primary_strategy_;
   RenderingConfigurationDefaultStrategy default_strategy_;
-
-  explicit RenderingConfigurationStrategy(ComponentConfig component_config,
-                                          RenderingEngine& rendering_engine);
-
-  bool Configure() override {
-    if (primary_strategy_.Configure()) {
-      return true;
-    }
-    // Fallback to default configuration if load fails or validation fails
-    return default_strategy_.Configure();
-  }
 };
 
 }  // namespace nextgen::engine::rendering

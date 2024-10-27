@@ -7,6 +7,12 @@
 
 namespace nextgen::engine::rendering {
 
+RenderingConfigurationStrategySelector::RenderingConfigurationStrategySelector(
+    ComponentConfig& component_config, RenderingEngine& rendering_engine)
+    : vulkan_strategy_(component_config.GetComponentConfig("vulkan"),
+                       rendering_engine),
+      direct_x_strategy_(component_config) {}
+
 IConfigurationStrategy* RenderingConfigurationStrategySelector::SelectStrategy(
     RenderingAPIEnum api) {
   switch (api) {

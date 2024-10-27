@@ -13,32 +13,15 @@ using configuration::ComponentConfig;
 using directx::DirectXDefaultConfigStrategy;
 using vulkan::VulkanConfigStrategy;
 
-struct RenderingConfigurationStrategySelectorData {
-  VulkanConfigStrategy vulkan_strategy_;
-  DirectXDefaultConfigStrategy direct_x_strategy_;
-
-  RenderingConfigurationStrategySelectorData(ComponentConfig& component_config,
-                                             RenderingEngine& rendering_engine)
-      : vulkan_strategy_(component_config.GetComponentConfig("vulkan"),
-                         rendering_engine),
-        direct_x_strategy_(component_config) {}
-};
-struct RenderingConfigurationStrategySelector
-    : RenderingConfigurationStrategySelectorData {
+struct RenderingConfigurationStrategySelector {
   RenderingConfigurationStrategySelector(ComponentConfig& component_config,
-                                         RenderingEngine& rendering_engine)
-      : RenderingConfigurationStrategySelectorData(component_config,
-                                                   rendering_engine) {}
+                                         RenderingEngine& rendering_engine);
 
   IConfigurationStrategy* SelectStrategy(RenderingAPIEnum api);
 
-  void Initialize(ComponentConfig& component_config,
-                  RenderingEngine& rendering_engine);
+  VulkanConfigStrategy vulkan_strategy_;
+  DirectXDefaultConfigStrategy direct_x_strategy_;
 };
-
-void InitializeSubStrategies(ComponentConfig& component_config,
-                             RenderingConfigurationStrategySelector& selector,
-                             RenderingEngine& rendering_engine);
 
 }  // namespace nextgen::engine::rendering
 // NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)

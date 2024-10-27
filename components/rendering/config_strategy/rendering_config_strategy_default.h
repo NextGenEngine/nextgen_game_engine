@@ -7,25 +7,17 @@
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering {
 
-struct RenderingConfigurationDefaultStrategyData {
-  ComponentConfig& component_config_;
-  RenderingConfigurationStrategySelector api_strategy_selector_;
-  RenderingEngine& rendering_engine_;
-};
-struct RenderingConfigurationDefaultStrategy
-    : RenderingConfigurationDefaultStrategyData,
-      IConfigurationStrategy {
-  bool Configure() override;
-  void Initialize(
-      ComponentConfig component_config, RenderingEngine& rendering_engine,
-      RenderingConfigurationStrategySelector& api_strategy_selector);
-
+struct RenderingConfigurationDefaultStrategy : IConfigurationStrategy {
   RenderingConfigurationDefaultStrategy(
       ComponentConfig& component_config,
       RenderingConfigurationStrategySelector& api_strategy_selector,
-      RenderingEngine& rendering_engine)
-      : RenderingConfigurationDefaultStrategyData(
-            component_config, api_strategy_selector, rendering_engine) {}
+      RenderingEngine& rendering_engine);
+
+  bool Configure() override;
+
+  ComponentConfig& component_config_;
+  RenderingConfigurationStrategySelector api_strategy_selector_;
+  RenderingEngine& rendering_engine_;
 };
 
 }  // namespace nextgen::engine::rendering

@@ -16,4 +16,12 @@ RenderingConfigurationStrategy::RenderingConfigurationStrategy(
       default_strategy_(component_config_, api_strategy_selector_,
                         rendering_engine) {}
 
+bool RenderingConfigurationStrategy::Configure() {
+  if (primary_strategy_.Configure()) {
+    return true;
+  }
+  // Fallback to default configuration if load fails or validation fails
+  return default_strategy_.Configure();
+}
+
 }  // namespace nextgen::engine::rendering

@@ -10,6 +10,14 @@ namespace nextgen::engine::rendering {
 
 using configuration::ComponentConfig;
 
+RenderingConfigurationPrimaryStrategy::RenderingConfigurationPrimaryStrategy(
+    ComponentConfig& component_config,
+    RenderingConfigurationStrategySelector& api_strategy_selector,
+    RenderingEngine& rendering_engine)
+    : component_config_(component_config),
+      api_strategy_selector_(api_strategy_selector),
+      rendering_engine_(rendering_engine) {}
+
 bool RenderingConfigurationPrimaryStrategy::Configure() {
   auto rendering_engine_config =
       component_config_.LoadConfig<RenderingEngineConfig>();
@@ -28,9 +36,5 @@ bool RenderingConfigurationPrimaryStrategy::Configure() {
       api_strategy_selector_.SelectStrategy(rendering_engine_config->api);
   return strategy->Configure();
 }
-
-void RenderingConfigurationPrimaryStrategy::Initialize(
-    ComponentConfig& component_config, RenderingEngine& rendering_engine,
-    RenderingConfigurationStrategySelector& api_strategy_selector) {}
 
 }  // namespace nextgen::engine::rendering
