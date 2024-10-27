@@ -14,27 +14,6 @@ namespace nextgen::engine::rendering {
 using configuration::ComponentConfig;
 using templates::FallbackConfigurationStrategyTemplate;
 
-// struct RenderingConfigurationStrategyData {
-//   ComponentConfig component_config_;
-//   // RenderingConfigurationStrategySelector api_strategy_selector_;
-//   // Constructor for RenderingConfigurationStrategyData to initialize
-//   // component_config_
-//   RenderingConfigurationStrategyData(ComponentConfig& component_config,
-//                                      RenderingEngine& rendering_engine)
-//       : component_config_(component_config) {}
-// };
-
-// struct RenderingConfigurationStrategy
-//     : RenderingConfigurationStrategyData,
-//       FallbackConfigurationStrategyTemplate<
-//           RenderingConfigurationPrimaryStrategy,
-//           RenderingConfigurationDefaultStrategy> {
-//   RenderingConfigurationStrategy(ComponentConfig component_config,
-//                                  RenderingEngine& rendering_engine);
-//   void Initialize(ComponentConfig& component_config,
-//                   RenderingEngine& rendering_engine);
-// };
-
 struct RenderingConfigurationStrategy : interfaces::IConfigurationStrategy {
   ComponentConfig component_config_;
   RenderingConfigurationStrategySelector api_strategy_selector_;
