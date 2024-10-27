@@ -27,4 +27,13 @@ IConfigurationStrategy* RenderingConfigurationStrategySelector::SelectStrategy(
   }
 }
 
+void RenderingConfigurationStrategySelector::SelectAndConfigure(
+    RenderingAPIEnum api) {
+  if (!SelectStrategy(api)->Configure()) {
+    throw std::runtime_error(
+        "RenderingConfigurationStrategySelector: FATAL ERROR. Cannot operate "
+        "when sub components failed to configure");
+  }
+}
+
 }  // namespace nextgen::engine::rendering

@@ -37,11 +37,12 @@ bool RenderingConfigurationDefaultStrategy::Configure() {
 
   component_config_.UpdateConfig(rendering_engine_config);
   component_config_.Save();
-  rendering_engine_.ApplyConfiguration(rendering_engine_config);
 
-  auto* sub_component_strategy =
-      api_strategy_selector_.SelectStrategy(rendering_engine_config.api);
-  return sub_component_strategy->Configure();
+  // Configure sub components (Vulkan/DirectX rendering api) first, and only
+  // then apply configuration to root component
+  api_strategy_selector_.SelectAndConfigure(rendering_engine_config.api);
+  rendering_engine_.ApplyConfiguration(rendering_engine_config);
+  return true;
 }
 
 }  // namespace nextgen::engine::rendering

@@ -1,5 +1,7 @@
 #include "rendering_config_strategy_primary.h"
 
+#include <stdexcept>
+
 #include "components/configuration/config_manager.h"
 #include "components/rendering/rendering_config.h"
 #include "components/rendering/rendering_engine.h"
@@ -19,22 +21,21 @@ RenderingConfigurationPrimaryStrategy::RenderingConfigurationPrimaryStrategy(
       rendering_engine_(rendering_engine) {}
 
 bool RenderingConfigurationPrimaryStrategy::Configure() {
-  auto rendering_engine_config =
+  auto rendering_engine_config_opt =
       component_config_.LoadConfig<RenderingEngineConfig>();
 
-  if (!rendering_engine_config) {
+  if (!rendering_engine_config_opt ||
+      !RenderingConfigValidator::Validate(*rendering_engine_config_opt)) {
     return false;
   }
 
-  if (!RenderingConfigValidator::Validate(*rendering_engine_config)) {
-    return false;
-  }
+  auto rendering_engine_config = rendering_engine_config_opt.value();
 
-  rendering_engine_.ApplyConfiguration(*rendering_engine_config);
-
-  auto* strategy =
-      api_strategy_selector_.SelectStrategy(rendering_engine_config->api);
-  return strategy->Configure();
+  // Configure sub components (Vulkan/DirectX rendering api) first, and only
+  // then apply configuration to root component
+  api_strategy_selector_.SelectAndConfigure(rendering_engine_config.api);
+  rendering_engine_.ApplyConfiguration(rendering_engine_config);
+  return true;
 }
 
 }  // namespace nextgen::engine::rendering

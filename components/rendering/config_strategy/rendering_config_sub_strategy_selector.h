@@ -18,6 +18,7 @@ struct RenderingConfigurationStrategySelector {
                                          RenderingEngine& rendering_engine);
 
   IConfigurationStrategy* SelectStrategy(RenderingAPIEnum api);
+  void SelectAndConfigure(RenderingAPIEnum api);
 
   VulkanConfigStrategy vulkan_strategy_;
   DirectXDefaultConfigStrategy direct_x_strategy_;
