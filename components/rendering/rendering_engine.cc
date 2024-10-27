@@ -12,18 +12,11 @@ RenderingEngine::RenderingEngine() {
   std::cout << "Rendering engine object created\n";
 }
 
-void RenderingEngine::ApplyConfiguration(const void* config) {
-  // Ensure that config is not null to prevent undefined behavior
-  assert(config != nullptr && "config pointer is null");
-
-  // Use a C++-style cast for better type safety and readability
-  const RenderingEngineConfig& new_config =
-      *static_cast<const RenderingEngineConfig*>(config);
-
-  if (rendering_engine_config_.api != new_config.api || api_ == nullptr) {
-    SwitchRenderingApi(new_config.api);
+void RenderingEngine::ApplyConfiguration(const RenderingEngineConfig& config) {
+  if (rendering_engine_config_.api != config.api || api_ == nullptr) {
+    SwitchRenderingApi(config.api);
   }
-  rendering_engine_config_ = new_config;
+  rendering_engine_config_ = config;
 }
 
 void RenderingEngine::Shutdown() {

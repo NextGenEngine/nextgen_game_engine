@@ -16,9 +16,10 @@ struct IConfigurationStrategy {
   virtual ~IConfigurationStrategy() = default;
 };
 
+template <typename ConfigType>
 // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 struct IConfigurable {
-  virtual void ApplyConfiguration(const void* config) = 0;
+  virtual void ApplyConfiguration(const ConfigType& config) = 0;
   virtual ~IConfigurable() = default;
 };
 

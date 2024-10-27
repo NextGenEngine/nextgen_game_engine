@@ -14,7 +14,6 @@ namespace nextgen::engine {
 using configuration::ComponentConfig;
 using configuration::ConfigManager;
 using configuration::IConfigLoader;
-using rendering::RenderingConfigurationPrimaryStrategy;
 using rendering::RenderingConfigurationStrategy;
 using rendering::RenderingEngine;
 using templates::FallbackConfigurationStrategyTemplate;

@@ -23,10 +23,11 @@ struct RenderingEngineData {
   } apis_;
 };
 
-struct RenderingEngine : RenderingEngineData, IConfigurable {
+struct RenderingEngine : RenderingEngineData,
+                         IConfigurable<RenderingEngineConfig> {
   explicit RenderingEngine();
   void Shutdown();
-  void ApplyConfiguration(const void* config) override;
+  void ApplyConfiguration(const RenderingEngineConfig& config) override;
   void MainLoop();
 
  private:

@@ -51,7 +51,6 @@ struct ComponentConfig {
   template <typename ConfigType>
   void UpdateConfig(const ConfigType& new_config) {
     MergeYAMLNodes(component_node_, YAML::Node(new_config));
-    // component_node_ = YAML::convert<ConfigType>::encode(new_config);
   }
 
   // Saves the updated configuration back to the ConfigManager

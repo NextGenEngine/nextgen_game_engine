@@ -18,7 +18,7 @@ struct RenderingConfigurationStrategy : interfaces::IConfigurationStrategy {
   explicit RenderingConfigurationStrategy(ComponentConfig component_config,
                                           RenderingEngine& rendering_engine);
 
-  bool Configure();
+  bool Configure() override;
 
   ComponentConfig component_config_;
   RenderingConfigurationStrategySelector api_strategy_selector_;

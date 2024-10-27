@@ -21,7 +21,7 @@ bool VulkanConfigurationDefaultStrategy::Configure() {
 
   component_config_.UpdateConfig(config);
   component_config_.Save();
-  vulkan_rendering_api_.ApplyConfiguration(&config);
+  vulkan_rendering_api_.ApplyConfiguration(config);
 
   return true;
 }

@@ -30,7 +30,7 @@ bool RenderingConfigurationPrimaryStrategy::Configure() {
     return false;
   }
 
-  rendering_engine_.ApplyConfiguration(&*rendering_engine_config);
+  rendering_engine_.ApplyConfiguration(*rendering_engine_config);
 
   auto* strategy =
       api_strategy_selector_.SelectStrategy(rendering_engine_config->api);

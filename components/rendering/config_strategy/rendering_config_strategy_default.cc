@@ -37,7 +37,7 @@ bool RenderingConfigurationDefaultStrategy::Configure() {
 
   component_config_.UpdateConfig(rendering_engine_config);
   component_config_.Save();
-  rendering_engine_.ApplyConfiguration(&rendering_engine_config);
+  rendering_engine_.ApplyConfiguration(rendering_engine_config);
 
   auto* sub_component_strategy =
       api_strategy_selector_.SelectStrategy(rendering_engine_config.api);

@@ -22,7 +22,7 @@ bool VulkanConfigurationPrimaryStrategy::Configure() {
     return false;
   }
 
-  vulkan_rendering_api_.ApplyConfiguration(&*vulkan_config);
+  vulkan_rendering_api_.ApplyConfiguration(*vulkan_config);
 
   return true;
 }

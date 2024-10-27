@@ -121,7 +121,7 @@ void VulkanRenderingApi::Shutdown() {
   vulkan_instance_.Shutdown();
 }
 
-void VulkanRenderingApi::ApplyConfiguration(const void* config) {
+void VulkanRenderingApi::ApplyConfiguration(const VulkanConfig& config) {
   return;
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-cstyle-cast,google-readability-casting)
   // const auto* vulkan_config = (VulkanConfig*)config;
