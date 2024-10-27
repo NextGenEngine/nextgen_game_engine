@@ -1,7 +1,5 @@
 #include "rendering_config_strategy_primary.h"
 
-#include <stdexcept>
-
 #include "components/configuration/config_manager.h"
 #include "components/rendering/rendering_config.h"
 #include "components/rendering/rendering_engine.h"
