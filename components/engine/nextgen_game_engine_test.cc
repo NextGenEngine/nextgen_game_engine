@@ -7,12 +7,7 @@
 #include <exception>
 #include <iostream>
 
-#include "components/configuration/config_loader.h"
-#include "components/configuration/config_manager.h"
-
-using nextgen::engine::CONFIG_FILE_PATH;
 using nextgen::engine::NextGenEngine;
-using nextgen::engine::configuration::ConfigManager;
 
 namespace {
 
@@ -25,15 +20,18 @@ int ExitProgram(int code) {
 int FailureExit() { return ExitProgram(EXIT_FAILURE); }
 int SuccessExit() { return ExitProgram(EXIT_SUCCESS); }
 
+void TryToShutdown() {
+  try {
+    nextgen::engine::ENGINE.Shutdown();
+  } catch (std::exception& e) {
+    std::cout << "MAIN: FATAL ERROR. Engine shutdown failed: " << e.what()
+              << "\n";
+  }
+}
+
 }  // namespace
 
 int main() {
-  // auto component_config = config_manager.GetRootComponentConfig();
-
-  // GameLoop(engine.value());
-
-  // engine.reset();
-
   std::cout << "sizeof(NextGenEngine) = " << sizeof(NextGenEngine)
             << " bytes\n";
 
@@ -42,12 +40,7 @@ int main() {
   } catch (std::exception& e) {
     std::cout << "MAIN: FATAL ERROR. Engine base initialization failed: "
               << e.what() << "\n";
-    try {
-      nextgen::engine::ENGINE.Shutdown();
-    } catch (std::exception& e) {
-      std::cout << "MAIN: FATAL ERROR. Engine shutdown failed: " << e.what()
-                << "\n";
-    }
+    TryToShutdown();
     return FailureExit();
   }
 
@@ -55,6 +48,7 @@ int main() {
     nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
   } catch (std::exception& e) {
     std::cout << "MAIN: FATAL ERROR. Engine configuration failed: " << e.what();
+    TryToShutdown();
     return FailureExit();
   }
   try {
@@ -62,6 +56,7 @@ int main() {
   } catch (std::exception& e) {
     std::cout << "MAIN: FATAL ERROR. Engine Main loop throws exception: "
               << e.what();
+    TryToShutdown();
     return FailureExit();
   }
 

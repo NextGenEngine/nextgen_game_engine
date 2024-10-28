@@ -6,14 +6,16 @@
 
 // #include "oneapi/tbb/task_group.h"
 
+namespace {
+// void ProcessInput() {}
+
+void update(auto delta) {}
+}  // namespace
+
 namespace nextgen::engine {
 
 nextgen::engine::configuration::FileLoader file_loader(CONFIG_FILE_PATH);
 NextGenEngine ENGINE;
-
-void ProcessInput() {}
-
-void update(auto delta) {}
 
 void NextGenEngine::Loop() {
   rendering_engine_.MainLoop();
