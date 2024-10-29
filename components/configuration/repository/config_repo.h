@@ -79,6 +79,14 @@ struct ConfigRepositoryNode {
     return *this;
   }
 
+  // Disable copy operations
+  ConfigRepositoryNode(const ConfigRepositoryNode&) = default;
+  // Disable move operations
+  ConfigRepositoryNode(ConfigRepositoryNode&&) = delete;
+  ConfigRepositoryNode& operator=(ConfigRepositoryNode&&) = delete;
+  // Destructor (default is fine since there are no dynamic resources)
+  ~ConfigRepositoryNode() = default;
+
  private:
   ConfigRepository& config_repo_;
   YAML::Node node_;

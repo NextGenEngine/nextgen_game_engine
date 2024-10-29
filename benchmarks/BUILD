@@ -7,7 +7,7 @@ cc_binary(
         "move_semantic_versus_references.cc",
     ],
     deps = [
-        "//components/configuration:config_manager",
+        "//components/configuration:config_repo",
         "@google_benchmark//:benchmark_main",
     ],
 )
@@ -32,7 +32,7 @@ cc_binary(
         "engine_classes_sizes.cc",
     ],
     deps = [
-        "//components/configuration:config_manager",
+        "//components/configuration:config_repo",
         "//components/engine:nextgen_game_engine",
         "//components/rendering:rendering_engine",
         "@google_benchmark//:benchmark_main",

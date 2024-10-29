@@ -6,7 +6,7 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members,cppcoreguidelines-non-private-member-variables-in-classes)
 struct VulkanInstance {
   VulkanContext& vulkan_context_;
 
@@ -32,7 +32,7 @@ struct VulkanInstance {
   static const char* GetDeviceTypeName(VkPhysicalDeviceType deviceType);
   bool initialized = false;
 };
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
+// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members,cppcoreguidelines-non-private-member-variables-in-classes)
 
 }  // namespace nextgen::engine::rendering::vulkan
 
