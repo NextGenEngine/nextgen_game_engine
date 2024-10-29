@@ -12,9 +12,8 @@ For the validation scenario where configuration validation depends not only on s
 Create an interface for validation strategies that can be used to implement different validation logic.
 
 ```cpp
-class IConfigValidator {
+class IConfigValidator : InterfaceBase {
 public:
-    virtual ~IConfigValidator() = default;
     virtual bool validate(const VulkanConfig& config, std::shared_ptr<VulkanInstance> instance) = 0;
 };
 ```

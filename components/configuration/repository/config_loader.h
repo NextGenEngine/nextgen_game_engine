@@ -6,13 +6,16 @@
 #include <string>
 #include <string_view>
 
+#include "lib/std_ext.h"
+
 namespace nextgen::engine::configuration {
 
+using lib::std_ext::InterfaceBase;
+
 // Abstract Interface for Config Loaders
-struct IConfigLoader {
+struct IConfigLoader : InterfaceBase {
   virtual YAML::Node Load() = 0;
   virtual void Save(const YAML::Node* config) = 0;
-  virtual ~IConfigLoader() = default;
 };
 
 // Loader for File-based Configuration

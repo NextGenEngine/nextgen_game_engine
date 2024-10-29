@@ -82,9 +82,8 @@ private:
 To handle different configurations, especially post-initialization with context and instance, use the Strategy Pattern. This will allow the VulkanRenderingApi to change its configuration strategy at runtime.
 
 ```cpp
-class IConfigurationStrategy {
+class IConfigurationStrategy : InterfaceBase {
 public:
-    virtual ~IConfigurationStrategy() = default;
     virtual void configure(std::shared_ptr<VulkanRenderingApi> api) = 0;
 };
 

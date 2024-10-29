@@ -7,9 +7,8 @@ Let's integrate a RenderingConfigurationStrategy that encapsulates the overall c
 We'll start with a common interface for configuration strategies that includes a method to apply configurations. This will be used by both the main rendering strategy and the individual component strategies.
 
 ```cpp
-class IConfigurationStrategy {
+class IConfigurationStrategy : InterfaceBase {
 public:
-    virtual ~IConfigurationStrategy() {}
     virtual void configure() = 0;
 };
 ```

@@ -101,7 +101,7 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable<VulkanConfig> {
   VulkanRenderingApi(const VulkanRenderingApi&) = delete;
   VulkanRenderingApi& operator=(const VulkanRenderingApi&) = delete;
   // move
-  VulkanRenderingApi(VulkanRenderingApi&&) noexcept = default;
+  VulkanRenderingApi(VulkanRenderingApi&&) noexcept = delete;
   VulkanRenderingApi& operator=(VulkanRenderingApi&&) noexcept = delete;
 
  private:

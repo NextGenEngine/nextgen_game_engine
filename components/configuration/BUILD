@@ -13,6 +13,7 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
+        "//lib:std_ext",
         "@yaml-cpp//:yaml-cpp",
     ],
 )

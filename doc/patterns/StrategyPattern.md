@@ -43,7 +43,7 @@ public:
     }
 };
 
-class IConfigurationService {
+class IConfigurationService : InterfaceBase {
 public:
     virtual void saveConfig(const VulkanConfig& config) = 0;
 };
@@ -72,9 +72,8 @@ private:
     std::shared_ptr<VulkanSwap> swap_;
 };
 
-class IConfigurationStrategy {
+class IConfigurationStrategy : InterfaceBase {
 public:
-    virtual ~IConfigurationStrategy() = default;
     virtual void configure(std::shared_ptr<VulkanInstance> instance,
                            std::shared_ptr<VulkanDevice> device,
                            std::shared_ptr<VulkanSwap> swap) = 0;
