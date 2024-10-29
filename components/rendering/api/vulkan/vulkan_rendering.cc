@@ -8,10 +8,12 @@
 #include <ext/matrix_clip_space.hpp>
 #include <ext/matrix_transform.hpp>
 #include <iostream>
+#include <optional>
 #include <stdexcept>
 #include <trigonometric.hpp>
 
 #include "components/rendering/api/vulkan/vulkan_buffer.h"
+#include "components/rendering/api/vulkan/vulkan_config.h"
 #include "components/rendering/api/vulkan/vulkan_constants.h"
 #include "components/rendering/api/vulkan/vulkan_uniform_buffer.h"
 

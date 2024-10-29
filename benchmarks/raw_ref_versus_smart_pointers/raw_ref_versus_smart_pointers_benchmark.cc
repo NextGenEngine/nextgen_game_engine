@@ -9,7 +9,7 @@ namespace {
 constexpr int num_iterations = 100000;
 
 // Benchmark for the `references::runCalculation` function
-static void BM_ReferencesCalculation(benchmark::State& state) {
+void BM_ReferencesCalculation(benchmark::State& state) {
   for (auto _ : state) {
     // Call the calculation function in the references namespace
     for (int i = 0; i < num_iterations; ++i) {
@@ -20,7 +20,7 @@ static void BM_ReferencesCalculation(benchmark::State& state) {
 BENCHMARK(BM_ReferencesCalculation);
 
 // Benchmark for the `smart_pointers::runCalculation` function
-static void BM_SmartPointersCalculation(benchmark::State& state) {
+void BM_SmartPointersCalculation(benchmark::State& state) {
   for (auto _ : state) {
     // Call the calculation function in the smart_pointers namespace
     for (int i = 0; i < num_iterations; ++i) {

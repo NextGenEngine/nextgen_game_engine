@@ -6,7 +6,7 @@ struct Rendering {
   Vulkan vulkan;
 };
 
-struct Application {
+static struct Application {
   Rendering rendering;
 } app;  // Global instance
 
@@ -25,7 +25,7 @@ Vulkan& Accessor<Application>::vulkan = app.rendering.vulkan;
 
 #define VULKAN app.rendering.vulkan
 
-auto& VulkanConfig = Accessor<Application>::vulkan;
+static auto& VulkanConfig = Accessor<Application>::vulkan;
 
 #include <iostream>
 

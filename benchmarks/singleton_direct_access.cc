@@ -24,18 +24,18 @@ class RenderManager {
 };
 // NOLINTEND(cppcoreguidelines-use-default-member-init,cppcoreguidelines-special-member-functions,misc-non-private-member-variables-in-classes,misc-non-private-member-variables-in-classes)
 
-void DoSomethingWithManager(RenderManager& manager) {
+static void DoSomethingWithManager(RenderManager& manager) {
   manager.code = 7;
   manager.code_a = 8;
 }
 
-auto DoSomethingWithManager2(std::unique_ptr<RenderManager> manager) {
+static auto DoSomethingWithManager2(std::unique_ptr<RenderManager> manager) {
   manager->code = 7;
   manager->code_a = 8;
   return manager;
 }
 
-void DoSomethingWithManager3(RenderManager& manager) {
+static void DoSomethingWithManager3(RenderManager& manager) {
   manager.code = 7;
   manager.code_a = 8;
 }

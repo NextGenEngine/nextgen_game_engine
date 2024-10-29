@@ -1,7 +1,5 @@
 #include "nextgen_game_engine.h"
 
-#include <yaml-cpp/node/parse.h>
-
 #include <cstddef>
 #include <cstdlib>
 #include <exception>
@@ -36,7 +34,7 @@ int main() {
             << " bytes\n";
 
   try {
-    nextgen::engine::ENGINE.Initialize();
+    nextgen::engine::NextGenEngine::Initialize();
   } catch (std::exception& e) {
     std::cout << "MAIN: FATAL ERROR. Engine base initialization failed: "
               << e.what() << "\n";

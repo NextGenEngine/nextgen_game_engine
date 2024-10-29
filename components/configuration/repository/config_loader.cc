@@ -1,8 +1,14 @@
 #include "config_loader.h"
 
+#include <yaml-cpp/exceptions.h>
+#include <yaml-cpp/node/node.h>
+#include <yaml-cpp/node/parse.h>
+
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <string_view>
+#include <utility>
 
 namespace {
 

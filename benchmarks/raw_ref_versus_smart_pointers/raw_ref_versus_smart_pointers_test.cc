@@ -2,6 +2,8 @@
 
 #include <gtest/gtest.h>  // Assuming you're using GoogleTest
 
+#include <memory>
+
 namespace references {
 
 TEST(TopLevelClassTest, CalculateAllWorks) {
@@ -14,7 +16,7 @@ TEST(TopLevelClassTest, CalculateAllWorks) {
 
   // Act: Create the top-level class and call the calculateAll method
   TopLevelClass topLevel;  // Your setup already instantiates these services
-  int result = topLevel.calculateAll();
+  int const result = topLevel.calculateAll();
 
   // Assert: Check if the calculation is correct
   ASSERT_EQ(result, serviceD.calculate() + serviceE.calculate() +
@@ -36,7 +38,7 @@ TEST(TopLevelClassTest, CalculateAllWorks) {
 
   // Act: Create the top-level class and call the calculateAll method
   TopLevelClass topLevel;  // Already uses smart pointers internally
-  int result = topLevel.calculateAll();
+  int const result = topLevel.calculateAll();
 
   // Assert: Check if the calculation is correct
   ASSERT_EQ(result, serviceD->calculate() + serviceE->calculate() +

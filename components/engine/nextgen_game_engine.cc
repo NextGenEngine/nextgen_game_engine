@@ -1,5 +1,7 @@
 #include "nextgen_game_engine.h"
 
+#include "components/configuration/repository/config_loader.h"
+
 // #include <chrono>
 #include <cstdlib>
 #include <iostream>

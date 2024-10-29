@@ -28,7 +28,7 @@ struct NextGenEngine {
     std::cout << "NextGenEngine object created\n";
   }
   void Loop();
-  void Initialize();
+  static void Initialize();
   void Shutdown();
 
   ConfigRepository component_config_{file_loader};
