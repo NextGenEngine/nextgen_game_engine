@@ -6,9 +6,13 @@ struct Rendering {
   Vulkan vulkan;
 };
 
-static struct Application {
+namespace {
+
+struct Application {
   Rendering rendering;
 } app;  // Global instance
+
+}  // namespace
 
 template <typename T>
 struct Accessor;
@@ -25,7 +29,11 @@ Vulkan& Accessor<Application>::vulkan = app.rendering.vulkan;
 
 #define VULKAN app.rendering.vulkan
 
-static auto& VulkanConfig = Accessor<Application>::vulkan;
+namespace {
+
+auto& VulkanConfig = Accessor<Application>::vulkan;
+
+}  // namespace
 
 #include <iostream>
 

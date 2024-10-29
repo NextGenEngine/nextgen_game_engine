@@ -36,7 +36,7 @@ class StringLoader : public IConfigLoader {
   std::string m_yaml_content;
 
  public:
-  explicit StringLoader(const std::string& yaml_content);
+  explicit StringLoader(std::string yaml_content);
 
   YAML::Node Load() override;
   void Save(const YAML::Node* config) override;

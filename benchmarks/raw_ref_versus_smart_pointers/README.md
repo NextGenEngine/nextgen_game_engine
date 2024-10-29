@@ -2,21 +2,21 @@
 
 The benchmark results for both non-optimized and optimized builds are quite interesting. Let's break them down and analyze them.
 
-### Non-Optimized Build (Debug Build):
+## Non-Optimized Build (Debug Build)
 
 | Benchmark                   | Time (ns) | CPU (ns) | Iterations |
 | --------------------------- | --------- | -------- | ---------- |
 | BM_ReferencesCalculation    | 1398317   | 1398201  | 501        |
 | BM_SmartPointersCalculation | 3329676   | 3329351  | 207        |
 
-### Optimized Build (Release Build):
+## Optimized Build (Release Build)
 
 | Benchmark                   | Time (ns) | CPU (ns) | Iterations |
 | --------------------------- | --------- | -------- | ---------- |
 | BM_ReferencesCalculation    | 618017    | 617970   | 1044       |
 | BM_SmartPointersCalculation | 652545    | 652358   | 1061       |
 
-### Key Observations:
+## Key Observations
 
 1. **Performance Improvement from Debug to Optimized Build**:
 
@@ -39,7 +39,7 @@ The benchmark results for both non-optimized and optimized builds are quite inte
 
    The number of iterations is very close in the optimized build, meaning that Google Benchmark ran the test cases for almost the same amount of real time for both. This reflects that the performance of both solutions is almost comparable in an optimized environment.
 
-### Interpretation of Results:
+## Interpretation of Results
 
 1. **Non-Optimized Build**:
 
@@ -50,12 +50,12 @@ The benchmark results for both non-optimized and optimized builds are quite inte
    - The performance gap narrows significantly after optimizations. The compiler is able to optimize away much of the overhead of `std::shared_ptr`, resulting in the two approaches having similar performance.
    - Despite the heavy memory management required by smart pointers, the optimizations make them almost as fast as raw references, demonstrating how modern compilers can optimize even complex features like smart pointers.
 
-### Takeaways:
+## Takeaways
 
 - **In Debug Builds**: The reference-based solution is significantly faster due to the absence of smart pointer overhead. This is expected in a non-optimized environment, where the compiler doesn't attempt to eliminate overhead from constructs like `std::shared_ptr`.
 - **In Optimized Builds**: The smart pointer-based solution performs nearly as well as the reference-based one. This suggests that in release or production scenarios, the overhead of smart pointers is mostly optimized away, making them a viable option without substantial performance loss, despite their safety and convenience.
 
-### Next Steps:
+## Next Steps
 
 - If performance is **critical** and your code is running in a **highly optimized environment**, both solutions are close enough that you can choose either based on your needs. The small difference (~5% in favor of references) might not be enough to justify avoiding smart pointers if safety and maintainability are important.
 - If you're working in a **debug environment** or **tight performance constraints**, the reference-based approach would be preferable, as it avoids the overhead introduced by smart pointers.
@@ -70,7 +70,7 @@ In real-life scenarios, especially in game development and other performance-cri
 
 Here’s a detailed look at how the two approaches are viewed in real-world applications like game development:
 
-### 1. **Performance Considerations**:
+## 1. **Performance Considerations**
 
 - **Raw References and Pointers**:
 
@@ -81,7 +81,7 @@ Here’s a detailed look at how the two approaches are viewed in real-world appl
   - **Pros**: `std::shared_ptr` and `std::unique_ptr` bring **automatic memory management**, reducing the chance of memory leaks or dangling pointers. They provide **safe ownership semantics**: `std::unique_ptr` guarantees exclusive ownership, and `std::shared_ptr` ensures multiple owners can safely share a resource.
   - **Cons**: In highly optimized loops, the overhead of reference counting (`std::shared_ptr`) or heap allocation (`std::unique_ptr`) can be noticeable, particularly in **hot paths** (code that runs frequently and must be extremely fast). However, in many cases, **optimized builds** mitigate these overheads effectively, as seen in your benchmark results.
 
-### 2. **Real-Life Scenarios in Game Development**:
+## 2. **Real-Life Scenarios in Game Development**
 
 - **Low-Level Systems (Engine Core, Graphics, Physics)**:
 
@@ -92,7 +92,7 @@ Here’s a detailed look at how the two approaches are viewed in real-world appl
   - **Preferred Solution**: **Smart pointers** (`std::shared_ptr`, `std::unique_ptr`) are more common in higher-level systems where safety is a priority, and performance is not as critical as in core engine systems.
   - **Why**: Gameplay objects often have complex ownership semantics (e.g., a player object might be referenced by several game systems). Using `std::shared_ptr` ensures that memory is automatically managed, reducing the risk of dangling pointers or leaks. This is particularly important in large codebases where maintaining strict ownership manually can become error-prone.
 
-### 3. **What Experienced C++ Engineers Say**:
+## 3. **What Experienced C++ Engineers Say**
 
 - **Raw Pointers/References in Performance-Critical Code**:
 
@@ -104,7 +104,7 @@ Here’s a detailed look at how the two approaches are viewed in real-world appl
   - The rationale is that for large-scale projects, avoiding memory leaks and ensuring proper ownership semantics is worth the minimal performance cost, especially in **non-critical** or less performance-sensitive code paths (such as gameplay logic or asset management systems).
   - C++ experts, such as those involved in standard library development or large-scale software systems, recommend **`std::unique_ptr`** for exclusive ownership as a good trade-off between performance and safety.
 
-### 4. **Best Practices in Game Development**:
+## 4. **Best Practices in Game Development**
 
 - **Prefer `std::unique_ptr`** where ownership semantics are simple:
 
@@ -120,12 +120,12 @@ Here’s a detailed look at how the two approaches are viewed in real-world appl
   - When a class needs to refer to an object but does **not own** it, raw pointers or references are typically used. This is common in scenarios where **ownership is managed externally** (e.g., in an object pool or a custom allocator).
   - **Example**: A physics component holding a reference to a player object but not owning it. The lifetime of the player is managed elsewhere, so a raw pointer or reference is appropriate.
 
-### Conclusion:
+## Conclusion
 
 - **Raw Pointers/References**: Preferred in performance-critical, low-level code where you need maximum control over memory and performance is a key concern. However, it requires careful manual management of object lifetimes.
 - **Smart Pointers**: Typically used in higher-level systems where **safety and maintainability** outweigh the minor performance cost. In real-life game development, `std::unique_ptr` is often favored for ownership due to its minimal overhead, while `std::shared_ptr` is used cautiously for more complex ownership cases.
 
-### General Rule:
+## General Rule
 
 - Use **raw pointers and references** for **performance-critical inner loops**, and use **smart pointers** when **safety and automatic memory management** are more important than micro-optimizations.
 

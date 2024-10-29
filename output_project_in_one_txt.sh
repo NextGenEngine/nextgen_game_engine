@@ -4,7 +4,7 @@
 output_file="result.txt"
 
 # Clear the output file if it already exists
->"${output_file}"
+true >"${output_file}"
 
 # Check if at least one mask is provided
 if [[ $# -eq 0 ]]; then
@@ -22,12 +22,15 @@ for mask in "$@"; do
 done
 
 # Sort the list of files
+# trunk-ignore(shellcheck/SC2312)
 sort "${temp_file_list}" | while read -r file; do
 	# Output the file path
-	echo "File: ${file}" >>"${output_file}"
-	echo "Contents:" >>"${output_file}"
-	# Output the file contents
-	cat "${file}" >>"${output_file}"
+	{
+		echo "File: ${file}"
+		echo "Contents:"
+		cat "${file}"
+	} >>"${output_file}"
+
 	# Add a separator
 	echo -e "\n---\n" >>"${output_file}"
 done

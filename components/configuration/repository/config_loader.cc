@@ -8,6 +8,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
+#include <utility>
 
 namespace {
 
@@ -72,8 +73,8 @@ void FileLoader::Save(const YAML::Node* config) {
             STRING LOADER
 ========================================*/
 
-StringLoader::StringLoader(const std::string& yaml_content)
-    : m_yaml_content(yaml_content) {}
+StringLoader::StringLoader(std::string yaml_content)
+    : m_yaml_content(std::move(yaml_content)) {}
 
 YAML::Node StringLoader::Load() {
   try {

@@ -10,24 +10,28 @@ constexpr int num_iterations = 100000;
 
 // Benchmark for the `references::runCalculation` function
 void BM_ReferencesCalculation(benchmark::State& state) {
-  for (auto _ : state) {
+  for ([[maybe_unused]] auto ___ : state) {
     // Call the calculation function in the references namespace
     for (int i = 0; i < num_iterations; ++i) {
       benchmark::DoNotOptimize(references::runCalculation());
     }
   }
 }
+
+// NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
 BENCHMARK(BM_ReferencesCalculation);
 
 // Benchmark for the `smart_pointers::runCalculation` function
 void BM_SmartPointersCalculation(benchmark::State& state) {
-  for (auto _ : state) {
+  for ([[maybe_unused]] auto ___ : state) {
     // Call the calculation function in the smart_pointers namespace
     for (int i = 0; i < num_iterations; ++i) {
       benchmark::DoNotOptimize(smart_pointers::runCalculation());
     }
   }
 }
+
+// NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
 BENCHMARK(BM_SmartPointersCalculation);
 
 }  // namespace
