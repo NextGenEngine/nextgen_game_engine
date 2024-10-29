@@ -7,12 +7,11 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
-#include <string_view>
 #include <utility>
 
 namespace {
 
-auto GetDefaultConfig() -> std::string_view {
+auto GetDefaultConfig() -> std::string {
   // NOTE: there is no need to implement this function at the moment.
   // Each component have its own configuration. And I do not want to
   // know it on higher level. It gives me flexibility to easily
@@ -30,8 +29,8 @@ namespace nextgen::engine::configuration {
             FILE LOADER
 ========================================*/
 
-FileLoader::FileLoader(const std::string_view& file_path)
-    : m_file_path(file_path) {}
+FileLoader::FileLoader(std::string file_path)
+    : m_file_path(std::move(file_path)) {}
 
 YAML::Node FileLoader::Load() {
   try {
@@ -52,7 +51,7 @@ YAML::Node FileLoader::Load() {
 
     // Load the default configuration
     try {
-      return YAML::Load(std::string(default_config));
+      return YAML::Load(default_config);
     } catch (const YAML::Exception& e) {
       throw std::runtime_error(
           "Failed to load default configuration.\nError: " +

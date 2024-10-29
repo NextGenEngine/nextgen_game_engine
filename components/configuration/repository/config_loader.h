@@ -4,7 +4,6 @@
 #include <yaml-cpp/yaml.h>
 
 #include <string>
-#include <string_view>
 
 #include "lib/std_ext.h"
 
@@ -24,7 +23,7 @@ class FileLoader : public IConfigLoader {
   std::string m_file_path;
 
  public:
-  explicit FileLoader(const std::string_view& file_path);
+  explicit FileLoader(std::string file_path);
 
   YAML::Node Load() override;
   void Save(const YAML::Node* config) override;

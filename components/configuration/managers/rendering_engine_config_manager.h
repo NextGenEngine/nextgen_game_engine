@@ -5,22 +5,12 @@
 #include "components/rendering/rendering_engine.h"
 #include "config_manager_template.h"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
-
 namespace nextgen::engine::configuration::managers {
 
-using RenderingEngineConfigManagerBase =
+using RenderingEngineConfigManager =
     ConfigComponentManager<rendering::RenderingEngine,
                            rendering::RenderingEngineConfig>;
 
-struct RenderingEngineConfigManager : public RenderingEngineConfigManagerBase {
-  explicit RenderingEngineConfigManager(
-      rendering::RenderingEngine& renderingEngine,
-      ConfigWithDefaultFlag<rendering::RenderingEngineConfig> config)
-      : RenderingEngineConfigManagerBase(renderingEngine, config) {}
-};
-
 }  // namespace nextgen::engine::configuration::managers
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 
 #endif

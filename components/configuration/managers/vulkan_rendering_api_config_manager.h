@@ -5,23 +5,12 @@
 #include "components/rendering/api/vulkan/vulkan_rendering.h"
 #include "config_manager_template.h"
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
-
 namespace nextgen::engine::configuration::managers {
 
-using VulkanRenderingApiConfigManagerBase =
+using VulkanRenderingApiConfigManager =
     ConfigComponentManager<rendering::vulkan::VulkanRenderingApi,
                            rendering::vulkan::VulkanConfig>;
 
-struct VulkanRenderingApiConfigManager
-    : public VulkanRenderingApiConfigManagerBase {
-  explicit VulkanRenderingApiConfigManager(
-      rendering::vulkan::VulkanRenderingApi& renderingEngine,
-      ConfigWithDefaultFlag<rendering::vulkan::VulkanConfig> config)
-      : VulkanRenderingApiConfigManagerBase(renderingEngine, config) {}
-};
-
 }  // namespace nextgen::engine::configuration::managers
-// NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 
 #endif

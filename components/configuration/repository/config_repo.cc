@@ -8,6 +8,10 @@
 
 namespace nextgen::engine::configuration {
 
+YAML::Node ConfigRepository::GetYamlNode() { return root_node_; }
+
+void ConfigRepository::Save() { loader_.Save(&root_node_); }
+
 ConfigRepositoryNode ConfigRepository::GetNode() {
   // If root node is not a Map, then make it a Map
   if (!root_node_.IsMap()) {
@@ -29,6 +33,15 @@ ConfigRepositoryNode ConfigRepository::GetNode(const std::string& sectionName) {
 ConfigRepositoryNode ConfigRepository::operator[](
     const std::string& sectionName) {
   return GetNode(sectionName);
+}
+
+const YAML::Node& ConfigRepositoryNode::GetYamlNode() const { return node_; }
+
+YAML::Node& ConfigRepositoryNode::GetYamlNodeMutable() { return node_; }
+
+void ConfigRepositoryNode::Save() {
+  // Update the root node in ConfigManager and invoke save
+  config_repo_.Save();
 }
 
 ConfigRepositoryNode ConfigRepositoryNode::GetNode(
@@ -82,6 +95,17 @@ void ConfigRepositoryNode::MergeYAMLNodes(YAML::Node target,
     // If currentConfig has the key with a scalar value and defaultVal is also
     // scalar, the value in currentConfig has already been replaced above.
   }
+}
+
+ConfigRepositoryNode& ConfigRepositoryNode::operator=(
+    const ConfigRepositoryNode& other) {
+  if (this != &other) {  // Check for self-assignment
+    // Assign the component_node_ as in the copy constructor
+    node_ = other.node_;
+    // Note: config_manager_ is a reference and remains bound to the original
+    // ConfigManager, so we do not attempt to reassign it.
+  }
+  return *this;
 }
 
 }  // namespace nextgen::engine::configuration

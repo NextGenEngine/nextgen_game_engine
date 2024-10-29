@@ -16,11 +16,11 @@ struct ConfigRepository {
     root_node_ = loader_.Load();
   }
 
-  YAML::Node GetYamlNode() { return root_node_; }
+  YAML::Node GetYamlNode();
   ConfigRepositoryNode GetNode();
   ConfigRepositoryNode GetNode(const std::string& sectionName);
   ConfigRepositoryNode operator[](const std::string& sectionName);
-  void Save() { loader_.Save(&root_node_); }
+  void Save();
 
  private:
   IConfigLoader& loader_;
@@ -31,12 +31,6 @@ struct ConfigRepositoryNode {
   ConfigRepositoryNode(ConfigRepository& config_manager,
                        YAML::Node component_root_node)
       : config_repo_(config_manager), node_(component_root_node) {}
-
-  // Returns a const reference to the component's configuration node
-  const YAML::Node& GetYamlNode() const { return node_; }
-
-  // Returns a mutable reference to the component's configuration node
-  YAML::Node& GetYamlNodeMutable() { return node_; }
 
   // Template method to load configuration into a struct
   template <typename ConfigType>
@@ -55,34 +49,25 @@ struct ConfigRepositoryNode {
     MergeYAMLNodes(node_, YAML::Node(new_config));
   }
 
+  // Returns a const reference to the component's configuration node
+  const YAML::Node& GetYamlNode() const;
+  // Returns a mutable reference to the component's configuration node
+  YAML::Node& GetYamlNodeMutable();
   // Saves the updated configuration back to the ConfigManager
-  void Save() {
-    // Update the root node in ConfigManager and invoke save
-    config_repo_.Save();
-  }
-
+  void Save();
   // Get a sub-component configuration
   ConfigRepositoryNode GetNode(const std::string& sectionName);
   ConfigRepositoryNode operator[](const std::string& sectionName);
   ConfigRepository& GetConfigRepository();
-
   void MergeYAMLNodes(YAML::Node target, const YAML::Node& source);
 
-  // Copy assignment operator
-  ConfigRepositoryNode& operator=(const ConfigRepositoryNode& other) {
-    if (this != &other) {  // Check for self-assignment
-      // Assign the component_node_ as in the copy constructor
-      node_ = other.node_;
-      // Note: config_manager_ is a reference and remains bound to the original
-      // ConfigManager, so we do not attempt to reassign it.
-    }
-    return *this;
-  }
-
-  // Disable copy operations
+  // Define custom copy assignment operator
+  ConfigRepositoryNode& operator=(const ConfigRepositoryNode& other);
+  // Default copy constructor
   ConfigRepositoryNode(const ConfigRepositoryNode&) = default;
-  // Disable move operations
-  ConfigRepositoryNode(ConfigRepositoryNode&&) = delete;
+  // Default move constructor
+  ConfigRepositoryNode(ConfigRepositoryNode&&) = default;
+  // Delete move assignment (because of reference member)
   ConfigRepositoryNode& operator=(ConfigRepositoryNode&&) = delete;
   // Destructor (default is fine since there are no dynamic resources)
   ~ConfigRepositoryNode() = default;

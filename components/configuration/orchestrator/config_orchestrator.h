@@ -1,11 +1,12 @@
 #ifndef NEXTGEN_ENGINE_CONFIGURATION_CONFIG_ORCHESTRATOR_H
 #define NEXTGEN_ENGINE_CONFIGURATION_CONFIG_ORCHESTRATOR_H
 
-// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 #include "components/configuration/managers/rendering_engine_config_manager.h"
 #include "components/configuration/managers/vulkan_rendering_api_config_manager.h"
 #include "components/configuration/repository/config_repo.h"
 #include "components/rendering/rendering_engine.h"
+
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 
 namespace nextgen::engine::configuration {
 

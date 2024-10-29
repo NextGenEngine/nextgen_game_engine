@@ -17,7 +17,7 @@ using configuration::IConfigLoader;
 using rendering::RenderingEngine;
 using templates::FallbackConfigurationStrategyTemplate;
 
-constexpr std::string_view CONFIG_FILE_PATH = "config.yaml";
+constexpr auto CONFIG_FILE_PATH = "config.yaml";
 extern nextgen::engine::configuration::FileLoader file_loader;
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
