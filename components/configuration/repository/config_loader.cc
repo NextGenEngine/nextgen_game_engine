@@ -4,11 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace nextgen::engine::configuration {
-
-/*========================================
-            FILE LOADER
-========================================*/
+namespace {
 
 auto GetDefaultConfig() -> std::string_view {
   // NOTE: there is no need to implement this function at the moment.
@@ -19,6 +15,14 @@ auto GetDefaultConfig() -> std::string_view {
   // from higher level components.
   return "";
 }
+
+}  // namespace
+
+namespace nextgen::engine::configuration {
+
+/*========================================
+            FILE LOADER
+========================================*/
 
 FileLoader::FileLoader(const std::string_view& file_path)
     : m_file_path(file_path) {}

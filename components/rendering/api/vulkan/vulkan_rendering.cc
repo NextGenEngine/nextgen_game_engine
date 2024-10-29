@@ -123,7 +123,8 @@ void VulkanRenderingApi::Shutdown() {
 }
 
 void VulkanRenderingApi::ApplyConfiguration(const VulkanConfig& config) {
-  return;
+  vulkan_config_ = config;
+
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-cstyle-cast,google-readability-casting)
   // const auto* vulkan_config = (VulkanConfig*)config;
   // std::cout << vulkan_config->device_id << "\n";

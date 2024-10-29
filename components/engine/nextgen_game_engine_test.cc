@@ -46,6 +46,10 @@ int main() {
 
   try {
     nextgen::engine::ENGINE.rendering_config_strategy_.Configure();
+    std::cout << "Device id="
+              << nextgen::engine::ENGINE.rendering_engine_.apis_
+                     .vulkan_rendering_api.vulkan_config_.device_id
+              << "\n";
   } catch (std::exception& e) {
     std::cout << "MAIN: FATAL ERROR. Engine configuration failed: " << e.what();
     TryToShutdown();
