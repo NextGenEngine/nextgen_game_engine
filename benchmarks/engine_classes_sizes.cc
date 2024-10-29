@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "components/configuration/config_manager.h"
+#include "components/configuration/config_repo.h"
 #include "components/engine/nextgen_game_engine.h"
 #include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy.h"
 #include "components/rendering/api/vulkan/config_strategy/vulkan_config_strategy_default.h"
@@ -22,9 +22,9 @@
 int main() {
   std::cout
       << "nextgen::engine::configuration::ConfigManager: "
-      << sizeof(nextgen::engine::configuration::ConfigManager) << "\n"
+      << sizeof(nextgen::engine::configuration::ConfigRepository) << "\n"
       << "nextgen::engine::configuration::ComponentConfig: "
-      << sizeof(nextgen::engine::configuration::ComponentConfig) << "\n"
+      << sizeof(nextgen::engine::configuration::ConfigRepositoryNode) << "\n"
       << "nextgen::engine::rendering::RenderingEngineConfig: "
       << sizeof(nextgen::engine::rendering::RenderingEngineConfig) << "\n"
       << "nextgen::engine::rendering::RenderingConfigurationStrategySelector: "

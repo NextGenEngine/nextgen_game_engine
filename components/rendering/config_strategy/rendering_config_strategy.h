@@ -1,7 +1,7 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_CONFIG_STRATEGY_H
 #define NEXTGEN_ENGINE_RENDERING_CONFIG_STRATEGY_H
 
-#include "components/configuration/config_manager.h"
+#include "components/configuration/repository/config_repo.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
 #include "components/engine/nextgen_game_engine_templates.h"
 #include "components/rendering/rendering_engine.h"
@@ -11,7 +11,7 @@
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
 namespace nextgen::engine::rendering {
 
-using configuration::ComponentConfig;
+using configuration::ConfigRepositoryNode;
 using templates::FallbackConfigurationStrategyTemplate;
 
 struct RenderingConfigurationStrategy : interfaces::IConfigurationStrategy {

@@ -21,7 +21,8 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":nextgen_game_engine_types",
-        "//components/configuration:config_manager",
+        "//components/configuration:config_orchestrator",
+        "//components/configuration:config_repo",
         "//components/rendering:rendering_engine",
         "@onetbb//:tbb",
     ],

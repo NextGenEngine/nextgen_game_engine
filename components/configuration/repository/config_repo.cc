@@ -1,4 +1,4 @@
-#include "components/configuration/config_manager.h"
+#include "config_repo.h"
 
 #include <yaml-cpp/node/detail/iterator_fwd.h>
 #include <yaml-cpp/node/node.h>
@@ -8,41 +8,52 @@
 
 namespace nextgen::engine::configuration {
 
-ComponentConfig ConfigManager::GetRootComponentConfig() {
+ConfigRepositoryNode ConfigRepository::GetNode() {
   // If root node is not a Map, then make it a Map
-  if (!rootNode_.IsMap()) {
-    rootNode_ = YAML::Node(YAML::NodeType::Map);
+  if (!root_node_.IsMap()) {
+    root_node_ = YAML::Node(YAML::NodeType::Map);
   }
-  return ComponentConfig(*this, rootNode_);
+  return ConfigRepositoryNode(*this, root_node_);
 }
 
-ComponentConfig ConfigManager::GetComponentConfig(
-    const std::string& sectionName) {
+ConfigRepositoryNode ConfigRepository::GetNode(const std::string& sectionName) {
   // If the node doesn't exist, create it
-  if (!rootNode_[sectionName]) {
-    rootNode_[sectionName] = YAML::Node(YAML::NodeType::Map);
+  if (!root_node_[sectionName]) {
+    root_node_[sectionName] = YAML::Node(YAML::NodeType::Map);
   }
-  return ComponentConfig(*this, rootNode_[sectionName]);
+  return ConfigRepositoryNode(*this, root_node_[sectionName]);
   // TODO(artem): try replace with helper. Read more in header file
   // return GetComponentConfigHelper(*this, rootNode_, sectionName);
 }
 
-ComponentConfig ComponentConfig::GetComponentConfig(
+ConfigRepositoryNode ConfigRepository::operator[](
+    const std::string& sectionName) {
+  return GetNode(sectionName);
+}
+
+ConfigRepositoryNode ConfigRepositoryNode::GetNode(
     const std::string& sectionName) {
   // If the node doesn't exist, create it
-  if (!component_node_[sectionName]) {
-    component_node_[sectionName] = YAML::Node(YAML::NodeType::Map);
+  if (!node_[sectionName]) {
+    node_[sectionName] = YAML::Node(YAML::NodeType::Map);
   }
-  return ComponentConfig(config_manager_, component_node_[sectionName]);
+  return ConfigRepositoryNode(config_repo_, node_[sectionName]);
   // TODO(artem): try replace with helper. Read more in header file
   // return GetComponentConfigHelper(config_manager_, component_node_,
   //                                 sectionName);
 }
 
-ConfigManager& ComponentConfig::GetConfigManager() { return config_manager_; }
+ConfigRepositoryNode ConfigRepositoryNode::operator[](
+    const std::string& sectionName) {
+  return GetNode(sectionName);
+}
 
-void ComponentConfig::MergeYAMLNodes(YAML::Node target,
-                                     const YAML::Node& source) {
+ConfigRepository& ConfigRepositoryNode::GetConfigRepository() {
+  return config_repo_;
+}
+
+void ConfigRepositoryNode::MergeYAMLNodes(YAML::Node target,
+                                          const YAML::Node& source) {
   if (!source.IsMap()) {
     target = source;
     return;

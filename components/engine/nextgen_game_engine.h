@@ -3,18 +3,17 @@
 
 #include <iostream>
 
-#include "components/configuration/config_loader.h"
-#include "components/configuration/config_manager.h"
+#include "components/configuration/orchestrator/config_orchestrator.h"
+#include "components/configuration/repository/config_loader.h"
+#include "components/configuration/repository/config_repo.h"
 #include "components/engine/nextgen_game_engine_templates.h"
-#include "components/rendering/config_strategy/rendering_config_strategy.h"
 #include "components/rendering/rendering_engine.h"
 
 namespace nextgen::engine {
 
-using configuration::ComponentConfig;
-using configuration::ConfigManager;
+using configuration::ConfigRepository;
+using configuration::ConfigRepositoryNode;
 using configuration::IConfigLoader;
-using rendering::RenderingConfigurationStrategy;
 using rendering::RenderingEngine;
 using templates::FallbackConfigurationStrategyTemplate;
 
@@ -25,18 +24,16 @@ extern nextgen::engine::configuration::FileLoader file_loader;
 struct NextGenEngine {
   explicit NextGenEngine()
       : component_config_(file_loader),
-        rendering_config_strategy_(
-            component_config_.GetComponentConfig("rendering"),
-            rendering_engine_) {
+        rendering_config_strategy_(component_config_, rendering_engine_) {
     std::cout << "NextGenEngine object created\n";
   }
   void Loop();
   void Initialize();
   void Shutdown();
 
-  ConfigManager component_config_{file_loader};
+  ConfigRepository component_config_{file_loader};
   RenderingEngine rendering_engine_;
-  RenderingConfigurationStrategy rendering_config_strategy_;
+  configuration::ConfigOrchestrator rendering_config_strategy_;
 };
 // NOLINTEND(misc-non-private-member-variables-in-classes)
 

@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cctype>
 #include <iostream>
+#include <stdexcept>
 
 #include "components/rendering/rendering_config.h"
 
@@ -26,7 +27,14 @@ void RenderingEngine::Shutdown() {
   api_->Shutdown();
 }
 
-void RenderingEngine::MainLoop() { apis_.vulkan_rendering_api.MainLoop(); }
+void RenderingEngine::MainLoop() {
+  if (api_ == nullptr) {
+    throw std::runtime_error(
+        "RenderingEngine: FATAL ERROR. Rendering engine API was not "
+        "initialized");
+  }
+  api_->MainLoop();
+}
 
 void RenderingEngine::Render() {
   api_->Render();

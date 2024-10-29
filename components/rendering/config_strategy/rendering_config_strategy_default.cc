@@ -1,6 +1,6 @@
 #include "rendering_config_strategy_default.h"
 
-#include "components/configuration/config_manager.h"
+#include "components/configuration/config_repo.h"
 #include "components/rendering/rendering_config.h"
 #include "components/rendering/rendering_engine.h"
 #include "rendering_config_sub_strategy_selector.h"
@@ -18,7 +18,7 @@ auto DefaultConfig = []() -> RenderingEngineConfig {
 
 namespace nextgen::engine::rendering {
 
-using configuration::ComponentConfig;
+using configuration::ConfigRepositoryNode;
 
 RenderingConfigurationDefaultStrategy::RenderingConfigurationDefaultStrategy(
     ComponentConfig& component_config,

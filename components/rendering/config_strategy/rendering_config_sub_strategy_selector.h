@@ -9,7 +9,7 @@
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::rendering {
 
-using configuration::ComponentConfig;
+using configuration::ConfigRepositoryNode;
 using directx::DirectXDefaultConfigStrategy;
 using vulkan::VulkanConfigStrategy;
 

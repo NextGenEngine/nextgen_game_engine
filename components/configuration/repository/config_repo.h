@@ -1,46 +1,48 @@
-// config_manager.h
+// config_repo.h
 #ifndef CONFIG_MANAGER_H
 #define CONFIG_MANAGER_H
 
 #include <yaml-cpp/yaml.h>
 
-#include "components/configuration/config_loader.h"
+#include "components/configuration/repository/config_loader.h"
 
 // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
 namespace nextgen::engine::configuration {
 
-struct ComponentConfig;
+struct ConfigRepositoryNode;
 
-struct ConfigManager {
-  explicit ConfigManager(IConfigLoader& loader) : loader_(loader) {
-    rootNode_ = loader_.Load();
+struct ConfigRepository {
+  explicit ConfigRepository(IConfigLoader& loader) : loader_(loader) {
+    root_node_ = loader_.Load();
   }
 
-  YAML::Node GetRootNode() { return rootNode_; }
-  ComponentConfig GetRootComponentConfig();
-  ComponentConfig GetComponentConfig(const std::string& sectionName);
-  void Save() { loader_.Save(&rootNode_); }
+  YAML::Node GetYamlNode() { return root_node_; }
+  ConfigRepositoryNode GetNode();
+  ConfigRepositoryNode GetNode(const std::string& sectionName);
+  ConfigRepositoryNode operator[](const std::string& sectionName);
+  void Save() { loader_.Save(&root_node_); }
 
  private:
   IConfigLoader& loader_;
-  YAML::Node rootNode_;
+  YAML::Node root_node_;
 };
 
-struct ComponentConfig {
-  ComponentConfig(ConfigManager& config_manager, YAML::Node component_root_node)
-      : config_manager_(config_manager), component_node_(component_root_node) {}
+struct ConfigRepositoryNode {
+  ConfigRepositoryNode(ConfigRepository& config_manager,
+                       YAML::Node component_root_node)
+      : config_repo_(config_manager), node_(component_root_node) {}
 
   // Returns a const reference to the component's configuration node
-  const YAML::Node& GetNode() const { return component_node_; }
+  const YAML::Node& GetYamlNode() const { return node_; }
 
   // Returns a mutable reference to the component's configuration node
-  YAML::Node& GetMutableNode() { return component_node_; }
+  YAML::Node& GetYamlNodeMutable() { return node_; }
 
   // Template method to load configuration into a struct
   template <typename ConfigType>
   std::optional<ConfigType> LoadConfig() const {
     try {
-      return std::make_optional(component_node_.as<ConfigType>());
+      return std::make_optional(node_.as<ConfigType>());
     } catch (...) {
       // Handle parsing exceptions, return std::nullopt if parsing fails
       return std::nullopt;
@@ -50,26 +52,27 @@ struct ComponentConfig {
   // Template method to update the configuration from a struct
   template <typename ConfigType>
   void UpdateConfig(const ConfigType& new_config) {
-    MergeYAMLNodes(component_node_, YAML::Node(new_config));
+    MergeYAMLNodes(node_, YAML::Node(new_config));
   }
 
   // Saves the updated configuration back to the ConfigManager
   void Save() {
     // Update the root node in ConfigManager and invoke save
-    config_manager_.Save();
+    config_repo_.Save();
   }
 
   // Get a sub-component configuration
-  ComponentConfig GetComponentConfig(const std::string& sectionName);
-  ConfigManager& GetConfigManager();
+  ConfigRepositoryNode GetNode(const std::string& sectionName);
+  ConfigRepositoryNode operator[](const std::string& sectionName);
+  ConfigRepository& GetConfigRepository();
 
   void MergeYAMLNodes(YAML::Node target, const YAML::Node& source);
 
   // Copy assignment operator
-  ComponentConfig& operator=(const ComponentConfig& other) {
+  ConfigRepositoryNode& operator=(const ConfigRepositoryNode& other) {
     if (this != &other) {  // Check for self-assignment
       // Assign the component_node_ as in the copy constructor
-      component_node_ = other.component_node_;
+      node_ = other.node_;
       // Note: config_manager_ is a reference and remains bound to the original
       // ConfigManager, so we do not attempt to reassign it.
     }
@@ -77,8 +80,8 @@ struct ComponentConfig {
   }
 
  private:
-  ConfigManager& config_manager_;
-  YAML::Node component_node_;
+  ConfigRepository& config_repo_;
+  YAML::Node node_;
 };
 
 // TODO(artem): try to use this function to replace duplication of code in
@@ -86,13 +89,13 @@ struct ComponentConfig {
 // methods. But I do not like additional call (in fact ComponentConfig will be
 // only used most of the time in real applications), so check first compiled
 // binary, if inlining will work here
-inline ComponentConfig GetComponentConfigHelper(
-    ConfigManager& parent, YAML::Node& startNode,
+inline ConfigRepositoryNode GetComponentConfigHelper(
+    ConfigRepository& parent, YAML::Node& startNode,
     const std::string& sectionName) {
   if (!startNode[sectionName]) {
     startNode[sectionName] = YAML::Node(YAML::NodeType::Map);
   }
-  return ComponentConfig(parent, startNode[sectionName]);
+  return ConfigRepositoryNode(parent, startNode[sectionName]);
 }
 
 }  // namespace nextgen::engine::configuration

@@ -3,7 +3,7 @@
 
 #include <concepts>
 
-#include "components/configuration/config_manager.h"
+#include "components/configuration/repository/config_repo.h"
 #include "nextgen_game_engine_interfaces.h"
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
@@ -30,12 +30,12 @@ concept Configurable = requires(T typ, const void* config) {
 template <ConfigurationStrategy PrimaryStrategy,
           ConfigurationStrategy DefaultStrategy, typename ConfigurableComponent>
 struct FallbackConfigurationStrategyTemplate : public IConfigurationStrategy {
-  configuration::ComponentConfig component_config_;
+  configuration::ConfigRepositoryNode component_config_;
   PrimaryStrategy primary_strategy_;
   DefaultStrategy default_strategy_;
 
   FallbackConfigurationStrategyTemplate(
-      configuration::ComponentConfig component_config,
+      configuration::ConfigRepositoryNode component_config,
       ConfigurableComponent& configurable_component)
       : component_config_(component_config),
         primary_strategy_(component_config_, configurable_component),

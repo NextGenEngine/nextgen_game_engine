@@ -1,7 +1,7 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_H
 #define NEXTGEN_ENGINE_RENDERING_H
 
-#include "components/configuration/config_manager.h"
+#include "components/configuration/repository/config_repo.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
 #include "components/rendering/api/vulkan/vulkan_rendering.h"
 #include "components/rendering/rendering_api.h"
@@ -11,7 +11,7 @@ namespace nextgen::engine::rendering {
 
 using interfaces::IConfigurable;
 using interfaces::IConfigurationStrategy;
-using nextgen::engine::configuration::ComponentConfig;
+using nextgen::engine::configuration::ConfigRepositoryNode;
 using nextgen::engine::rendering::api::IRenderingApi;
 
 struct RenderingEngineData {

@@ -9,7 +9,7 @@
 #include <string>
 
 #include "components/configuration/config_loader.h"
-#include "components/configuration/config_manager.h"
+#include "components/configuration/config_repo.h"
 #include "config_manager_move.h"
 
 // Define your YAML content
@@ -21,7 +21,7 @@ database:
 
 constexpr int ITERATIONS = 1000000;
 
-using nextgen::engine::configuration::ConfigManager;
+using nextgen::engine::configuration::ConfigRepository;
 using nextgen::engine::configuration::StringLoader;
 
 auto CreateConfigManager() -> std::optional<std::shared_ptr<ConfigManager>> {

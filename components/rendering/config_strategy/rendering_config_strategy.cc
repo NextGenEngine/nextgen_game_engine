@@ -1,11 +1,11 @@
 #include "rendering_config_strategy.h"
 
-#include "components/configuration/config_manager.h"
+#include "components/configuration/config_repo.h"
 #include "components/rendering/rendering_engine.h"
 
 namespace nextgen::engine::rendering {
 
-using configuration::ComponentConfig;
+using configuration::ConfigRepositoryNode;
 
 RenderingConfigurationStrategy::RenderingConfigurationStrategy(
     ComponentConfig component_config, RenderingEngine& rendering_engine)

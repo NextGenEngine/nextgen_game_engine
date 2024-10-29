@@ -1,11 +1,11 @@
 #include "vulkan_config_strategy.h"
 
-#include "components/configuration/config_manager.h"
+#include "components/configuration/config_repo.h"
 #include "components/engine/nextgen_game_engine_templates.h"
 #include "components/rendering/rendering_engine.h"
 
 namespace nextgen::engine::rendering::vulkan {
-using configuration::ComponentConfig;
+using configuration::ConfigRepositoryNode;
 
 VulkanConfigStrategy::VulkanConfigStrategy(ComponentConfig component_config,
                                            RenderingEngine& rendering_engine)

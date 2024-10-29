@@ -1,7 +1,7 @@
 #ifndef NEXTGEN_ENGINE_VULKAN_RENDERING_H
 #define NEXTGEN_ENGINE_VULKAN_RENDERING_H
 
-#include "components/configuration/config_manager.h"
+#include "components/configuration/repository/config_repo.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
 #include "components/rendering/api/vulkan/vulkan_buffer.h"
 #include "components/rendering/api/vulkan/vulkan_command_buffers.h"
@@ -29,7 +29,7 @@
 
 namespace nextgen::engine::rendering::vulkan {
 
-using configuration::ComponentConfig;
+using configuration::ConfigRepositoryNode;
 using interfaces::IConfigurable;
 using nextgen::engine::rendering::api::IRenderingApi;
 
@@ -67,7 +67,7 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable<VulkanConfig> {
   void Initialize() override;
   void Shutdown() override;
 
-  void MainLoop();
+  void MainLoop() override;
 
   void Render() override;
   bool Exiting() override;

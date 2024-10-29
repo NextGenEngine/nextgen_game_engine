@@ -1,4 +1,4 @@
-#include "config_manager.h"
+#include "components/configuration/repository/config_repo.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -7,10 +7,10 @@
 
 #include <string>
 
-#include "components/configuration/config_loader.h"
+#include "components/configuration/repository/config_loader.h"
 
-using nextgen::engine::configuration::ComponentConfig;
-using nextgen::engine::configuration::ConfigManager;
+using nextgen::engine::configuration::ConfigRepository;
+using nextgen::engine::configuration::ConfigRepositoryNode;
 
 // Mock ConfigLoader for testing
 class MockConfigLoader : public nextgen::engine::configuration::IConfigLoader {
@@ -27,7 +27,7 @@ constexpr auto APP_NAME = "MyGame";
 constexpr auto VERSION_SECTION = "version";
 constexpr auto VERSION = "1.0";
 
-TEST(ConfigManagerTest, LoadsConfigurationSuccessfully) {
+TEST(ConfigRepositoryTest, LoadsConfigurationSuccessfully) {
   // Create a mock loader instance
   MockConfigLoader mockLoader;
 
@@ -41,11 +41,11 @@ TEST(ConfigManagerTest, LoadsConfigurationSuccessfully) {
       .Times(1)
       .WillOnce(::testing::Return(expectedConfig));
 
-  // Instantiate ConfigManager with the mock loader
-  ConfigManager configManager(mockLoader);
+  // Instantiate ConfigRepository with the mock loader
+  ConfigRepository configManager(mockLoader);
 
   // Load the configuration
-  YAML::Node config = configManager.GetRootNode();
+  YAML::Node config = configManager.GetYamlNode();
 
   // Verify that the configuration matches the expected values
   EXPECT_EQ(config[APP_NAME_SECTION].as<std::string>(), APP_NAME);
@@ -54,15 +54,15 @@ TEST(ConfigManagerTest, LoadsConfigurationSuccessfully) {
 
 }  // namespace LoadsConfigurationSuccessfullyTest
 
-namespace GetComponentConfigReturnsCorrectNodeTest {
+namespace GetNodeReturnsCorrectNodeTest {
 
-// GetComponentConfigReturnsCorrectNode test
+// GetNodeReturnsCorrectNode test
 constexpr auto EXISTING_COMPONENT_SECTION = "existing_component";
 constexpr auto SETTING_SECTION = "setting";
 constexpr auto SETTING_VALUE = "value";
 constexpr auto NEW_COMPONENT_SECTION = "new_component";
 
-TEST(ConfigManagerTest, GetComponentConfigReturnsCorrectNode) {
+TEST(ConfigRepositoryTest, GetNodeReturnsCorrectNode) {
   // Create a mock loader instance
   MockConfigLoader mockLoader;
 
@@ -75,36 +75,36 @@ TEST(ConfigManagerTest, GetComponentConfigReturnsCorrectNode) {
       .Times(1)
       .WillOnce(::testing::Return(initialConfig));
 
-  // Instantiate ConfigManager with the mock loader
-  ConfigManager configManager(mockLoader);
+  // Instantiate ConfigRepository with the mock loader
+  ConfigRepository configManager(mockLoader);
 
   // Request a component configuration for an existing component
-  ComponentConfig const existingComponentConfig =
-      configManager.GetComponentConfig(EXISTING_COMPONENT_SECTION);
+  ConfigRepositoryNode const existingConfigRepositoryNode =
+      configManager.GetNode(EXISTING_COMPONENT_SECTION);
 
   // Verify that the retrieved node contains the correct data
-  const YAML::Node& existingNode = existingComponentConfig.GetNode();
+  const YAML::Node& existingNode = existingConfigRepositoryNode.GetYamlNode();
   EXPECT_EQ(existingNode[SETTING_SECTION].as<std::string>(), SETTING_VALUE);
 
   // Request a component configuration for a non-existing component
-  ComponentConfig const newComponentConfig =
-      configManager.GetComponentConfig(NEW_COMPONENT_SECTION);
+  ConfigRepositoryNode const newConfigRepositoryNode =
+      configManager.GetNode(NEW_COMPONENT_SECTION);
 
   // Verify that the new node is created
-  const YAML::Node& newNode = newComponentConfig.GetNode();
+  const YAML::Node& newNode = newConfigRepositoryNode.GetYamlNode();
   EXPECT_TRUE(newNode.IsDefined());
 
-  // Since newComponentConfig[NEW_COMPONENT_SECTION] didn't exist, its node
+  // Since newConfigRepositoryNode[NEW_COMPONENT_SECTION] didn't exist, its node
   // should be empty and Map by default
   EXPECT_TRUE(newNode.IsMap());
   EXPECT_EQ(newNode.size(), 0);
 }
 
-}  // namespace GetComponentConfigReturnsCorrectNodeTest
+}  // namespace GetNodeReturnsCorrectNodeTest
 
-namespace NestedComponentConfigSaveWorksCorrectlyTest {
+namespace NestedConfigRepositoryNodeSaveWorksCorrectlyTest {
 
-// NestedComponentConfigSaveWorksCorrectly test
+// NestedConfigRepositoryNodeSaveWorksCorrectly test
 constexpr auto RENDERING_SECTION = "rendering";
 constexpr auto VULKAN_SECTION = "vulkan";
 constexpr auto VULKAN_VERSION_SECTION = "api_version";
@@ -112,7 +112,7 @@ constexpr auto VULKAN_VERSION = "1.2";
 constexpr auto RENDERING_API_SECTION = "api";
 constexpr auto RENDERING_API_NAME = "Vulkan";
 
-TEST(ConfigManagerTest, NestedComponentConfigSaveWorksCorrectly) {
+TEST(ConfigRepositoryTest, NestedConfigRepositoryNodeSaveWorksCorrectly) {
   // Create a mock loader instance
   MockConfigLoader mockLoader;
 
@@ -131,21 +131,21 @@ TEST(ConfigManagerTest, NestedComponentConfigSaveWorksCorrectly) {
       .WillOnce(::testing::Invoke(
           [&savedConfig](const YAML::Node* config) { savedConfig = *config; }));
 
-  // Instantiate ConfigManager with the mock loader
-  ConfigManager configManager(mockLoader);
+  // Instantiate ConfigRepository with the mock loader
+  ConfigRepository configManager(mockLoader);
 
   // Get the rendering component configuration
-  ComponentConfig renderingComponent =
-      configManager.GetComponentConfig(RENDERING_SECTION);
-  renderingComponent.GetMutableNode()[RENDERING_API_SECTION] =
+  ConfigRepositoryNode renderingComponent =
+      configManager.GetNode(RENDERING_SECTION);
+  renderingComponent.GetYamlNodeMutable()[RENDERING_API_SECTION] =
       RENDERING_API_NAME;
 
   // Get the vulkan component configuration from rendering
-  ComponentConfig vulkanComponent =
-      renderingComponent.GetComponentConfig(VULKAN_SECTION);
+  ConfigRepositoryNode vulkanComponent =
+      renderingComponent.GetNode(VULKAN_SECTION);
 
   // Optionally, modify the vulkan component configuration
-  YAML::Node& vulkanNode = vulkanComponent.GetMutableNode();
+  YAML::Node& vulkanNode = vulkanComponent.GetYamlNodeMutable();
   vulkanNode[VULKAN_VERSION_SECTION] = VULKAN_VERSION;
 
   // Save the configuration
@@ -168,7 +168,7 @@ TEST(ConfigManagerTest, NestedComponentConfigSaveWorksCorrectly) {
       RENDERING_API_NAME);
 }
 
-}  // namespace NestedComponentConfigSaveWorksCorrectlyTest
+}  // namespace NestedConfigRepositoryNodeSaveWorksCorrectlyTest
 
 namespace LoadAndUpdateConfigWorksCorrectlyTest {
 
@@ -182,7 +182,7 @@ struct VulkanConfig {
   float refresh_rate;  // Refresh rate in Hz
 };
 
-TEST(ComponentConfigTest, LoadAndUpdateConfigWorksCorrectly) {
+TEST(ConfigRepositoryNodeTest, LoadAndUpdateConfigWorksCorrectly) {
   // Create a mock loader instance
   MockConfigLoader mockLoader;
 
@@ -206,20 +206,19 @@ TEST(ComponentConfigTest, LoadAndUpdateConfigWorksCorrectly) {
       .WillOnce(::testing::Invoke(
           [&savedConfig](const YAML::Node* config) { savedConfig = *config; }));
 
-  // Instantiate ConfigManager with the mock loader
-  ConfigManager configManager(mockLoader);
+  // Instantiate ConfigRepository with the mock loader
+  ConfigRepository configManager(mockLoader);
 
   // Get the Vulkan component configuration
-  ComponentConfig renderingComponent =
-      configManager.GetComponentConfig("rendering");
-  ComponentConfig vulkanComponent = configManager.GetComponentConfig("vulkan");
+  ConfigRepositoryNode renderingComponent = configManager.GetNode("rendering");
+  ConfigRepositoryNode vulkanComponent = configManager.GetNode("vulkan");
 
   // Set rendering api to Vulkan to test that UpdateConfig does not rewrite
   // unknown properties
-  renderingComponent.GetMutableNode()["api"] = "Vulkan";
+  renderingComponent.GetYamlNodeMutable()["api"] = "Vulkan";
 
   // Update the component node with initial configuration
-  vulkanComponent.GetMutableNode() = initialConfig;
+  vulkanComponent.GetYamlNodeMutable() = initialConfig;
 
   // Load the configuration into a VulkanConfig struct
   std::optional<VulkanConfig> vulkanConfigOpt =
@@ -239,7 +238,7 @@ TEST(ComponentConfigTest, LoadAndUpdateConfigWorksCorrectly) {
     vulkanConfig.height = 1440;
     vulkanConfig.refresh_rate = 144.0F;
 
-    // Update the ComponentConfig with the modified VulkanConfig
+    // Update the ConfigRepositoryNode with the modified VulkanConfig
     vulkanComponent.UpdateConfig(vulkanConfig);
     // Save the configuration
     vulkanComponent.Save();
@@ -288,7 +287,7 @@ struct convert<VulkanConfig> {
 
 namespace CopyConstructorWorksCorrectlyTest {
 
-TEST(ComponentConfigTest, CopyConstructorWorksCorrectly) {
+TEST(ConfigRepositoryNodeTest, CopyConstructorWorksCorrectly) {
   // Create a mock loader instance
   MockConfigLoader mockLoader;
 
@@ -301,33 +300,33 @@ TEST(ComponentConfigTest, CopyConstructorWorksCorrectly) {
       .Times(1)
       .WillOnce(::testing::Return(initialConfig));
 
-  // Instantiate ConfigManager with the mock loader
-  ConfigManager configManager(mockLoader);
+  // Instantiate ConfigRepository with the mock loader
+  ConfigRepository configManager(mockLoader);
 
   // Get the Vulkan component configuration
-  ComponentConfig originalComponent =
-      configManager.GetComponentConfig("vulkan");
+  ConfigRepositoryNode originalComponent = configManager.GetNode("vulkan");
 
   // Modify the original component
-  originalComponent.GetMutableNode()["width"] = 1920;
+  originalComponent.GetYamlNodeMutable()["width"] = 1920;
 
   // Copy the original component to a new component
-  ComponentConfig copiedComponent = originalComponent;  // Uses copy constructor
+  ConfigRepositoryNode copiedComponent =
+      originalComponent;  // Uses copy constructor
 
   // Verify that the copied component has the same node values as the original
-  EXPECT_EQ(copiedComponent.GetNode()["width"].as<int>(), 1920);
+  EXPECT_EQ(copiedComponent.GetYamlNode()["width"].as<int>(), 1920);
 
   // Ensure that both original and copied components share the same
-  // ConfigManager
-  EXPECT_EQ(&(copiedComponent.GetConfigManager()),
-            &(originalComponent.GetConfigManager()));
+  // ConfigRepository
+  EXPECT_EQ(&(copiedComponent.GetConfigRepository()),
+            &(originalComponent.GetConfigRepository()));
 
   // Now lets modify original and expect this change in copy, and also do it
   // vise versa
-  originalComponent.GetMutableNode()["width"] = 762;
-  EXPECT_EQ(copiedComponent.GetNode()["width"].as<int>(), 762);
-  copiedComponent.GetMutableNode()["width"] = 2560;
-  EXPECT_EQ(originalComponent.GetNode()["width"].as<int>(), 2560);
+  originalComponent.GetYamlNodeMutable()["width"] = 762;
+  EXPECT_EQ(copiedComponent.GetYamlNode()["width"].as<int>(), 762);
+  copiedComponent.GetYamlNodeMutable()["width"] = 2560;
+  EXPECT_EQ(originalComponent.GetYamlNode()["width"].as<int>(), 2560);
 }
 
 }  // namespace CopyConstructorWorksCorrectlyTest

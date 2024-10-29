@@ -6,6 +6,7 @@ namespace nextgen::engine::rendering::api {
 
 struct IRenderingApi : interfaces::IComponent {
   virtual void Render() = 0;
+  virtual void MainLoop() = 0;
   virtual bool Exiting() = 0;
 };
 
