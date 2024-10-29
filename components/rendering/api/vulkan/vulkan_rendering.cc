@@ -126,6 +126,11 @@ VulkanConfig VulkanRenderingApi::GetDefaultConfig() {
   return vulkan_instance_.GetDefaultConfiguration();
 }
 
+std::optional<VulkanConfig> VulkanRenderingApi::ValidateConfig(
+    const VulkanConfig& config) {
+  return std::make_optional(config);
+}
+
 void VulkanRenderingApi::ApplyConfiguration(const VulkanConfig& config) {
   vulkan_config_ = config;
 

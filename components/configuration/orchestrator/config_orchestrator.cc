@@ -1,5 +1,7 @@
 #include "config_orchestrator.h"
 
+#include <optional>
+
 #include "components/configuration/managers/config_manager_template.h"
 #include "components/configuration/repository/config_repo.h"
 #include "components/rendering/api/vulkan/vulkan_config.h"
@@ -20,10 +22,17 @@ using nextgen::engine::rendering::vulkan::VulkanRenderingApi;
 template <typename ConfigType, typename EngineComponent>
 auto LoadConfigWithDefault(ConfigRepositoryNode config_node,
                            EngineComponent& engine_component) {
+  // Load the configuration or use the default if unavailable
   auto config_opt = config_node.LoadConfig<ConfigType>();
+
+  // Use config_opt if available, validate it and apply corrections, otherwise
+  // use default
+  auto validated_config =
+      config_opt ? engine_component.ValidateConfig(*config_opt) : std::nullopt;
+
   return ConfigWithDefaultFlag<ConfigType>{
-      !config_opt.has_value(),
-      config_opt.value_or(engine_component.GetDefaultConfig())};
+      !validated_config.has_value(),
+      validated_config.value_or(engine_component.GetDefaultConfig())};
 }
 
 auto LoadRenderingConfig(ConfigRepository& config_manager,
@@ -34,8 +43,8 @@ auto LoadRenderingConfig(ConfigRepository& config_manager,
 
 auto LoadVulkanConfig(ConfigRepository& config_manager,
                       VulkanRenderingApi& vulkan_api) {
-  return LoadConfigWithDefault<VulkanConfig>(config_manager["rendering"],
-                                             vulkan_api);
+  return LoadConfigWithDefault<VulkanConfig>(
+      config_manager["rendering"]["vulkan"], vulkan_api);
 };
 
 }  // namespace

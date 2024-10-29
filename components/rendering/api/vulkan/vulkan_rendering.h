@@ -70,6 +70,7 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable<VulkanConfig> {
   void MainLoop() override;
 
   VulkanConfig GetDefaultConfig();
+  static std::optional<VulkanConfig> ValidateConfig(const VulkanConfig& config);
 
   void Render() override;
   bool Exiting() override;

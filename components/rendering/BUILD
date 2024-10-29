@@ -15,29 +15,11 @@ cc_library(
 cc_library(
     name = "rendering_engine",
     srcs = [
-        # "config_strategy/rendering_config_strategy.h",
-        # "config_strategy/rendering_config_strategy.cc",
-        # "config_strategy/rendering_config_strategy_default.h",
-        # "config_strategy/rendering_config_strategy_default.cc",
-        # "config_strategy/rendering_config_strategy_primary.h",
-        # "config_strategy/rendering_config_strategy_primary.cc",
-        # "config_strategy/rendering_config_sub_strategy_selector.h",
-        # "config_strategy/rendering_config_sub_strategy_selector.cc",
-        # "config_strategy/rendering_config_validator.h",
-        # "config_strategy/rendering_config_validator.cc",
         "rendering_engine_switch_api.cc",
         "rendering_engine.cc",
         "rendering_config.h",
 
         # Vulkan API
-        # "api/vulkan/config_strategy/vulkan_config_strategy_default.cc",
-        # "api/vulkan/config_strategy/vulkan_config_strategy_default.h",
-        # "api/vulkan/config_strategy/vulkan_config_strategy_primary.cc",
-        # "api/vulkan/config_strategy/vulkan_config_strategy_primary.h",
-        # "api/vulkan/config_strategy/vulkan_config_strategy.cc",
-        # "api/vulkan/config_strategy/vulkan_config_strategy.h",
-        # "api/vulkan/config_strategy/vulkan_config_validator.cc",
-        # "api/vulkan/config_strategy/vulkan_config_validator.h",
         "api/vulkan/vulkan_buffer.cc",
         "api/vulkan/vulkan_buffer.h",
         "api/vulkan/vulkan_command_buffers.cc",
@@ -88,12 +70,8 @@ cc_library(
         "api/vulkan/vulkan_vertex_buffer.cc",
         "api/vulkan/vulkan_vertex_buffer.h",
         "api/vulkan/window_surface.h",
-
-        # DIRECTX API
-        "api/directx/directx_config_strategy.h",
     ],
     hdrs = [
-        "config_strategy/rendering_config_strategy.h",
         "rendering_engine.h",
     ],
     visibility = ["//visibility:public"],

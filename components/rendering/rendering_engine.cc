@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cctype>
 #include <iostream>
+#include <optional>
 #include <stdexcept>
 
 #include "components/rendering/rendering_config.h"
@@ -52,6 +53,19 @@ bool RenderingEngine::Exiting() {
 
 RenderingEngineConfig RenderingEngine::GetDefaultConfig() {
   return RenderingEngineConfig{.api = RenderingAPIEnum::Vulkan};
+}
+
+std::optional<RenderingEngineConfig> RenderingEngine::ValidateConfig(
+    const RenderingEngineConfig& config) {
+  switch (config.api) {
+    case RenderingAPIEnum::Vulkan:
+    case RenderingAPIEnum::OpenGL:
+    case RenderingAPIEnum::DirectX:
+      break;
+    default:
+      return std::nullopt;
+  }
+  return std::make_optional(config);
 }
 
 }  // namespace nextgen::engine::rendering

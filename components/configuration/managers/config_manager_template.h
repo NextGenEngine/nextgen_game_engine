@@ -30,8 +30,12 @@ class ConfigComponentManager {
 
   // Saves configuration locally and marks, that it is not default anymore
   void SetConfiguration(const ConfigType& config) {
-    config_wrapper_.config = config;  // Update the local copy
-    config_wrapper_.is_default = false;
+    // using __builtin_expect as hint to the compiler to optimize the code
+    // layout accordingly
+    if (__builtin_expect(component_.ValidateConfig(config), 1)) {
+      config_wrapper_.config = config;  // Update the local copy
+      config_wrapper_.is_default = false;
+    }
   }
 
   void ConfigureComponent() {

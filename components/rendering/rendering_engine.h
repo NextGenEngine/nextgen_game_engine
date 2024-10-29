@@ -1,6 +1,8 @@
 #ifndef NEXTGEN_ENGINE_RENDERING_H
 #define NEXTGEN_ENGINE_RENDERING_H
 
+#include <optional>
+
 #include "components/configuration/repository/config_repo.h"
 #include "components/engine/nextgen_game_engine_interfaces.h"
 #include "components/rendering/api/vulkan/vulkan_rendering.h"
@@ -30,6 +32,8 @@ struct RenderingEngine : RenderingEngineData,
   void ApplyConfiguration(const RenderingEngineConfig& config) override;
   void MainLoop();
   static RenderingEngineConfig GetDefaultConfig();
+  static std::optional<RenderingEngineConfig> ValidateConfig(
+      const RenderingEngineConfig& config);
 
  private:
   IRenderingApi* GetRenderingApiInstance(RenderingAPIEnum newApi);
