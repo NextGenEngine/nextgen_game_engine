@@ -17,7 +17,7 @@ struct VulkanInstance {
 
   ~VulkanInstance() = default;
 
-  VulkanConfig GetDefaultConfiguration() const;
+  VulkanConfig GetDefaultConfiguration();
 
   // copy
   VulkanInstance& operator=(const VulkanInstance&) = delete;
@@ -30,6 +30,7 @@ struct VulkanInstance {
   void EnumerateAvailableDevices() const;
   static void GetRecommendedResolutionForDevice();
   static const char* GetDeviceTypeName(VkPhysicalDeviceType deviceType);
+  bool initialized = false;
 };
 // NOLINTEND(misc-non-private-member-variables-in-classes,cppcoreguidelines-avoid-const-or-ref-data-members)
 

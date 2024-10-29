@@ -69,6 +69,8 @@ struct VulkanRenderingApi : public IRenderingApi, IConfigurable<VulkanConfig> {
 
   void MainLoop() override;
 
+  VulkanConfig GetDefaultConfig();
+
   void Render() override;
   bool Exiting() override;
 

@@ -29,6 +29,7 @@ struct RenderingEngine : RenderingEngineData,
   void Shutdown();
   void ApplyConfiguration(const RenderingEngineConfig& config) override;
   void MainLoop();
+  static RenderingEngineConfig GetDefaultConfig();
 
  private:
   IRenderingApi* GetRenderingApiInstance(RenderingAPIEnum newApi);

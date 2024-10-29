@@ -50,4 +50,8 @@ bool RenderingEngine::Exiting() {
   return api_->Exiting();
 }
 
+RenderingEngineConfig RenderingEngine::GetDefaultConfig() {
+  return RenderingEngineConfig{.api = RenderingAPIEnum::Vulkan};
+}
+
 }  // namespace nextgen::engine::rendering

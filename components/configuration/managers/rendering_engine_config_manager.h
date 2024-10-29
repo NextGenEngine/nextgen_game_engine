@@ -16,7 +16,7 @@ using RenderingEngineConfigManagerBase =
 struct RenderingEngineConfigManager : public RenderingEngineConfigManagerBase {
   explicit RenderingEngineConfigManager(
       rendering::RenderingEngine& renderingEngine,
-      rendering::RenderingEngineConfig config)
+      ConfigWithDefaultFlag<rendering::RenderingEngineConfig> config)
       : RenderingEngineConfigManagerBase(renderingEngine, config) {}
 };
 

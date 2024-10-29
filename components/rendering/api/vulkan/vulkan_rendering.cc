@@ -122,6 +122,10 @@ void VulkanRenderingApi::Shutdown() {
   vulkan_instance_.Shutdown();
 }
 
+VulkanConfig VulkanRenderingApi::GetDefaultConfig() {
+  return vulkan_instance_.GetDefaultConfiguration();
+}
+
 void VulkanRenderingApi::ApplyConfiguration(const VulkanConfig& config) {
   vulkan_config_ = config;
 

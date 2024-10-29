@@ -127,9 +127,18 @@ void VulkanInstance::Initialize() {
   }
 }
 
-VulkanConfig VulkanInstance::GetDefaultConfiguration() const {
+VulkanConfig VulkanInstance::GetDefaultConfiguration() {
+  auto temporary_init = !initialized;
+  if (temporary_init) {
+    Initialize();
+  }
+
   EnumerateAvailableDevices();
   GetRecommendedResolutionForDevice();
+
+  if (temporary_init) {
+    Shutdown();
+  }
 
   // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
   const uint32_t defaultDeviceIndex = prioritizedIndexes[0];

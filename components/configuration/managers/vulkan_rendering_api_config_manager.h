@@ -17,7 +17,7 @@ struct VulkanRenderingApiConfigManager
     : public VulkanRenderingApiConfigManagerBase {
   explicit VulkanRenderingApiConfigManager(
       rendering::vulkan::VulkanRenderingApi& renderingEngine,
-      rendering::vulkan::VulkanConfig config)
+      ConfigWithDefaultFlag<rendering::vulkan::VulkanConfig> config)
       : VulkanRenderingApiConfigManagerBase(renderingEngine, config) {}
 };
 
