@@ -37,7 +37,7 @@ cc_library(
 )
 
 cc_test(
-    name = "config_repo_test",
+    name = "config_system_test",
     size = "small",
     srcs = [
         "tests/config_manager_test.cc",

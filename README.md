@@ -168,7 +168,7 @@ bazel run @hedron_compile_commands//:refresh_all
 ## Build, test and run project with Bazel
 
 ```bash
-bazel test //components/configuration:config_repo_test
+bazel test //components/configuration:config_system_test
 bazel build //components/engine:nextgen_game_engine_test
 
 # RUN an example

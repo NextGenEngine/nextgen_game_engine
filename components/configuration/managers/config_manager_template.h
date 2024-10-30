@@ -54,10 +54,6 @@ struct ConfigComponentManager {
   const ConfigWithDefaultFlag<ConfigType>& GetConfigWrapperRef() const {
     return config_wrapper_;
   }
-  // Returns an mutable ref of the component's configuration wrapper
-  ConfigWithDefaultFlag<ConfigType>& GetConfigWrapperMutableRef() {
-    return config_wrapper_;
-  }
   // Returns a copy of the component's configuration wrapper
   ConfigWithDefaultFlag<ConfigType> GetConfigWrapperCopy() const {
     return config_wrapper_;
@@ -65,13 +61,11 @@ struct ConfigComponentManager {
 
   // Returns an immutable ref of the component's configuration
   const ConfigType& GetConfigRef() const { return config_wrapper_.config; }
-  // Returns an mutable ref of the component's configuration
-  ConfigType& GetConfigMutableRef() { return config_wrapper_.config; }
   // Returns a copy of the component's configuration
   ConfigType GetConfigCopy() const { return config_wrapper_.config; }
 
   // Saves configuration locally and marks, that it is not default anymore
-  void SetConfiguration(const ConfigType& config) {
+  ConfigWithDefaultFlag<ConfigType> SetConfiguration(const ConfigType& config) {
     auto validated_config = component_.ValidateConfig(config);
     // using __builtin_expect as hint to the compiler to optimize the code
     // layout accordingly
@@ -81,6 +75,7 @@ struct ConfigComponentManager {
       config_wrapper_.is_default = false;
       modified = true;
     }
+    return config_wrapper_;
   }
 
   void ConfigureComponent() {
