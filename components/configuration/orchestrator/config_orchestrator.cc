@@ -18,24 +18,25 @@ auto LoadConfig(const ConfigRepositoryNode& config_node) {
   return config_node.LoadConfig<ConfigType>();
 };
 
-auto LoadRenderingConfig(ConfigRepository& config_manager) {
-  return LoadConfig<RenderingEngineConfig>(config_manager["rendering"]);
+auto LoadRenderingConfig(ConfigRepository& config_repo) {
+  return LoadConfig<RenderingEngineConfig>(config_repo["rendering"]);
 };
 
-auto LoadVulkanConfig(ConfigRepository& config_manager) {
-  return LoadConfig<VulkanConfig>(config_manager["rendering"]["vulkan"]);
+auto LoadVulkanConfig(ConfigRepository& config_repo) {
+  return LoadConfig<VulkanConfig>(config_repo["rendering"]["vulkan"]);
 };
 
 }  // namespace
 
 namespace nextgen::engine::configuration {
 
-ConfigOrchestrator::ConfigOrchestrator(ConfigRepository& config_manager,
-                                       RenderingEngine& rendering_engine)
+ConfigOrchestrator::ConfigOrchestrator(ConfigRepository& config_repo,
+                                       RenderingEngine& rendering_engine,
+                                       VulkanRenderingApi& vulkan_rendering_api)
     : rendering_config_manager_(rendering_engine,
-                                LoadRenderingConfig(config_manager)),
-      vulkan_config_manager_(rendering_engine.apis_.vulkan_rendering_api,
-                             LoadVulkanConfig(config_manager)) {}
+                                LoadRenderingConfig(config_repo)),
+      vulkan_config_manager_(vulkan_rendering_api,
+                             LoadVulkanConfig(config_repo)) {}
 
 void ConfigOrchestrator::Configure() {
   vulkan_config_manager_.ConfigureComponent();
