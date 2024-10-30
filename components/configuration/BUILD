@@ -39,9 +39,14 @@ cc_library(
 cc_test(
     name = "config_repo_test",
     size = "small",
-    srcs = ["tests/config_repo_test.cc"],
+    srcs = [
+        "tests/config_manager_test.cc",
+        "tests/config_repo_test.cc",
+    ],
     deps = [
+        ":config_orchestrator",
         ":config_repo",
+        "//components/rendering:rendering_engine",
         "@googletest//:gtest_main",
     ],
 )

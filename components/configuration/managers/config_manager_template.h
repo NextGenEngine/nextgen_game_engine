@@ -8,6 +8,16 @@
 
 namespace nextgen::engine::configuration {
 
+template <typename EngineComponentType, typename ConfigType>
+concept EngineComponentTypeConcept =
+    requires(EngineComponentType component, ConfigType config) {
+      { component.GetDefaultConfig() } -> std::same_as<ConfigType>;
+      {
+        component.ValidateConfig(config)
+      } -> std::same_as<std::optional<ConfigType>>;
+      { component.ApplyConfiguration(config) } -> std::same_as<void>;
+    };
+
 template <typename ConfigType>
 struct ConfigWithDefaultFlag {
   bool is_default;
@@ -17,9 +27,9 @@ struct ConfigWithDefaultFlag {
       : is_default(is_default), config(std::move(config)) {}
 };
 
-template <typename ConfigType, typename EngineComponent>
+template <typename ConfigType, typename EngineComponentType>
 auto LoadConfigOrDefault(std::optional<ConfigType> config_opt,
-                         EngineComponent& engine_component) {
+                         EngineComponentType& engine_component) {
   // Use config_opt if available, validate it and apply corrections, otherwise
   // use default
   auto validated_config =
@@ -30,13 +40,14 @@ auto LoadConfigOrDefault(std::optional<ConfigType> config_opt,
       validated_config.value_or(engine_component.GetDefaultConfig())};
 }
 
-template <typename ComponentType, typename ConfigType>
+template <typename EngineComponentType, typename ConfigType>
+  requires EngineComponentTypeConcept<EngineComponentType, ConfigType>
 struct ConfigComponentManager {
-  explicit ConfigComponentManager(ComponentType& component,
+  explicit ConfigComponentManager(EngineComponentType& component,
                                   std::optional<ConfigType> config)
       : component_(component),
         config_wrapper_(
-            std::move(LoadConfigOrDefault<ConfigType, ComponentType>(
+            std::move(LoadConfigOrDefault<ConfigType, EngineComponentType>(
                 std::move(config), component))) {}
 
   // Returns an immutable ref of the component's configuration wrapper
@@ -61,10 +72,12 @@ struct ConfigComponentManager {
 
   // Saves configuration locally and marks, that it is not default anymore
   void SetConfiguration(const ConfigType& config) {
+    auto validated_config = component_.ValidateConfig(config);
     // using __builtin_expect as hint to the compiler to optimize the code
     // layout accordingly
-    if (__builtin_expect(component_.ValidateConfig(config), 1)) {
-      config_wrapper_.config = config;  // Update the local copy
+    if (__builtin_expect(validated_config.has_value(), 1)) {
+      config_wrapper_.config =
+          validated_config.value();  // Update the local copy
       config_wrapper_.is_default = false;
       modified = true;
     }
@@ -79,7 +92,7 @@ struct ConfigComponentManager {
   }
 
  protected:
-  ComponentType& component_;
+  EngineComponentType& component_;
   ConfigWithDefaultFlag<ConfigType> config_wrapper_;
   bool modified{true};
 };
