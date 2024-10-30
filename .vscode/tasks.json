@@ -38,9 +38,9 @@
       }
     },
     {
-      "label": "bazel: test config_manager_test",
+      "label": "bazel: test config_system_test",
       "type": "shell",
-      "command": "bazel test //components/configuration:config_manager_test",
+      "command": "bazel test //components/configuration:config_system_test",
       "group": {
         "kind": "test",
         "isDefault": false

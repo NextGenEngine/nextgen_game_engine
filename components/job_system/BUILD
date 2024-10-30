@@ -1,7 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
-    name = "config_manager",
+    name = "job_system",
     srcs = [
         "backend/custom_impl/core_detector.cpp",
         "backend/custom_impl/core_detector.h",

@@ -28,9 +28,9 @@ struct ConfigRepository {
 };
 
 struct ConfigRepositoryNode {
-  ConfigRepositoryNode(ConfigRepository& config_manager,
+  ConfigRepositoryNode(ConfigRepository& config_repo,
                        YAML::Node component_root_node)
-      : config_repo_(config_manager), node_(component_root_node) {}
+      : config_repo_(config_repo), node_(component_root_node) {}
 
   // Template method to load configuration into a struct
   template <typename ConfigType>

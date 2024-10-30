@@ -102,7 +102,7 @@ ConfigRepositoryNode& ConfigRepositoryNode::operator=(
   if (this != &other) {  // Check for self-assignment
     // Assign the component_node_ as in the copy constructor
     node_ = other.node_;
-    // Note: config_manager_ is a reference and remains bound to the original
+    // Note: config_repo_ is a reference and remains bound to the original
     // ConfigManager, so we do not attempt to reassign it.
   }
   return *this;

@@ -57,6 +57,13 @@ void NextGenEngine::Loop() {
   // }
 }
 
+NextGenEngine::NextGenEngine()
+    : component_config_(file_loader),
+      rendering_config_strategy_(component_config_, rendering_engine_,
+                                 rendering_engine_.apis_.vulkan_rendering_api) {
+  std::cout << "NextGenEngine object created\n";
+}
+
 void NextGenEngine::Initialize() {
   static bool initialized = false;
   if (initialized) {
