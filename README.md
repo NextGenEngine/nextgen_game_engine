@@ -6,14 +6,14 @@ First draft of game engine
 
 <!-- TOC tocDepth:2..3 chapterDepth:2..6 -->
 
-- [Install C++ standart library dev packages](#install-c-standart-library-dev-packages)
+- [Quick start](#quick-start)
 - [Install Bazel](#install-bazel)
+- [Install C++ standart library dev packages](#install-c-standart-library-dev-packages)
 - [Install Vulkan development packages (assumes a package manager like apt, dnf, or pacman is available)](#install-vulkan-development-packages-assumes-a-package-manager-like-apt-dnf-or-pacman-is-available)
 - [Install latest LLVM toolchain for best developer experience](#install-latest-llvm-toolchain-for-best-developer-experience)
   - [LLVM toolchain on Ubuntu 22.04](#llvm-toolchain-on-ubuntu-2204)
-- [Custom clang-tidy linter for Trunk.io](#custom-clang-tidy-linter-for-trunkio)
 - [Generate compile_commands.json](#generate-compile_commandsjson)
-- [Build and test project with Bazel](#build-and-test-project-with-bazel)
+- [Build, test and run project with Bazel](#build-test-and-run-project-with-bazel)
 - [Code quality checking with Trunk](#code-quality-checking-with-trunk)
 - [Debug with CodeLLDB](#debug-with-codelldb)
 - [IDEs recommendations](#ides-recommendations)
@@ -22,16 +22,13 @@ First draft of game engine
 
 <!-- /TOC -->
 
-## Install C++ standart library dev packages
+## Quick start
 
-In case project is using non-hermetic toolchain, which is true at current
-moment, because its hard to use Vulkan SDK and other system packages, which
-do not have Bazel package yet, you need to install libc++-dev package
-(standard C++ library development files) in order for Clangd to work properly.
+In order to build this project and get executable you only need to install
+Bazel and Vulkan development packages. Everything else is needed only to setup
+development environment.
 
-```bash
-sudo apt install libc++-20-dev
-```
+After installing [Bazel](#install-bazel) and [Vulkan libraries](#install-vulkan-development-packages-assumes-a-package-manager-like-apt-dnf-or-pacman-is-available), you can [Build, test and run project with Bazel](#build-test-and-run-project-with-bazel)
 
 ## Install Bazel
 
@@ -59,6 +56,17 @@ Bazelisk is also published to npm. You may want to install it with
 
 ```bash
 npm install -g @bazel/bazelisk
+```
+
+## Install C++ standart library dev packages
+
+In case project is using non-hermetic toolchain, which is true at current
+moment, because its hard to use Vulkan SDK and other system packages, which
+do not have Bazel package yet, you need to install libc++-dev package
+(standard C++ library development files) in order for Clangd to work properly.
+
+```bash
+sudo apt install libc++-20-dev
 ```
 
 ## Install Vulkan development packages (assumes a package manager like apt, dnf, or pacman is available)
@@ -143,30 +151,6 @@ clangd --version
 clang-tidy --version
 ```
 
-## Custom clang-tidy linter for Trunk.io
-
-We use Trunk.io for code quality management.
-
-By default it is using quite old version of clang-tidy.
-We want to use nightly builds of clang-tidy for development (check instructions
-above for LLVM toolchain installation).
-To use latest clang-tidy with Trunk.io we created an override plugin -
-`https://github.com/NextGenEngine/trunk-io-linter-clang-tidy-latest.git` and
-configured it in `.trunk/trunk.yaml` (order is critical):
-
-```yaml
-plugins:
-  sources:
-    - id: trunk
-      ref: v1.4.4
-      uri: https://github.com/trunk-io/plugins
-    - id: clang-tidy-latest
-      uri: https://github.com/NextGenEngine/trunk-io-linter-clang-tidy-latest
-      ref: v1.0
-```
-
-Read Trunk.io documentation for details.
-
 ## Generate compile_commands.json
 
 Bazel is supported with plugins in many different IDEs, including
@@ -181,11 +165,14 @@ auto-completion and refactoring features. For this you need to generate
 bazel run @hedron_compile_commands//:refresh_all
 ```
 
-## Build and test project with Bazel
+## Build, test and run project with Bazel
 
 ```bash
-bazel test //components/engine:tests
-bazel build //components/engine:engine
+bazel test //components/configuration:config_repo_test
+bazel build //components/engine:nextgen_game_engine_test
+
+# RUN an example
+./bazel-bin/components/engine/nextgen_game_engine_test
 ```
 
 ## Code quality checking with Trunk
