@@ -15,6 +15,7 @@ struct MockConfig {
 
 // Define a mock engine component that satisfies the EngineComponentTypeConcept
 struct MockEngineComponentType {
+  using ConfigType = MockConfig;
   // Mock the methods required by the concept
   MOCK_METHOD(MockConfig, GetDefaultConfig, (), ());
   MOCK_METHOD(std::optional<MockConfig>, ValidateConfig, (const MockConfig&),
@@ -42,8 +43,8 @@ TEST_F(ConfigComponentManagerTest, DefaultConfigIsLoadedWhenNoConfigProvided) {
       .WillOnce(Return(default_config));
 
   // Instantiate ConfigComponentManager with std::nullopt
-  ConfigComponentManager<MockEngineComponentType, MockConfig> manager(
-      mock_component, std::nullopt);
+  ConfigComponentManager<MockEngineComponentType> manager(mock_component,
+                                                          std::nullopt);
 
   // The config_wrapper_ should have is_default == true
   EXPECT_TRUE(manager.GetConfigWrapperRef().is_default);
@@ -75,8 +76,8 @@ TEST_F(ConfigComponentManagerTest, ProvidedValidConfigIsUsed) {
       .WillOnce(Return(provided_config));
 
   // Instantiate ConfigComponentManager with the provided valid config
-  ConfigComponentManager<MockEngineComponentType, MockConfig> manager(
-      mock_component, provided_config);
+  ConfigComponentManager<MockEngineComponentType> manager(mock_component,
+                                                          provided_config);
 
   // is_default should be false since we provided a valid config
   EXPECT_FALSE(manager.GetConfigWrapperRef().is_default);
@@ -106,8 +107,8 @@ TEST_F(ConfigComponentManagerTest, ProvidedInvalidConfigLoadsDefault) {
       .WillOnce(Return(default_config));
 
   // Instantiate ConfigComponentManager with the invalid config
-  ConfigComponentManager<MockEngineComponentType, MockConfig> manager(
-      mock_component, invalid_config);
+  ConfigComponentManager<MockEngineComponentType> manager(mock_component,
+                                                          invalid_config);
 
   // Since the provided config is invalid, is_default should be true
   EXPECT_TRUE(manager.GetConfigWrapperRef().is_default);
@@ -132,8 +133,8 @@ TEST_F(ConfigComponentManagerTest, ModifiedPropertyControlsApplyConfiguration) {
       .WillOnce(Return(initial_config));
 
   // Instantiate ConfigComponentManager with the initial valid config
-  ConfigComponentManager<MockEngineComponentType, MockConfig> manager(
-      mock_component, initial_config);
+  ConfigComponentManager<MockEngineComponentType> manager(mock_component,
+                                                          initial_config);
 
   // Expect ApplyConfiguration to be called once with the initial config
   EXPECT_CALL(mock_component, ApplyConfiguration(initial_config)).Times(1);

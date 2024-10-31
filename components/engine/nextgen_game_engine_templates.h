@@ -3,14 +3,8 @@
 
 #include <concepts>
 
-#include "components/configuration/repository/config_repo.h"
-#include "nextgen_game_engine_interfaces.h"
-
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
 namespace nextgen::engine::templates {
-using interfaces::IConfigurable;
-using interfaces::IConfigurationStrategy;
-using interfaces::IConfigValidator;
 
 template <typename T, typename ConfigType>
 concept ConfigValidator = requires(T typ, ConfigType config) {
@@ -27,28 +21,31 @@ concept Configurable = requires(T typ, const void* config) {
   { typ.ApplyConfiguration(config) };
 };
 
-template <ConfigurationStrategy PrimaryStrategy,
-          ConfigurationStrategy DefaultStrategy, typename ConfigurableComponent>
-struct FallbackConfigurationStrategyTemplate : public IConfigurationStrategy {
-  configuration::ConfigRepositoryNode component_config_;
-  PrimaryStrategy primary_strategy_;
-  DefaultStrategy default_strategy_;
+// TODO(artem): remove it
+// template <ConfigurationStrategy PrimaryStrategy,
+//           ConfigurationStrategy DefaultStrategy, typename
+//           ConfigurableComponent>
+// struct FallbackConfigurationStrategyTemplate : public IConfigurationStrategy
+// {
+//   configuration::ConfigRepositoryNode component_config_;
+//   PrimaryStrategy primary_strategy_;
+//   DefaultStrategy default_strategy_;
 
-  FallbackConfigurationStrategyTemplate(
-      configuration::ConfigRepositoryNode component_config,
-      ConfigurableComponent& configurable_component)
-      : component_config_(component_config),
-        primary_strategy_(component_config_, configurable_component),
-        default_strategy_(component_config_, configurable_component) {}
+//   FallbackConfigurationStrategyTemplate(
+//       configuration::ConfigRepositoryNode component_config,
+//       ConfigurableComponent& configurable_component)
+//       : component_config_(component_config),
+//         primary_strategy_(component_config_, configurable_component),
+//         default_strategy_(component_config_, configurable_component) {}
 
-  bool Configure() override {
-    if (primary_strategy_.Configure()) {
-      return true;
-    }
-    // Fallback to default configuration if load fails or validation fails
-    return default_strategy_.Configure();
-  }
-};
+//   bool Configure() override {
+//     if (primary_strategy_.Configure()) {
+//       return true;
+//     }
+//     // Fallback to default configuration if load fails or validation fails
+//     return default_strategy_.Configure();
+//   }
+// };
 
 }  // namespace nextgen::engine::templates
 // NOLINTEND(misc-non-private-member-variables-in-classes)

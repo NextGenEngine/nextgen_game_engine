@@ -12,18 +12,14 @@ struct IComponent : InterfaceBase {
   virtual void Shutdown() = 0;
 };
 
-struct IConfigurationStrategy : InterfaceBase {
-  virtual bool Configure() = 0;
-};
-
-template <typename ConfigType>
-struct IConfigurable : InterfaceBase {
-  virtual void ApplyConfiguration(const ConfigType& config) = 0;
-};
-
-struct IConfigValidator : InterfaceBase {
-  virtual bool Validate(const void* config) = 0;
-};
+// TODO(artem): make another branch and test out this interface with
+// ConfigOrchestrator instead of using fully templated version of orchestrator
+// template <typename ConfigType> struct IConfigurable : InterfaceBase {
+//   virtual void ApplyConfiguration(const ConfigType& config) = 0;
+//   virtual ConfigType GetDefaultConfig() = 0;
+//   virtual std::optional<ConfigType> ValidateConfig(
+//       const ConfigType& config) = 0;
+// };
 
 }  // namespace nextgen::engine::interfaces
 

@@ -4,15 +4,12 @@
 #include <optional>
 
 #include "components/configuration/repository/config_repo.h"
-#include "components/engine/nextgen_game_engine_interfaces.h"
 #include "components/rendering/api/vulkan/vulkan_rendering.h"
 #include "components/rendering/rendering_api.h"
 #include "components/rendering/rendering_config.h"
 
 namespace nextgen::engine::rendering {
 
-using interfaces::IConfigurable;
-using interfaces::IConfigurationStrategy;
 using nextgen::engine::configuration::ConfigRepositoryNode;
 using nextgen::engine::rendering::api::IRenderingApi;
 
@@ -25,11 +22,13 @@ struct RenderingEngineData {
   } apis_;
 };
 
-struct RenderingEngine : RenderingEngineData,
-                         IConfigurable<RenderingEngineConfig> {
+struct RenderingEngine : RenderingEngineData {
+  // this one is required for type erasure in templated components
+  using ConfigType = RenderingEngineConfig;
+
   explicit RenderingEngine();
   void Shutdown();
-  void ApplyConfiguration(const RenderingEngineConfig& config) override;
+  void ApplyConfiguration(const RenderingEngineConfig& config);
   void MainLoop();
   static RenderingEngineConfig GetDefaultConfig();
   static std::optional<RenderingEngineConfig> ValidateConfig(

@@ -20,18 +20,12 @@ cc_library(
 
 cc_library(
     name = "config_orchestrator",
-    srcs = [
-        "managers/rendering_engine_config_manager.h",
-        "managers/vulkan_rendering_api_config_manager.h",
-        "orchestrator/config_orchestrator.cc",
-    ],
     hdrs = [
         "orchestrator/config_orchestrator.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
         ":config_repo",
-        "//components/rendering:rendering_engine",
         "@yaml-cpp//:yaml-cpp",
     ],
 )
@@ -46,7 +40,6 @@ cc_test(
     deps = [
         ":config_orchestrator",
         ":config_repo",
-        "//components/rendering:rendering_engine",
         "@googletest//:gtest_main",
     ],
 )

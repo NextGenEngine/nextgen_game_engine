@@ -8,15 +8,18 @@
 
 namespace nextgen::engine::configuration {
 
-template <typename EngineComponentType, typename ConfigType>
-concept EngineComponentTypeConcept =
-    requires(EngineComponentType component, ConfigType config) {
-      { component.GetDefaultConfig() } -> std::same_as<ConfigType>;
-      {
-        component.ValidateConfig(config)
-      } -> std::same_as<std::optional<ConfigType>>;
-      { component.ApplyConfiguration(config) } -> std::same_as<void>;
-    };
+template <typename EngineComponentType>
+concept EngineComponentTypeConcept = requires(
+    EngineComponentType component,
+    typename EngineComponentType::ConfigType config) {
+  {
+    component.GetDefaultConfig()
+  } -> std::same_as<typename EngineComponentType::ConfigType>;
+  {
+    component.ValidateConfig(config)
+  } -> std::same_as<std::optional<typename EngineComponentType::ConfigType>>;
+  { component.ApplyConfiguration(config) } -> std::same_as<void>;
+};
 
 template <typename ConfigType>
 struct ConfigWithDefaultFlag {
@@ -40,9 +43,10 @@ auto LoadConfigOrDefault(std::optional<ConfigType> config_opt,
       validated_config.value_or(engine_component.GetDefaultConfig())};
 }
 
-template <typename EngineComponentType, typename ConfigType>
-  requires EngineComponentTypeConcept<EngineComponentType, ConfigType>
+template <typename EngineComponentType>
+  requires EngineComponentTypeConcept<EngineComponentType>
 struct ConfigComponentManager {
+  using ConfigType = typename EngineComponentType::ConfigType;
   explicit ConfigComponentManager(EngineComponentType& component,
                                   std::optional<ConfigType> config)
       : component_(component),

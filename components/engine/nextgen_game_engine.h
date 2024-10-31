@@ -4,7 +4,7 @@
 #include "components/configuration/orchestrator/config_orchestrator.h"
 #include "components/configuration/repository/config_loader.h"
 #include "components/configuration/repository/config_repo.h"
-#include "components/engine/nextgen_game_engine_templates.h"
+#include "components/rendering/api/vulkan/vulkan_rendering.h"
 #include "components/rendering/rendering_engine.h"
 
 namespace nextgen::engine {
@@ -14,7 +14,7 @@ using configuration::ConfigRepository;
 using configuration::ConfigRepositoryNode;
 using configuration::IConfigLoader;
 using rendering::RenderingEngine;
-using templates::FallbackConfigurationStrategyTemplate;
+using rendering::vulkan::VulkanRenderingApi;
 
 constexpr auto CONFIG_FILE_PATH = "config.yaml";
 extern nextgen::engine::configuration::FileLoader file_loader;
@@ -28,7 +28,8 @@ struct NextGenEngine {
 
   ConfigRepository component_config_{file_loader};
   RenderingEngine rendering_engine_;
-  ConfigOrchestrator rendering_config_strategy_;
+  ConfigOrchestrator<RenderingEngine, rendering::vulkan::VulkanRenderingApi>
+      rendering_config_strategy_;
 };
 // NOLINTEND(misc-non-private-member-variables-in-classes)
 
