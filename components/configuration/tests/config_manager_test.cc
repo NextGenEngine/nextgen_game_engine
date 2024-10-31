@@ -23,7 +23,7 @@ struct MockEngineComponentType {
   MOCK_METHOD(void, ApplyConfiguration, (const MockConfig&), ());
 };
 
-#include "components/configuration/managers/config_manager_template.h"
+#include "components/configuration/manager/config_manager_template.h"
 
 using nextgen::engine::configuration::ConfigComponentManager;
 using ::testing::_;

@@ -26,8 +26,6 @@
 
 // config_orchestrator_test.cc
 
-#include "components/configuration/orchestrator/config_orchestrator.h"
-
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <yaml-cpp/exceptions.h>
@@ -37,6 +35,7 @@
 #include <memory>
 #include <optional>
 
+#include "components/configuration/orchestrator/config_orchestrator_template.h"
 #include "components/configuration/repository/config_loader.h"
 #include "components/configuration/repository/config_repo.h"
 

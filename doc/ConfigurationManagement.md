@@ -102,7 +102,7 @@ This design achieves modularity, performance, and simplicity, allowing new confi
 
 ```cpp
 #include "components/configuration/repository/config_repo.h"
-#include "components/configuration/orchestrator/config_orchestrator.h"
+#include "components/configuration/orchestrator/config_orchestrator_template.h"
 #include "components/rendering/rendering_engine.h"
 
 // Initialize file-based config repository

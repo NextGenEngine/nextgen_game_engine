@@ -7,7 +7,6 @@ cc_library(
         "repository/config_repo.cc",
     ],
     hdrs = [
-        "managers/config_manager_template.h",
         "repository/config_loader.h",
         "repository/config_repo.h",
     ],
@@ -19,13 +18,25 @@ cc_library(
 )
 
 cc_library(
-    name = "config_orchestrator",
+    name = "config_manager",
     hdrs = [
-        "orchestrator/config_orchestrator.h",
+        "manager/config_manager_template.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
         ":config_repo",
+        "@yaml-cpp//:yaml-cpp",
+    ],
+)
+
+cc_library(
+    name = "config_orchestrator",
+    hdrs = [
+        "orchestrator/config_orchestrator_template.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":config_manager",
         "@yaml-cpp//:yaml-cpp",
     ],
 )

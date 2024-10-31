@@ -1,7 +1,7 @@
 #ifndef NEXTGEN_ENGINE_CONFIGURATION_CONFIG_ORCHESTRATOR_H
 #define NEXTGEN_ENGINE_CONFIGURATION_CONFIG_ORCHESTRATOR_H
 
-#include "components/configuration/managers/config_manager_template.h"
+#include "components/configuration/manager/config_manager_template.h"
 #include "components/configuration/repository/config_repo.h"
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)

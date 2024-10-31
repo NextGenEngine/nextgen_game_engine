@@ -1,7 +1,7 @@
 #ifndef NEXTGEN_GAME_ENGINE__H
 #define NEXTGEN_GAME_ENGINE__H
 
-#include "components/configuration/orchestrator/config_orchestrator.h"
+#include "components/configuration/orchestrator/config_orchestrator_template.h"
 #include "components/configuration/repository/config_loader.h"
 #include "components/configuration/repository/config_repo.h"
 #include "components/rendering/api/vulkan/vulkan_rendering.h"
