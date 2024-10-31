@@ -2,7 +2,6 @@
 #define NEXTGEN_ENGINE_VULKAN_RENDERING_H
 
 #include "components/configuration/repository/config_repo.h"
-#include "components/engine/nextgen_game_engine_interfaces.h"
 #include "components/rendering/api/vulkan/vulkan_buffer.h"
 #include "components/rendering/api/vulkan/vulkan_command_buffers.h"
 #include "components/rendering/api/vulkan/vulkan_command_pool.h"

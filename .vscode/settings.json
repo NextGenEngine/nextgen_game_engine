@@ -88,6 +88,8 @@
   "lldb.dereferencePointers": true,
   "lldb.consoleMode": "commands",
   "lldb.showDisassembly": "auto",
-  "clangd.path": "clangd-20",
-  "trunk.trunkPath": "/usr/local/bin/trunk_io"
+  "clangd.path": "/usr/bin/clangd-20",
+  "trunk.trunkPath": "/usr/local/bin/trunk_io",
+  "clang-tidy.executable": "/usr/bin/clang-tidy-20",
+  "clang-tidy.fixOnSave": true
 }

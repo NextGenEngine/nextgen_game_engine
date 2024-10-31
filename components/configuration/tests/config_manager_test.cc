@@ -38,7 +38,7 @@ namespace DefaultConfigIsLoadedWhenNoConfigProvided {
 
 TEST_F(ConfigComponentManagerTest, DefaultConfigIsLoadedWhenNoConfigProvided) {
   // Set up expectations
-  MockConfig default_config{42};
+  MockConfig const default_config{42};
   EXPECT_CALL(mock_component, GetDefaultConfig())
       .WillOnce(Return(default_config));
 
@@ -102,7 +102,7 @@ TEST_F(ConfigComponentManagerTest, ProvidedInvalidConfigLoadsDefault) {
       .WillOnce(Return(std::nullopt));
 
   // Expect GetDefaultConfig to be called and return default config
-  MockConfig default_config{42};
+  MockConfig const default_config{42};
   EXPECT_CALL(mock_component, GetDefaultConfig())
       .WillOnce(Return(default_config));
 

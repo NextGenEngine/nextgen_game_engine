@@ -30,7 +30,14 @@
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <yaml-cpp/exceptions.h>
+#include <yaml-cpp/node/convert.h>
+#include <yaml-cpp/node/node.h>
 
+#include <memory>
+#include <optional>
+
+#include "components/configuration/repository/config_loader.h"
 #include "components/configuration/repository/config_repo.h"
 
 using nextgen::engine::configuration::ConfigOrchestrator;
@@ -202,12 +209,12 @@ namespace ConfigureUsesDefaultConfigWhenValidConfigIsInvalid {
 TEST_F(ConfigOrchestratorTest,
        ConfigureUsesDefaultConfigWhenValidConfigIsInvalid) {
   // Define invalid configurations
-  MockRenderingEngineConfig invalid_rendering_config{-1};
-  MockVulkanConfig invalid_vulkan_config{-2};
+  MockRenderingEngineConfig const invalid_rendering_config{-1};
+  MockVulkanConfig const invalid_vulkan_config{-2};
 
   // Define default configurations
-  MockRenderingEngineConfig default_rendering_config{42};
-  MockVulkanConfig default_vulkan_config{84};
+  MockRenderingEngineConfig const default_rendering_config{42};
+  MockVulkanConfig const default_vulkan_config{84};
 
   // Set up the MockConfigLoader to return a YAML node with invalid
   // configurations
@@ -258,8 +265,8 @@ namespace ConfigureHandlesMixedValidAndInvalidConfigs {
 TEST_F(ConfigOrchestratorTest, ConfigureHandlesMixedValidAndInvalidConfigs) {
   // Define a valid RenderingEngineConfig and an invalid VulkanConfig
   MockRenderingEngineConfig rendering_config{100};
-  MockVulkanConfig invalid_vulkan_config{-2};
-  MockVulkanConfig default_vulkan_config{84};
+  MockVulkanConfig const invalid_vulkan_config{-2};
+  MockVulkanConfig const default_vulkan_config{84};
 
   // Set up the MockConfigLoader to return a YAML node with mixed configurations
   YAML::Node root_config;
