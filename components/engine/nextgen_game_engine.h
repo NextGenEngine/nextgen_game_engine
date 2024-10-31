@@ -9,10 +9,10 @@
 
 namespace nextgen::engine {
 
-using configuration::ConfigOrchestrator;
 using configuration::ConfigRepository;
 using configuration::ConfigRepositoryNode;
 using configuration::IConfigLoader;
+using configuration::TConfigOrchestrator;
 using rendering::RenderingEngine;
 using rendering::vulkan::VulkanRenderingApi;
 
@@ -28,7 +28,7 @@ struct NextGenEngine {
 
   ConfigRepository component_config_{file_loader};
   RenderingEngine rendering_engine_;
-  ConfigOrchestrator<RenderingEngine, rendering::vulkan::VulkanRenderingApi>
+  TConfigOrchestrator<RenderingEngine, rendering::vulkan::VulkanRenderingApi>
       rendering_config_strategy_;
 };
 // NOLINTEND(misc-non-private-member-variables-in-classes)

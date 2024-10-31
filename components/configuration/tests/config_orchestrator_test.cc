@@ -39,8 +39,8 @@
 #include "components/configuration/repository/config_loader.h"
 #include "components/configuration/repository/config_repo.h"
 
-using nextgen::engine::configuration::ConfigOrchestrator;
 using nextgen::engine::configuration::ConfigRepository;
+using nextgen::engine::configuration::TConfigOrchestrator;
 using ::testing::Return;
 
 // Define mock configuration types
@@ -195,7 +195,7 @@ TEST_F(ConfigOrchestratorTest,
   config_repo = std::make_unique<ConfigRepository>(mock_loader);
 
   // Instantiate ConfigOrchestrator
-  ConfigOrchestrator<MockRenderingEngine, MockVulkanRenderingApi> orchestrator(
+  TConfigOrchestrator<MockRenderingEngine, MockVulkanRenderingApi> orchestrator(
       *config_repo, mock_rendering_engine, mock_vulkan_api);
 
   // Call Configure to apply configurations
@@ -250,7 +250,7 @@ TEST_F(ConfigOrchestratorTest,
   config_repo = std::make_unique<ConfigRepository>(mock_loader);
 
   // Instantiate ConfigOrchestrator
-  ConfigOrchestrator<MockRenderingEngine, MockVulkanRenderingApi> orchestrator(
+  TConfigOrchestrator<MockRenderingEngine, MockVulkanRenderingApi> orchestrator(
       *config_repo, mock_rendering_engine, mock_vulkan_api);
 
   // Call Configure to apply configurations
@@ -302,7 +302,7 @@ TEST_F(ConfigOrchestratorTest, ConfigureHandlesMixedValidAndInvalidConfigs) {
   config_repo = std::make_unique<ConfigRepository>(mock_loader);
 
   // Instantiate ConfigOrchestrator
-  ConfigOrchestrator<MockRenderingEngine, MockVulkanRenderingApi> orchestrator(
+  TConfigOrchestrator<MockRenderingEngine, MockVulkanRenderingApi> orchestrator(
       *config_repo, mock_rendering_engine, mock_vulkan_api);
 
   // Call Configure to apply configurations

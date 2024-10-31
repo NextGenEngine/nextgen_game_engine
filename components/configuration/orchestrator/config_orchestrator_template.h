@@ -11,14 +11,14 @@ namespace nextgen::engine::configuration {
 template <typename RenderingEngineType, typename VulkanRenderingApiType>
   requires EngineComponentTypeConcept<RenderingEngineType> &&
            EngineComponentTypeConcept<VulkanRenderingApiType>
-struct ConfigOrchestrator {
+struct TConfigOrchestrator {
   using RenderingEngineConfigType = typename RenderingEngineType::ConfigType;
   using VulkanRenderingApiConfigType =
       typename VulkanRenderingApiType::ConfigType;
 
-  explicit ConfigOrchestrator(ConfigRepository& config_repo,
-                              RenderingEngineType& rendering_engine,
-                              VulkanRenderingApiType& vulkan_rendering_api)
+  explicit TConfigOrchestrator(ConfigRepository& config_repo,
+                               RenderingEngineType& rendering_engine,
+                               VulkanRenderingApiType& vulkan_rendering_api)
       : rendering_config_manager_(rendering_engine,
                                   std::move(LoadRenderingConfig(config_repo))),
         vulkan_config_manager_(vulkan_rendering_api,
@@ -29,8 +29,8 @@ struct ConfigOrchestrator {
     rendering_config_manager_.ConfigureComponent();
   }
 
-  ConfigComponentManager<RenderingEngineType> rendering_config_manager_;
-  ConfigComponentManager<VulkanRenderingApiType> vulkan_config_manager_;
+  TConfigComponentManager<RenderingEngineType> rendering_config_manager_;
+  TConfigComponentManager<VulkanRenderingApiType> vulkan_config_manager_;
 
  private:
   // Helper functions to load configurations
