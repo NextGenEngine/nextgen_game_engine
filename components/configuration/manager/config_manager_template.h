@@ -48,6 +48,8 @@ template <typename EngineComponentType>
   requires EngineComponentTypeConcept<EngineComponentType>
 struct TConfigComponentManager {
   using ConfigType = typename EngineComponentType::ConfigType;
+  using ConfigWrapperType = TConfigWithDefaultFlag<ConfigType>;
+
   explicit TConfigComponentManager(EngineComponentType& component,
                                    std::optional<ConfigType> config)
       : component_(component),
@@ -56,13 +58,11 @@ struct TConfigComponentManager {
                 std::move(config), component))) {}
 
   // Returns an immutable ref of the component's configuration wrapper
-  const TConfigWithDefaultFlag<ConfigType>& GetConfigWrapperRef() const {
+  const ConfigWrapperType& GetConfigWrapperRef() const {
     return config_wrapper_;
   }
   // Returns a copy of the component's configuration wrapper
-  TConfigWithDefaultFlag<ConfigType> GetConfigWrapperCopy() const {
-    return config_wrapper_;
-  }
+  ConfigWrapperType GetConfigWrapperCopy() const { return config_wrapper_; }
 
   // Returns an immutable ref of the component's configuration
   const ConfigType& GetConfigRef() const { return config_wrapper_.config; }
@@ -70,8 +70,7 @@ struct TConfigComponentManager {
   ConfigType GetConfigCopy() const { return config_wrapper_.config; }
 
   // Saves configuration locally and marks, that it is not default anymore
-  TConfigWithDefaultFlag<ConfigType> SetConfiguration(
-      const ConfigType& config) {
+  ConfigWrapperType SetConfiguration(const ConfigType& config) {
     auto validated_config = component_.ValidateConfig(config);
     // using __builtin_expect as hint to the compiler to optimize the code
     // layout accordingly
@@ -94,7 +93,7 @@ struct TConfigComponentManager {
 
  protected:
   EngineComponentType& component_;
-  TConfigWithDefaultFlag<ConfigType> config_wrapper_;
+  ConfigWrapperType config_wrapper_;
   bool modified{true};
 };
 

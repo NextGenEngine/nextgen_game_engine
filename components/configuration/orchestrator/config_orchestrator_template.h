@@ -15,6 +15,10 @@ struct TConfigOrchestrator {
   using RenderingEngineConfigType = typename RenderingEngineType::ConfigType;
   using VulkanRenderingApiConfigType =
       typename VulkanRenderingApiType::ConfigType;
+  using RenderingEngineConfigManager =
+      TConfigComponentManager<RenderingEngineType>;
+  using VulkanRenderingApiConfigManager =
+      TConfigComponentManager<VulkanRenderingApiType>;
 
   explicit TConfigOrchestrator(ConfigRepository& config_repo,
                                RenderingEngineType& rendering_engine,
@@ -29,8 +33,8 @@ struct TConfigOrchestrator {
     rendering_config_manager_.ConfigureComponent();
   }
 
-  TConfigComponentManager<RenderingEngineType> rendering_config_manager_;
-  TConfigComponentManager<VulkanRenderingApiType> vulkan_config_manager_;
+  RenderingEngineConfigManager rendering_config_manager_;
+  VulkanRenderingApiConfigManager vulkan_config_manager_;
 
  private:
   // Helper functions to load configurations
