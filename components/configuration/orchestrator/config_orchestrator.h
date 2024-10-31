@@ -13,7 +13,8 @@ template <typename RenderingEngineType, typename VulkanRenderingApiType>
            EngineComponentTypeConcept<VulkanRenderingApiType>
 struct ConfigOrchestrator {
   using RenderingEngineConfigType = typename RenderingEngineType::ConfigType;
-  using VulkanRenderingApiConfigType = typename RenderingEngineType::ConfigType;
+  using VulkanRenderingApiConfigType =
+      typename VulkanRenderingApiType::ConfigType;
 
   explicit ConfigOrchestrator(ConfigRepository& config_repo,
                               RenderingEngineType& rendering_engine,

@@ -17,7 +17,7 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug/Release: nextgen_game_engine_test",
+      "name": "Release: nextgen_game_engine_test",
       "program": "${workspaceFolder}/bazel-bin/components/engine/nextgen_game_engine_test",
       "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
       "args": [],
@@ -27,7 +27,27 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug/Release: benchmarks_move_semantic",
+      "name": "Debug: config_system_test",
+      "program": "${workspaceFolder}/bazel-bin/components/configuration/config_system_test",
+      "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "bazel-build-debug: config_system_test"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Release: config_system_test",
+      "program": "${workspaceFolder}/bazel-bin/components/configuration/config_system_test",
+      "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "bazel-build-release-with-debug: config_system_test"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Release: benchmarks_move_semantic",
       "program": "${workspaceFolder}/bazel-bin/benchmarks/benchmarks_move_semantic",
       "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
       "args": [],
@@ -37,7 +57,7 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug/Release: templated_structure_accessor",
+      "name": "Release: templated_structure_accessor",
       "program": "${workspaceFolder}/bazel-bin/benchmarks/templated_structure_accessor",
       "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
       "args": [],
@@ -47,7 +67,7 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug/Release: singleton_direct_access",
+      "name": "Release: singleton_direct_access",
       "program": "${workspaceFolder}/bazel-bin/benchmarks/singleton_direct_access",
       "sourceMap": { "/proc/self/cwd": "${workspaceFolder}" },
       "args": [],

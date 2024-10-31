@@ -74,6 +74,24 @@
       }
     },
     {
+      "label": "bazel-build-debug: config_system_test",
+      "type": "shell",
+      "command": "bazel build --config=debug //components/configuration:config_system_test",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "bazel-build-release-with-debug: config_system_test",
+      "type": "shell",
+      "command": "bazel build --config=releasewithdebug //components/configuration:config_system_test",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
       "label": "bazel-build-debug: benchmarks_move_semantic",
       "type": "shell",
       "command": "bazel build --config=debug //benchmarks:benchmarks_move_semantic",

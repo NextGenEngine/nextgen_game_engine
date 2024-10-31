@@ -39,8 +39,9 @@ auto LoadConfigOrDefault(std::optional<ConfigType> config_opt,
       config_opt ? engine_component.ValidateConfig(*config_opt) : std::nullopt;
 
   return ConfigWithDefaultFlag<ConfigType>{
-      !validated_config.has_value(),
-      validated_config.value_or(engine_component.GetDefaultConfig())};
+      !validated_config.has_value(), validated_config
+                                         ? *validated_config
+                                         : engine_component.GetDefaultConfig()};
 }
 
 template <typename EngineComponentType>

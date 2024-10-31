@@ -35,11 +35,11 @@ cc_test(
     size = "small",
     srcs = [
         "tests/config_manager_test.cc",
+        "tests/config_orchestrator_test.cc",
         "tests/config_repo_test.cc",
     ],
     deps = [
         ":config_orchestrator",
-        ":config_repo",
         "@googletest//:gtest_main",
     ],
 )
