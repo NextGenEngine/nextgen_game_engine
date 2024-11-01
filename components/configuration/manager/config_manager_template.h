@@ -1,6 +1,7 @@
 #ifndef NEXTGEN_ENGINE_CONFIGURATION_CONFIG_COMPONENT_MANAGER_H
 #define NEXTGEN_ENGINE_CONFIGURATION_CONFIG_COMPONENT_MANAGER_H
 
+#include <concepts>
 #include <optional>
 #include <utility>
 
