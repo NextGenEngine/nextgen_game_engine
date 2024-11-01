@@ -13,12 +13,11 @@
 namespace {
 
 auto GetDefaultConfig() -> std::string {
-  // NOTE: there is no need to implement this function at the moment.
-  // Each component have its own configuration. And I do not want to
-  // know it on higher level. It gives me flexibility to easily
-  // change component configuration without updating higher level
-  // Engine component. Components become more encapsulated and decoupled
-  // from higher level components.
+  // NOTE: This method just returns empty configuration. It is unrelated to
+  // default configuration of engine components. The meaning of this method is
+  // just to create empty configuration in case configuration was not found at
+  // all for some reason. Default configuration of engine components is managed
+  // by engine components themselves.
   return "";
 }
 
